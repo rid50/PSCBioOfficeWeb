@@ -15,55 +15,69 @@ using Neurotec.Biometrics;
 
 namespace SplitFingerTemplates
 {
-    public static class MyConnection
-    {
-        private static SqlConnection conn = null;
-        //private static SqlConnection conn2 = null;
+    //public static class MyConnection
+    //{
+    //    private static SqlConnection conn = null;
+    //    private static SqlConnection conn2 = null;
 
-        static public SqlConnection Connection
-        {
-            //conn = new SqlConnection(getConnectionString());
-            //conn.Open();
-            get
-            {
-                return conn;
-            }
-        }
+    //    static public SqlConnection Connection
+    //    {
+    //        //conn = new SqlConnection(getConnectionString());
+    //        //conn.Open();
+    //        get
+    //        {
+    //            return conn;
+    //        }
+    //    }
 
-        static MyConnection()
-        {
-            conn = new SqlConnection(getConnectionString());
-            conn.Open();
-            //conn2 = new SqlConnection(getConnectionString());
-            //conn2.Open();
-        }
+    //    static public SqlConnection Connection2
+    //    {
+    //        //conn = new SqlConnection(getConnectionString());
+    //        //conn.Open();
+    //        get
+    //        {
+    //            return conn2;
+    //        }
+    //    }
 
-        //~Connection2()
-        //{
-        //    if (conn != null && conn.State == ConnectionState.Open)
-        //    {
-        //        conn.Close();
-        //        conn = null;
-        //    }
+    //    static MyConnection()
+    //    {
+    //        try {
+    //            conn = new SqlConnection(getConnectionString());
+    //            conn.Open();
+    //            conn2 = new SqlConnection(getConnectionString());
+    //            conn2.Open();
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            throw new Exception(ex.Message);
+    //        }
+    //    }
 
-        //    //if (conn2 != null && conn2.State == ConnectionState.Open)
-        //    //{
-        //    //    conn2.Close();
-        //    //    conn2 = null;
-        //    //}
-        //}
+    //    //~Connection2()
+    //    //{
+    //    //    if (conn != null && conn.State == ConnectionState.Open)
+    //    //    {
+    //    //        conn.Close();
+    //    //        conn = null;
+    //    //    }
 
-        static String getConnectionString()
-        {
-            return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
-        }   
-    }
+    //    //    //if (conn2 != null && conn2.State == ConnectionState.Open)
+    //    //    //{
+    //    //    //    conn2.Close();
+    //    //    //    conn2 = null;
+    //    //    //}
+    //    //}
+
+    //    static String getConnectionString()
+    //    {
+    //        return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+    //    }   
+    //}
 
     class SerializationProcess
     {
-        private static readonly System.Object lockThis = new System.Object();
-        //private static SqlConnection conn = null;
-        //private static SqlConnection conn2 = null;
+        //private static readonly System.Object lockThis = new System.Object();
 
         NFExtractor extractor;
 
@@ -97,17 +111,16 @@ namespace SplitFingerTemplates
 
         public static Int32 rowcount()
         {
-            //SqlConnection conn = null;
+            SqlConnection conn = null;
             SqlCommand cmd = null;
             SqlDataReader reader = null;
             try
             {
                 //conn = buildConnectionString();
-                //conn = new SqlConnection(getConnectionString());
-                //conn.Open();
+                conn = new SqlConnection(getConnectionString());
+                conn.Open();
                 cmd = new SqlCommand();
-                //cmd.Connection = conn;
-                cmd.Connection = MyConnection.Connection;
+                cmd.Connection = conn;
                 cmd.CommandText = String.Format("SELECT count(*) FROM Egy_T_FingerPrint");
 
                 reader = cmd.ExecuteReader();
@@ -128,11 +141,11 @@ namespace SplitFingerTemplates
                     if (reader != null)
                         reader.Close();
 
-                    //if (conn != null && conn.State == ConnectionState.Open)
-                    //{
-                    //    conn.Close();
-                    //    conn = null;
-                    //}
+                    if (conn != null && conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                        conn = null;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -154,8 +167,8 @@ namespace SplitFingerTemplates
 
             //return;
 
-            //SqlConnection conn = null;
-            //SqlConnection conn2 = null;
+            SqlConnection conn = null;
+            SqlConnection conn2 = null;
             SqlCommand cmd = null;
             SqlCommand cmd2 = null;
             SqlDataReader reader = null;
@@ -197,10 +210,13 @@ namespace SplitFingerTemplates
             try
             {
                 //conn = buildConnectionString();
-                //conn = new SqlConnection(getConnectionString());
-                //conn.Open();
+                var connStr = getConnectionString();
+                conn = new SqlConnection(connStr);
+                conn.Open();
+                conn2 = new SqlConnection(connStr);
+                conn2.Open();
                 cmd = new SqlCommand();
-                cmd.Connection = MyConnection.Connection;
+                cmd.Connection = conn;
 
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + dbFingerColumn + " FROM " + dbFingerTable + " WHERE AppID = 20095420";
 
@@ -317,6 +333,7 @@ namespace SplitFingerTemplates
                                 if (sb.Length == 0)
                                 {
                                     cmd2 = new SqlCommand();
+                                    cmd2.Connection = conn2;
 
                                     sb.Append("update {0} with (serializable) SET ");
                                 }
@@ -355,7 +372,7 @@ namespace SplitFingerTemplates
 
                             //conn2 = new SqlConnection(getConnectionString());
                             //conn2.Open();
-                            cmd2.Connection = MyConnection.Connection;
+                            //cmd2.Connection = MyConnection.Connection2;
                             cmd2.ExecuteNonQuery();
 
                             //cmd2.CommandText = String.Format(@"update {0} with (serializable) SET li = @li
@@ -425,17 +442,17 @@ namespace SplitFingerTemplates
                     if (reader != null)
                         reader.Close();
 
-                    //if (conn != null && conn.State == ConnectionState.Open)
-                    //{
-                    //    conn.Close();
-                    //    conn = null;
-                    //}
+                    if (conn != null && conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                        conn = null;
+                    }
 
-                    //if (conn2 != null && conn2.State == ConnectionState.Open)
-                    //{
-                    //    conn2.Close();
-                    //    conn2 = null;
-                    //}
+                    if (conn2 != null && conn2.State == ConnectionState.Open)
+                    {
+                        conn2.Close();
+                        conn2 = null;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -444,9 +461,9 @@ namespace SplitFingerTemplates
             }
         }
 
-        //static private String getConnectionString()
-        //{
-        //    return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
-        //}
+        static private String getConnectionString()
+        {
+            return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+        }
     }
 }

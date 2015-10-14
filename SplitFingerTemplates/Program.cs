@@ -75,8 +75,9 @@ namespace SplitFingerTemplates
 
             //int offset = 1000;
             Int32 rowcount = SerializationProcess.rowcount();
-            int limit = 10;
+            int limit = 10000;
             int topindex = (int)(rowcount/limit + 1);
+            //topindex = 100;
             Task[] taskArray = new Task[topindex];
             //Task[] taskArray = new Task[8];
 

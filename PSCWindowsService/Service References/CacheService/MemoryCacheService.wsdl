@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MemoryCacheService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_IMemoryCacheService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WCFService" />
+      <xsd:import schemaLocation="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMemoryCacheService_Contains_InputMessage">
+    <wsdl:part name="parameters" element="tns:Contains" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_Contains_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ContainsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_SetDirty_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetDirty" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_SetDirty_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetDirtyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetRawFingerCollection_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRawFingerCollection" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetRawFingerCollection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRawFingerCollectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetQualityFingerCollection_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetQualityFingerCollection" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetQualityFingerCollection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetQualityFingerCollectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetPicture_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPicture" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_GetPicture_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPictureResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_Put_InputMessage">
+    <wsdl:part name="parameters" element="tns:Put" />
+  </wsdl:message>
+  <wsdl:message name="IMemoryCacheService_Put_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PutResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMemoryCacheService">
+    <wsdl:operation name="Contains">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/Contains" message="tns:IMemoryCacheService_Contains_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/ContainsResponse" message="tns:IMemoryCacheService_Contains_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDirty">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/SetDirty" message="tns:IMemoryCacheService_SetDirty_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/SetDirtyResponse" message="tns:IMemoryCacheService_SetDirty_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRawFingerCollection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/GetRawFingerCollection" message="tns:IMemoryCacheService_GetRawFingerCollection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/GetRawFingerCollectionResponse" message="tns:IMemoryCacheService_GetRawFingerCollection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetQualityFingerCollection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollection" message="tns:IMemoryCacheService_GetQualityFingerCollection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollectionResponse" message="tns:IMemoryCacheService_GetQualityFingerCollection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPicture">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/GetPicture" message="tns:IMemoryCacheService_GetPicture_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/GetPictureResponse" message="tns:IMemoryCacheService_GetPicture_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Put">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/Put" message="tns:IMemoryCacheService_Put_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/PutResponse" message="tns:IMemoryCacheService_Put_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IMemoryCacheService" type="tns:IMemoryCacheService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IMemoryCacheService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Contains">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/Contains" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDirty">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/SetDirty" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRawFingerCollection">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/GetRawFingerCollection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetQualityFingerCollection">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPicture">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/GetPicture" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Put">
+      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/Put" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MemoryCacheService">
+    <wsdl:port name="BasicHttpBinding_IMemoryCacheService" binding="tns:BasicHttpBinding_IMemoryCacheService">
+      <soap:address location="http://biooffice/WCFService/MemoryCacheService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

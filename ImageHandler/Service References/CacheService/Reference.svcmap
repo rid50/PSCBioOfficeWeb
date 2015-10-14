@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="600707c5-d89d-4f85-8703-8b9f99271077" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ArrayList" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://biooffice/WCFService/MemoryCacheService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MemoryCacheService1.xsd" MetadataType="Schema" ID="b55420a4-274f-4f47-86bd-7ac94f5b454f" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MemoryCacheService3.xsd" MetadataType="Schema" ID="87ecfc8f-3b3d-45ae-892c-6653556b4ae5" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MemoryCacheService2.xsd" MetadataType="Schema" ID="27f2766e-6b45-4936-bd9c-bf043aa96729" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MemoryCacheService.disco" MetadataType="Disco" ID="04f6c8d7-49c4-4d78-b567-d4b6b387e4e7" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?disco" />
+    <MetadataFile FileName="MemoryCacheService.wsdl" MetadataType="Wsdl" ID="3932abc8-0bbc-471c-93dc-5d73b99d03de" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?wsdl" />
+    <MetadataFile FileName="MemoryCacheService.xsd" MetadataType="Schema" ID="ab5cc766-270a-4633-b283-7f645b9e7c11" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MemoryCacheService4.xsd" MetadataType="Schema" ID="22a39d11-2a6d-454b-b8e9-d35c21c07ac2" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd4" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

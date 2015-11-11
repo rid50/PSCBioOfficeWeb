@@ -62,39 +62,33 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neurotec">
-      <HintPath>dotNET\Neurotec.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Biometrics.Extractors, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=AMD64">
+    <Reference Include="Neurotec, Version=3.1.1.2, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dotNET\Neurotec.Biometrics.Extractors.dll</HintPath>
+      <HintPath>..\dotNET\Neurotec.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Gui">
-      <HintPath>dotNET\Neurotec.Biometrics.Gui.dll</HintPath>
+    <Reference Include="Neurotec.Biometrics">
+      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Matchers">
-      <HintPath>dotNET\Neurotec.Biometrics.Matchers.dll</HintPath>
+    <Reference Include="Neurotec.Biometrics.Client">
+      <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Standards">
-      <HintPath>dotNET\Neurotec.Biometrics.Standards.dll</HintPath>
+    <Reference Include="Neurotec.Biometrics.Gui, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dotNET\Neurotec.Biometrics.Gui.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Templates">
-      <HintPath>dotNET\Neurotec.Biometrics.Templates.dll</HintPath>
+    <Reference Include="Neurotec.Devices">
+      <HintPath>..\dotNET\Neurotec.Devices.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Tools">
-      <HintPath>dotNET\Neurotec.Biometrics.Tools.dll</HintPath>
+    <Reference Include="Neurotec.Gui, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dotNET\Neurotec.Gui.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.DeviceManager">
-      <HintPath>dotNET\Neurotec.DeviceManager.dll</HintPath>
+    <Reference Include="Neurotec.Licensing, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Gui">
-      <HintPath>dotNET\Neurotec.Gui.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Images">
-      <HintPath>dotNET\Neurotec.Images.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Licensing">
-      <HintPath>dotNET\Neurotec.Licensing.dll</HintPath>
+    <Reference Include="Neurotec.Media">
+      <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

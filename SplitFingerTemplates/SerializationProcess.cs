@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading;
 using Neurotec.Images;
 using Neurotec.Biometrics;
+using Neurotec.Biometrics.Client;
 
 namespace SplitFingerTemplates
 {
@@ -77,9 +78,11 @@ namespace SplitFingerTemplates
 
     class SerializationProcess
     {
+        private NBiometricClient _biometricClient;
+
         //private static readonly System.Object lockThis = new System.Object();
 
-        NFExtractor extractor;
+        //NFExtractor extractor;
 
         //static SerializationProcess()
         //{
@@ -91,7 +94,7 @@ namespace SplitFingerTemplates
 
         public SerializationProcess()
         {
-            extractor = new NFExtractor();
+            //extractor = new NFExtractor();
         }
 
         //~SerializationProcess()
@@ -173,10 +176,13 @@ namespace SplitFingerTemplates
             SqlCommand cmd2 = null;
             SqlDataReader reader = null;
 
+            NSubject subject;
+
             //List<WsqImage> fingersCollection = null;
             ArrayList fingersCollection = null;
             //ArrayList arr = new ArrayList(10);
-            MemoryStream[] ms = new MemoryStream[11];
+            //MemoryStream[] ms = new MemoryStream[11];
+            MemoryStream ms = null;
             //MemoryStream ms;
             byte[] buffer = new byte[0];
             int id = 0;
@@ -200,10 +206,14 @@ namespace SplitFingerTemplates
             formatter.Binder = new WsqSerializationBinder.MyBinder<WsqImage>();
             //formatter.Binder = new WsqSerializationBinder.GenericBinder<WsqImage>();
 
-            Stopwatch stw = new Stopwatch();
+
+            _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
+            _biometricClient.Initialize();
+
+            Stopwatch sw = new Stopwatch();
             //Stopwatch stwd = new Stopwatch();
             //Stopwatch stws = new Stopwatch();
-            stw.Start();
+            //stw.Start();
             //stwd.Start();
             //stws.Start();
 
@@ -222,7 +232,8 @@ namespace SplitFingerTemplates
 
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + dbFingerColumn + " FROM " + dbFingerTable + " WHERE datalength(" + dbFingerColumn + ") IS NOT NULL";
                 //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM (SELECT ROW_NUMBER() OVER(ORDER BY AppID) AS row, AppID, AppWsq FROM Egy_T_FingerPrint WHERE datalength(AppWsq) IS NOT NULL) r WHERE row > {0} and row <= {1}", from, to);
-                cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
 
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -234,17 +245,20 @@ namespace SplitFingerTemplates
                     {
                         id = (int)reader[dbIdColumn];
                         buffer = (byte[])reader[dbFingerColumn];
-                        ms[0] = new MemoryStream(buffer);
+                        ms = new MemoryStream(buffer);
+                        //ms[0] = new MemoryStream(buffer);
                         
                         try
                         {
                             //stwd.Restart();
-                            fingersCollection = formatter.Deserialize(ms[0]) as ArrayList;
+                            fingersCollection = formatter.Deserialize(ms) as ArrayList;
+                            //fingersCollection = formatter.Deserialize(ms[0]) as ArrayList;
                             //Console.WriteLine("Deserialize ArrayList, Time elapsed: {0}, AppId: {1}", stwd.Elapsed, id);
                         }
                         //catch (Exception ex) { throw new Exception(ex.ToString()); }
                         catch (Exception) { continue; }
-                        finally { ms[0].Close(); }
+                        finally { ms.Close(); }
+                        //finally { ms[0].Close(); }
 
                         if (cmd2 != null)
                         {
@@ -252,13 +266,18 @@ namespace SplitFingerTemplates
                             cmd2 = null;
                         }
 
+                        continue;
+
                         if (sb.Length != 0)
                             sb.Clear();
 
                         //stws.Restart();
                         String indx = "";
+
+                        subject = new NSubject();
+                        
                         NImage nImage = null;
-                        NFRecord template = null;
+                        //NFRecord template = null;
 
                         for (int i = 0; i < fingersCollection.Count; i++)
                         {
@@ -266,52 +285,56 @@ namespace SplitFingerTemplates
                             {
                                 try
                                 {
-                                    ms[i + 1] = new MemoryStream((fingersCollection[i] as WsqImage).Content);
-                                    nImage = NImageFormat.Wsq.LoadImage(ms[i + 1]);
-                                }
-                                catch (Exception ex) {
-                                    throw new Exception(string.Format("Error creating image retrieved from database {0}", ex.Message)); 
-                                }
-                                finally
-                                {
-                                    if (ms[i + 1] != null)
+                                    //ms[i + 1] = new MemoryStream((fingersCollection[i] as WsqImage).Content);
+                                    //nImage = NImageFormat.Wsq.LoadImage(ms[i + 1]);
+                                    //nImage = NImage.FromStream(ms[i + 1], NImageFormat.Wsq);
+                                    nImage = NImage.FromMemory((fingersCollection[i] as WsqImage).Content, NImageFormat.Wsq);
+
+                                    var finger = new NFinger { Image = nImage };
+                                    //if (subject.Fingers.Count > 0)
+                                    //    subject.Fingers.RemoveAt(0);
+
+                                    //var subject = new NSubject();
+                                    subject.Fingers.Add(finger);
+                                    switch (i)
                                     {
-                                        ms[i + 1].Close();
-                                        ms[i + 1] = null;
+                                        case 0:
+                                            finger.Position = NFPosition.LeftIndex;
+                                            break;
+                                        case 1:
+                                            finger.Position = NFPosition.LeftMiddle;
+                                            break;
+                                        case 2:
+                                            finger.Position = NFPosition.LeftRing;
+                                            break;
+                                        case 3:
+                                            finger.Position = NFPosition.LeftLittle;
+                                            break;
+                                        case 4:
+                                            finger.Position = NFPosition.RightIndex;
+                                            break;
+                                        case 5:
+                                            finger.Position = NFPosition.RightMiddle;
+                                            break;
+                                        case 6:
+                                            finger.Position = NFPosition.RightRing;
+                                            break;
+                                        case 7:
+                                            finger.Position = NFPosition.RightLittle;
+                                            break;
+                                        case 8:
+                                            finger.Position = NFPosition.LeftThumb;
+                                            break;
+                                        case 9:
+                                            finger.Position = NFPosition.RightThumb;
+                                            break;
                                     }
-                                }
 
-                                float horzResolution = nImage.HorzResolution;
-                                float vertResolution = nImage.VertResolution;
-                                if (horzResolution < 250) horzResolution = 500;
-                                if (vertResolution < 250) vertResolution = 500;
-
-                                NGrayscaleImage grayImage = (NGrayscaleImage)NImage.FromImage(NPixelFormat.Grayscale, 0, horzResolution, vertResolution, nImage);
-
-                                //continue;
-                                try
-                                {
-                                    NfeExtractionStatus extractionStatus;
-                                    //lock (lockThis)
-                                    //{
-                                        //template = Data.NFExtractor.Extract(grayImage, NFPosition.Unknown, NFImpressionType.LiveScanPlain, out extractionStatus);
-                                        //NFExtractor extractor = new NFExtractor();
-                                        template = extractor.Extract(grayImage, NFPosition.Unknown, NFImpressionType.LiveScanPlain, out extractionStatus);
-                                        if (extractionStatus != NfeExtractionStatus.TemplateCreated)
-                                        {
-                                            throw new Exception(extractionStatus.ToString());
-                                        }
-                                    //}
                                 }
                                 catch (Exception)
                                 {
-                                    if (template != null)
-                                    {
-                                        template.Dispose();
-                                        template = null;
-                                    }
-                                    //continue;
-                                    //throw new Exception(string.Format("Extraction error: {0}", ex.Message)); 
+                                    continue;
+                                    //throw new Exception(string.Format("Error creating image retrieved from database {0}", ex.Message));
                                 }
                                 finally
                                 {
@@ -321,45 +344,123 @@ namespace SplitFingerTemplates
                                         nImage = null;
                                     }
 
-                                    if (grayImage != null)
-                                    {
-                                        grayImage.Dispose();
-                                        grayImage = null;
-                                    }
+                                    //if (ms[i + 1] != null)
+                                    //{
+                                    //    ms[i + 1].Close();
+                                    //    ms[i + 1] = null;
+                                    //}
                                 }
+                            }
+                        }
 
-                                indx = "@" + dict[i];
+                        //sw = System.Diagnostics.Stopwatch.StartNew();
+                        _biometricClient.CreateTemplate(subject);
+                        //sw.Stop();
+                        //TimeSpan ts = sw.Elapsed;
+                        //string elapsedTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);
+                        //Console.WriteLine("RunTime " + elapsedTime);
 
-                                if (sb.Length == 0)
+                        bool valid; NFPosition pos = NFPosition.Unknown; NFRecord record = null;
+                        for (int i = 0; i < fingersCollection.Count; i++)
+                        {
+                            indx = "@" + dict[i];
+                            
+                            if (sb.Length == 0)
+                            {
+                                cmd2 = new SqlCommand();
+                                cmd2.Connection = conn2;
+
+                                sb.Append("update {0} with (serializable) SET ");
+                            }
+                            else
+                                sb.Append(",");
+
+                            sb.Append(dict[i] + "=" + indx);
+                            cmd2.Parameters.Add(indx, SqlDbType.VarBinary);
+
+                            //valid = false;
+
+                            if (fingersCollection[i] != null)
+                            {
+                                switch (i)
                                 {
-                                    cmd2 = new SqlCommand();
-                                    cmd2.Connection = conn2;
-
-                                    sb.Append("update {0} with (serializable) SET ");
+                                    case 0:
+                                        pos = NFPosition.LeftIndex;
+                                        break;
+                                    case 1:
+                                        pos = NFPosition.LeftMiddle;
+                                        break;
+                                    case 2:
+                                        pos = NFPosition.LeftRing;
+                                        break;
+                                    case 3:
+                                        pos = NFPosition.LeftLittle;
+                                        break;
+                                    case 4:
+                                        pos = NFPosition.RightIndex;
+                                        break;
+                                    case 5:
+                                        pos = NFPosition.RightMiddle;
+                                        break;
+                                    case 6:
+                                        pos = NFPosition.RightRing;
+                                        break;
+                                    case 7:
+                                        pos = NFPosition.RightLittle;
+                                        break;
+                                    case 8:
+                                        pos = NFPosition.LeftThumb;
+                                        break;
+                                    case 9:
+                                        pos = NFPosition.RightThumb;
+                                        break;
                                 }
-                                else
-                                    sb.Append(",");
+
+                                //if (sb.Length == 0)
+                                //{
+                                //    cmd2 = new SqlCommand();
+                                //    cmd2.Connection = conn2;
+
+                                //    sb.Append("update {0} with (serializable) SET ");
+                                //}
+                                //else
+                                //    sb.Append(",");
 
                                 //ms[i + 1] = new MemoryStream();
                                 //formatter.Serialize(ms[i + 1], template);
-                                
-                                sb.Append(dict[i] + "=" + indx);
-                                cmd2.Parameters.Add(indx, SqlDbType.VarBinary);
-                                if (template == null)
-                                    cmd2.Parameters[indx].Value = new byte[0];
-                                else
-                                    cmd2.Parameters[indx].Value = template.Save();
-                                //cmd2.Parameters[indx].Value = ms[i + 1].ToArray();
 
-                                if (template != null)
+                                //sb.Append(dict[i] + "=" + indx);
+                                //cmd2.Parameters.Add(indx, SqlDbType.VarBinary);
+
+                                valid = false;
+                                int k = 0;
+                                for (k = 0; k < subject.Fingers.Count; k++)
                                 {
-                                    template.Dispose();
-                                    template = null;
+                                    if (subject.Fingers[k].Position == pos)
+                                    {
+                                        if (subject.Fingers[k].Objects.First().Status == NBiometricStatus.Ok)
+                                        {
+                                            if (subject.Fingers[k].Objects.First().Quality != 254)
+                                            {
+                                                valid = true;
+                                            }
+                                        }
+
+                                        break;
+                                    }
                                 }
 
-                                //bt[i] = ms[i + 1].ToArray();
-                                ////arr.Add(ms[i + 1].ToArray());
-
+                                if (!valid)
+                                    cmd2.Parameters[indx].Value = new byte[0];
+                                else
+                                {
+                                    record = subject.Fingers[k].Objects.First().GetTemplate(false);
+                                    cmd2.Parameters[indx].Value = record.Save().ToArray();
+                                }
+                            }
+                            else
+                            {
+                                cmd2.Parameters[indx].Value = new byte[0];
                             }
                         }
 
@@ -402,20 +503,28 @@ namespace SplitFingerTemplates
                         //Console.WriteLine("AppId: {0}", id);
                         
                         //arr.Clear();
+                        if (record != null)
+                        {
+                            record.Dispose();
+                            record = null;
+                        }
+
+                        subject = null;
+
                         if (fingersCollection != null)
                         {
                             fingersCollection.Clear();
                             fingersCollection = null;
                         }
 
-                        for (int i = 0; i < 11; i++)
-                        {
-                            if (ms[i] != null)
-                            {
-                                ms[i].Close();
-                                ms[i] = null;
-                            }
-                        }
+                        //for (int i = 0; i < 11; i++)
+                        //{
+                        //    if (ms[i] != null)
+                        //    {
+                        //        ms[i].Close();
+                        //        ms[i] = null;
+                        //    }
+                        //}
 
                         //if (id % 10 == 0)
                         //{

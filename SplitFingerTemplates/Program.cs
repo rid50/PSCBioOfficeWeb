@@ -101,8 +101,6 @@ namespace SplitFingerTemplates
 
             Console.WriteLine("Row count: " + rowcount);
 
-            return;
-
             int limit = 10000;
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;

@@ -124,14 +124,17 @@ namespace SplitFingerTemplates
                 conn.Open();
                 cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = String.Format("SELECT count(*) FROM Egy_T_FingerPrint");
+                cmd.CommandText = "SELECT AppID FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY ";
 
                 reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    //return (long)reader[0];
-                    return reader.GetInt32(0);
-                }
+                reader.Read();
+                reader.GetInt32(0);
+                reader.Close();
+
+                cmd.CommandText = "SELECT count(*) FROM Egy_T_FingerPrint";
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                return reader.GetInt32(0);
             }
             catch (Exception ex)
             {
@@ -266,7 +269,7 @@ namespace SplitFingerTemplates
                             cmd2 = null;
                         }
 
-                        continue;
+                        //scontinue;
 
                         if (sb.Length != 0)
                             sb.Clear();

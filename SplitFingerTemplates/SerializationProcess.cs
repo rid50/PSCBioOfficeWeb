@@ -211,6 +211,7 @@ namespace SplitFingerTemplates
 
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
+            _biometricClient.FingersQualityThreshold = 40;
             _biometricClient.Initialize();
 
             Stopwatch sw = new Stopwatch();

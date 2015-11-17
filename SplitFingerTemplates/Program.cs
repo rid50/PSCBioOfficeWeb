@@ -93,19 +93,30 @@ namespace SplitFingerTemplates
         //static void Run(NFExtractor NFExtractor)
         static void Run()
         {
-            //int limit = 100;
-            //Task[] taskArray = new Task[1];
+            Int32 rowcount = 0;
+            for (int i = 0; i < 2; i++)
+            {
+                try
+                {
+                    rowcount = SerializationProcess.rowcount();
+                    break;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Time out, try again ");
+                }
+            }
 
-            //int offset = 1000;
-            Int32 rowcount = SerializationProcess.rowcount();
+            if (rowcount == 0)
+                return;
 
             Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 10000;
+            int limit = 1;
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;
-            Task[] taskArray = new Task[topindex];
-            //Task[] taskArray = new Task[1];
+            //Task[] taskArray = new Task[topindex];
+            Task[] taskArray = new Task[1];
 
             Stopwatch stw = new Stopwatch();
             stw.Start();

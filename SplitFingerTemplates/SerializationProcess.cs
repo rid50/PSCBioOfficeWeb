@@ -124,13 +124,6 @@ namespace SplitFingerTemplates
                 conn.Open();
                 cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "SELECT AppID FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY ";
-
-                reader = cmd.ExecuteReader();
-                reader.Read();
-                reader.GetInt32(0);
-                reader.Close();
-
                 cmd.CommandText = "SELECT count(*) FROM Egy_T_FingerPrint";
                 reader = cmd.ExecuteReader();
                 reader.Read();
@@ -158,9 +151,6 @@ namespace SplitFingerTemplates
                     throw new Exception(ex.Message);
                 }
             }
-
-            return 0;
-
         }
     
         //public void run(int from, int to, int count, int threadId)
@@ -211,6 +201,7 @@ namespace SplitFingerTemplates
 
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
+            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
             _biometricClient.FingersQualityThreshold = 40;
             _biometricClient.Initialize();
 
@@ -237,7 +228,8 @@ namespace SplitFingerTemplates
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + dbFingerColumn + " FROM " + dbFingerTable + " WHERE datalength(" + dbFingerColumn + ") IS NOT NULL";
                 //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM (SELECT ROW_NUMBER() OVER(ORDER BY AppID) AS row, AppID, AppWsq FROM Egy_T_FingerPrint WHERE datalength(AppWsq) IS NOT NULL) r WHERE row > {0} and row <= {1}", from, to);
                 //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
-                cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -447,6 +439,8 @@ namespace SplitFingerTemplates
                                             if (subject.Fingers[k].Objects.First().Quality != 254)
                                             {
                                                 valid = true;
+                                                Console.WriteLine(" ----- Size: {0}", subject.Fingers[k].Objects.First().Template.GetSize());
+
                                             }
                                         }
 
@@ -458,7 +452,7 @@ namespace SplitFingerTemplates
                                     cmd2.Parameters[indx].Value = new byte[0];
                                 else
                                 {
-                                    record = subject.Fingers[k].Objects.First().GetTemplate(false);
+                                    record = subject.Fingers[k].Objects.First().Template;
                                     cmd2.Parameters[indx].Value = record.Save().ToArray();
                                 }
                             }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Neurotec.Licensing;
 
-namespace SplitFingerTemplates
+namespace MatchFingerTemplates
 {
     class StateObject
     {
@@ -94,7 +94,7 @@ namespace SplitFingerTemplates
         static void Run()
         {
             Int32 rowcount = 0;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 try
                 {
@@ -112,11 +112,11 @@ namespace SplitFingerTemplates
 
             Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 1000;
+            int limit = 10000;
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;
             //Task[] taskArray = new Task[topindex];
-            Task[] taskArray = new Task[6];
+            Task[] taskArray = new Task[1];
 
             Stopwatch stw = new Stopwatch();
             stw.Start();
@@ -126,12 +126,19 @@ namespace SplitFingerTemplates
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>
                 {
                     StateObject state = obj as StateObject;
+                    int retcode = 0;
 
-                    var process = new SerializationProcess();
+                    var process = new SerializationProcess (@"C:\roman\psc\wsq\TwoFingersTemplate.temp" );
                     //try
                     //{
                     //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
-                    process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
+                    retcode = process.run(state.LoopCounter * limit + 80000, state.LoopCounter * limit + limit, limit);
+                    //retcode = process.run(state.LoopCounter * limit, state.LoopCounter * limit + limit, limit);
+                    if (retcode > 0)
+                    {
+                        SerializationProcess.terminateProcess = true;
+                        return;
+                    }
                     //}
                     //catch (Exception ex)
                     //{

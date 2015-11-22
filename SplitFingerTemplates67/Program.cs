@@ -1,6 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Data.SqlClient;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
+using System.Configuration;
+using System.Data;
 using System.Diagnostics;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Threading;
+using Neurotec.Biometrics;
 using Neurotec.Licensing;
 
 namespace SplitFingerTemplates
@@ -15,42 +27,31 @@ namespace SplitFingerTemplates
         //[STAThread]
         static void Main(string[] args)
         {
-            const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
 
+            const string Address = "/local";
+            const string Port = "5000";
+            const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ,Biometrics.FingerSegmentation";
             try
             {
-                foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string component in Components.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    NLicense.ObtainComponents("/local", "5000", component);
+                    NLicense.ObtainComponents(Address, Port, component);
                 }
 
-                //Helpers.ObtainLicenses(licensesMain);
-
-                //try
-                //{
-                //    Helpers.ObtainLicenses(licensesBss);
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine(ex.ToString());
-                //}
                 Run();
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.ToString());
-
-                //MessageBox.Show("Error. Details: " + ex.Message, "Fingers Sample", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 NLicense.ReleaseComponents(Components);
-                //Helpers.ReleaseLicenses(licensesMain);
-                //Helpers.ReleaseLicenses(licensesBss);
             }
 
-            //IList<string> licensesMain = new List<string>(new string[] { "FingersExtractor", "FingersMatcher" });
+            ////IList<string> licensesMain = new List<string>(new string[] { "FingersExtractor", "FingersMatcher" });
+            ////IList<string> licensesBss = new List<string>(new string[] { "FingersBSS" });
+            //IList<string> licensesMain = new List<string>(new string[] { "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ,Biometrics.FingerSegmentation" });
             //IList<string> licensesBss = new List<string>(new string[] { "FingersBSS" });
 
             //try
@@ -61,15 +62,14 @@ namespace SplitFingerTemplates
             //    {
             //        Helpers.ObtainLicenses(licensesBss);
 
-            //        //if (Data.NFExtractor == null)
-            //        //{
-            //        //    Data.NFExtractor = new NFExtractor();
-            //        //    Data.UpdateNfe();
-            //        //    //Data.UpdateNfeSettings();
-            //        //}
+            //        if (Data.NFExtractor == null)
+            //        {
+            //            Data.NFExtractor = new NFExtractor();
+            //            Data.UpdateNfe();
+            //            //Data.UpdateNfeSettings();
+            //        }
 
-            //        Run();
-            //        //Run(Data.NFExtractor);
+            //        Run(Data.NFExtractor);
             //    }
             //    catch (Exception ex)
             //    {
@@ -111,9 +111,9 @@ namespace SplitFingerTemplates
                 return;
 
             Console.WriteLine("Row count: " + rowcount);
-
+            //return;
             int limit = 1000;
-            int topindex = (int)(rowcount/limit + 1);
+            int topindex = (int)(rowcount / limit + 1);
             //topindex = 100;
             //Task[] taskArray = new Task[topindex];
             Task[] taskArray = new Task[6];
@@ -130,7 +130,8 @@ namespace SplitFingerTemplates
                     var process = new SerializationProcess();
                     //try
                     //{
-                    //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
+                    //process.run(state.LoopCounter * limit, state.LoopCounter * limit + limit, limit, Thread.CurrentThread.ManagedThreadId);
+                    //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
                     process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
                     //}
                     //catch (Exception ex)

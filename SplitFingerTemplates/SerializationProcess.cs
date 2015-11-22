@@ -201,7 +201,8 @@ namespace SplitFingerTemplates
 
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
+            //_biometricClient.FingersFastExtraction = true;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Small;
             _biometricClient.FingersQualityThreshold = 40;
             _biometricClient.Initialize();
 
@@ -228,8 +229,8 @@ namespace SplitFingerTemplates
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + dbFingerColumn + " FROM " + dbFingerTable + " WHERE datalength(" + dbFingerColumn + ") IS NOT NULL";
                 //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM (SELECT ROW_NUMBER() OVER(ORDER BY AppID) AS row, AppID, AppWsq FROM Egy_T_FingerPrint WHERE datalength(AppWsq) IS NOT NULL) r WHERE row > {0} and row <= {1}", from, to);
                 //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
-                //cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
-                cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
+                cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                //cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -439,7 +440,7 @@ namespace SplitFingerTemplates
                                             if (subject.Fingers[k].Objects.First().Quality != 254)
                                             {
                                                 valid = true;
-                                                Console.WriteLine(" ----- Size: {0}", subject.Fingers[k].Objects.First().Template.GetSize());
+                                                //Console.WriteLine(" ----- Size: {0}", subject.Fingers[k].Objects.First().Template.GetSize());
 
                                             }
                                         }

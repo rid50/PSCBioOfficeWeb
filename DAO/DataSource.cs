@@ -15,7 +15,7 @@ namespace DAO
 
     public abstract class DataSource
     {
-        public abstract byte[] GetImage(IMAGE_TYPE imageType, System.Int32 id);
+        public abstract byte[][] GetImage(IMAGE_TYPE imageType, System.Int32 id);
         public abstract void SendImage(IMAGE_TYPE imageType, int id, ref byte[] buffer);
         //public abstract Dictionary<int, byte[]> GetRecordSet(Dictionary<int, byte[]> list);
     }

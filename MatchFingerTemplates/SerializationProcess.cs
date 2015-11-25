@@ -193,6 +193,8 @@ namespace MatchFingerTemplates
             NBiometricStatus status;
             int retcode = 0;
 
+            var fingerArray = new string[2] { "ri", "rm" };
+
             byte[][] buffer = new byte[2][];
 
             try
@@ -203,7 +205,7 @@ namespace MatchFingerTemplates
                 cmd = new SqlCommand();
                 cmd.Connection = conn;
 
-                cmd.CommandText = String.Format("SELECT AppID, ri, rr FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                cmd.CommandText = String.Format("SELECT AppID, {2}, {3} FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count, fingerArray[0], fingerArray[1]);
 
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -221,9 +223,9 @@ namespace MatchFingerTemplates
                         AppId = reader.GetInt32(0);
                         //Console.WriteLine("{0}", AppId);
 
-                        if (!reader.IsDBNull(1) && ((byte[])reader["ri"]).Length > 1)
+                        if (!reader.IsDBNull(1) && ((byte[])reader[fingerArray[0]]).Length > 1)
                         {
-                            buffer[0] = (byte[])reader["ri"];
+                            buffer[0] = (byte[])reader[fingerArray[0]];
 
                             subject2 = NSubject.FromMemory(buffer[0]);
 
@@ -245,9 +247,9 @@ namespace MatchFingerTemplates
                             subject2.Clear();
                         }
 
-                        if (!reader.IsDBNull(2) && ((byte[])reader["rr"]).Length > 1)
+                        if (!reader.IsDBNull(2) && ((byte[])reader[fingerArray[1]]).Length > 1)
                         {
-                            buffer[1] = (byte[])reader["rr"];
+                            buffer[1] = (byte[])reader[fingerArray[1]];
 
                             subject2 = NSubject.FromMemory(buffer[1]);
 
@@ -266,7 +268,7 @@ namespace MatchFingerTemplates
 
                     if (numberOfMatches == 2)
                     {
-                        //Console.WriteLine(" ----- AppID: {0}", AppId);
+                        Console.WriteLine(" ----- AppID: {0}", AppId);
                         retcode = AppId;
                         break;
                     }

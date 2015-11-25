@@ -15,7 +15,7 @@ namespace WCFService
         public byte[] GetImage(IMAGE_TYPE imageType, int id)
         {
             DataSource ds = new CloudDatabase();
-            return ds.GetImage(imageType, id);
+            return ds.GetImage(imageType, id)[0];
         }
 
         public void SendImage(IMAGE_TYPE imageType, int id, ref byte[] buffer)

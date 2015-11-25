@@ -115,8 +115,8 @@ namespace MatchFingerTemplates
             int limit = 10000;
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;
-            //Task[] taskArray = new Task[topindex];
-            Task[] taskArray = new Task[1];
+            Task[] taskArray = new Task[topindex];
+            //Task[] taskArray = new Task[1];
 
             Stopwatch stw = new Stopwatch();
             stw.Start();
@@ -132,7 +132,7 @@ namespace MatchFingerTemplates
                     //try
                     //{
                     //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
-                    retcode = process.run(state.LoopCounter * limit + 80000, state.LoopCounter * limit + limit, limit);
+                    retcode = process.run(state.LoopCounter * limit, state.LoopCounter * limit + limit, limit);
                     //retcode = process.run(state.LoopCounter * limit, state.LoopCounter * limit + limit, limit);
                     if (retcode > 0)
                     {

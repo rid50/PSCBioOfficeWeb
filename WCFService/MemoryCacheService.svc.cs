@@ -53,12 +53,23 @@ namespace WCFService
 
         public void SetDirty()
         {
-            MemoryCache.Default["dirty"] = "true";
+            //throw new FaultException<String>("MyFault");
+
+            //try
+            //{
+                MemoryCache.Default["dirty"] = "true";
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new FaultException<String>(ex.Message);
+            //}
         }
 
-        public byte[] GetImage(IMAGE_TYPE imageType, int id)
+        public byte[][] GetImage(IMAGE_TYPE imageType, int id)
         {
-            byte[] buffer = new byte[1];
+
+            byte[][] buffer = new byte[11][]; 
+            //byte[] buffer = new byte[1];
             ArrayList fingersCollection = null;
 
             if (getAppSetting("Enroll") == "db")
@@ -112,7 +123,7 @@ namespace WCFService
             if (getAppSetting("Enroll") == "db")
             {
                 var ds = new Database();
-                buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
+                buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id))[0];
                 //var bioProcessor = new BioProcessor.BioProcessor();
                 //bioProcessor.DeserializeWSQArray(buffer, out fingersCollection);
             }
@@ -124,7 +135,9 @@ namespace WCFService
         {
             if (IsDirty(id))
             {
-                byte[] buffer = new byte[1];
+                //byte[] buffer = new byte[1];
+                byte[][] buffer = new byte[11][]; 
+
                 //ArrayList fingersCollection = null;
 
                 if (getAppSetting("Enroll") == "db")
@@ -158,7 +171,7 @@ namespace WCFService
             if (getAppSetting("Enroll") == "db")
             {
                 var ds = new Database();
-                return ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id));
+                return ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id))[0];
             }
             else
             {

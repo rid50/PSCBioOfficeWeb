@@ -41,7 +41,7 @@ namespace DAO
             dbFingerColumnWebService = configurationServiceClient.getAppSetting("dbFingerColumnWebService"); 
         }
 
-        public override byte[] GetImage(IMAGE_TYPE imageType, int id)
+        public override byte[][] GetImage(IMAGE_TYPE imageType, int id)
         {
             //String url = "http://nomad.host22.com/kuwaitindex/bio_picture.php?id=" + id.ToString();
             String url;
@@ -57,7 +57,9 @@ namespace DAO
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
-            byte[] bytes = null;
+            //byte[] bytes = null;
+            byte[][] buffer = new byte[11][];
+
             using (Stream sm = request.GetResponse().GetResponseStream())
             {
                 try
@@ -81,12 +83,12 @@ namespace DAO
                                 if (imageType == IMAGE_TYPE.picture)
                                 {
                                     if (result[0].picture != null)
-                                        bytes = System.Convert.FromBase64String(result[0].picture);
+                                        buffer[0] = System.Convert.FromBase64String(result[0].picture);
                                 }
                                 else
                                 {
                                     if (result[0].wsq != null)
-                                        bytes = System.Convert.FromBase64String(result[0].wsq);
+                                        buffer[0] = System.Convert.FromBase64String(result[0].wsq);
                                 }
                             }
                             catch (Exception ex) { throw new Exception(ex.Message); }
@@ -98,7 +100,7 @@ namespace DAO
                     throw new Exception(ex.Message);
                 }
             }
-            return bytes;
+            return buffer;
         }
 
         public override void SendImage(IMAGE_TYPE imageType, int id, ref byte[] buffer)

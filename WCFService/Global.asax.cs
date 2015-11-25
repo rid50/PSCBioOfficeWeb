@@ -18,7 +18,41 @@ namespace WCFService
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            initFingersLicences(HttpContext.Current, out licensesMain, out licensesBss);
+            try
+            {
+                //context.Server.MapPath("/");
+                //throw new Exception(context.Server.MapPath("/"));
+                //throw new Exception(HttpRuntime.AppDomainAppPath);
+                //throw new Exception(System.Web.Hosting.HostingEnvironment.MapPath(HttpRuntime.AppDomainAppVirtualPath));
+                //throw new Exception(System.Web.Hosting.HostingEnvironment.MapPath(HttpRuntime.AppDomainAppPath));
+
+                //Helpers.ObtainLicenses(licensesMain, context.Server.MapPath(""));
+
+                Helpers.ObtainLicenses();
+
+                //Helpers.ObtainLicenses(licensesMain, context.Server.MapPath("/"));
+
+                //try
+                //{
+                //    Helpers.ObtainLicenses(licensesBss, context.Server.MapPath(""));
+                //    //Helpers.ObtainLicenses(licensesBss, context.Server.MapPath("/"));
+                //}
+                //catch (Exception ex)
+                //{
+                //    //Console.WriteLine(ex.ToString());
+                //    throw new Exception("Error FingersBSS: " + ex.Message);
+                //}
+
+                //Application.EnableVisualStyles();
+                //Application.SetCompatibleTextRenderingDefault(false);
+                //Application.Run(new Form1());
+            }
+            catch (Exception ex)
+            {
+                //throw new Exception("kuku");
+                //throw new System.ServiceModel.FaultException("KUKU", 
+                throw new System.ServiceModel.FaultException("Error FingersExtractor, FingersMatcher: " + ex.Message, System.ServiceModel.FaultCode.CreateSenderFaultCode("a1", "b1" ));
+            }
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -38,7 +72,11 @@ namespace WCFService
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            Exception exc = Server.GetLastError();
+            throw new System.ServiceModel.FaultException(exc.Message);
 
+            //Response.Write(exc.Message);
+            //Server.ClearError();
         }
 
         protected void Session_End(object sender, EventArgs e)
@@ -48,7 +86,8 @@ namespace WCFService
 
         protected void Application_End(object sender, EventArgs e)
         {
-            releaseFingersLicences(licensesMain, licensesBss);
+            Helpers.ReleaseLicenses();
+            //releaseFingersLicences(licensesMain, licensesBss);
         }
 
         private void initFingersLicences(HttpContext context, out IList<string> licensesMain, out IList<string> licensesBss)
@@ -66,19 +105,22 @@ namespace WCFService
                 //throw new Exception(System.Web.Hosting.HostingEnvironment.MapPath(HttpRuntime.AppDomainAppVirtualPath));
                 //throw new Exception(System.Web.Hosting.HostingEnvironment.MapPath(HttpRuntime.AppDomainAppPath));
 
-                Helpers.ObtainLicenses(licensesMain, context.Server.MapPath(""));
+                //Helpers.ObtainLicenses(licensesMain, context.Server.MapPath(""));
+
+                Helpers.ObtainLicenses();
+
                 //Helpers.ObtainLicenses(licensesMain, context.Server.MapPath("/"));
 
-                try
-                {
-                    Helpers.ObtainLicenses(licensesBss, context.Server.MapPath(""));
-                    //Helpers.ObtainLicenses(licensesBss, context.Server.MapPath("/"));
-                }
-                catch (Exception ex)
-                {
-                    //Console.WriteLine(ex.ToString());
-                    throw new Exception("Error FingersBSS: " + ex.Message);
-                }
+                //try
+                //{
+                //    Helpers.ObtainLicenses(licensesBss, context.Server.MapPath(""));
+                //    //Helpers.ObtainLicenses(licensesBss, context.Server.MapPath("/"));
+                //}
+                //catch (Exception ex)
+                //{
+                //    //Console.WriteLine(ex.ToString());
+                //    throw new Exception("Error FingersBSS: " + ex.Message);
+                //}
 
                 //Application.EnableVisualStyles();
                 //Application.SetCompatibleTextRenderingDefault(false);
@@ -86,19 +128,21 @@ namespace WCFService
             }
             catch (Exception ex)
             {
-                throw new Exception("Error FingersExtractor, FingersMatcher: " + ex.Message);
+                //throw new Exception("kuku");
+                //throw new System.ServiceModel.FaultException("KUKU", 
+                throw new System.ServiceModel.FaultException("Error FingersExtractor, FingersMatcher: " + ex.Message);
             }
-            finally
-            {
-                //Helpers.ReleaseLicenses(licensesMain);
-                //Helpers.ReleaseLicenses(licensesBss);
-            }
+            //finally
+            //{
+            //    //Helpers.ReleaseLicenses(licensesMain);
+            //    //Helpers.ReleaseLicenses(licensesBss);
+            //}
         }
 
         private void releaseFingersLicences(IList<string> licensesMain, IList<string> licensesBss)
         {
-            Helpers.ReleaseLicenses(licensesMain);
-            Helpers.ReleaseLicenses(licensesBss);
+            Helpers.ReleaseLicenses();
+            //Helpers.ReleaseLicenses(licensesBss);
         }
 
     }

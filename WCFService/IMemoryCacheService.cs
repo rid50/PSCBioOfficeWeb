@@ -16,6 +16,7 @@ namespace WCFService
         bool Contains(string id);
 
         [OperationContract]
+        //[FaultContract(typeof(String))]
         void SetDirty();
 
         [OperationContract]
@@ -40,5 +41,4 @@ namespace WCFService
         [DataMember]
         public ArrayList fingersCollection = null;
     }
-
 }

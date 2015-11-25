@@ -17,6 +17,7 @@ namespace DAO
         static string dbIdColumn;
         static string dbPictureColumn;
         static string dbFingerColumn;
+        string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
 
         static Database()
         {
@@ -42,9 +43,7 @@ namespace DAO
             dbFingerTable = configurationServiceClient.getAppSetting("dbFingerTable");
             dbIdColumn = configurationServiceClient.getAppSetting("dbIdColumn");
             dbPictureColumn = configurationServiceClient.getAppSetting("dbPictureColumn");
-            dbFingerColumn = configurationServiceClient.getAppSetting("dbFingerColumn"); 
-
-
+            dbFingerColumn = configurationServiceClient.getAppSetting("dbFingerColumn");
         }
 
         //string dbPictureTable = System.Configuration.ConfigurationManager.AppSettings["dbPictureTable"];
@@ -54,7 +53,7 @@ namespace DAO
         //string dbFingerColumn = System.Configuration.ConfigurationManager.AppSettings["dbFingerColumn"];
 
         //public override byte[] GetImage(IMAGE_TYPE imageType, int id)
-        public override byte[] GetImage(IMAGE_TYPE imageType, System.Int32 id)
+        public override byte[][] GetImage(IMAGE_TYPE imageType, System.Int32 id)
         {
             //throw new Exception(getConnectionString());
 
@@ -62,7 +61,8 @@ namespace DAO
             SqlCommand cmd = null;
             SqlDataReader reader = null;
 
-            byte[] buffer = new byte[0];
+            byte[][] buffer = new byte[11][];
+            //byte[] buffer = new byte[0];
 
             try
             {
@@ -94,7 +94,8 @@ namespace DAO
                 if (IMAGE_TYPE.picture == imageType)
                     cmd.CommandText = "SELECT " + dbPictureColumn + " FROM " + dbPictureTable + " WHERE " + dbIdColumn + " = @id";
                 else if (IMAGE_TYPE.wsq == imageType)
-                    cmd.CommandText = "SELECT " + dbFingerColumn + " FROM " + dbFingerTable + " WHERE " + dbIdColumn + " = @id";
+                    cmd.CommandText = "SELECT " + dbFingerColumn + "," + fingerFields + " FROM " + dbFingerTable + " WHERE " + dbIdColumn + " = @id";
+                    //cmd.CommandText = "SELECT " + dbFingerColumn + " FROM " + dbFingerTable + " WHERE " + dbIdColumn + " = @id";
                 //else if (IMAGE_TYPE.fingerTemplates == imageType)
                     //cmd.CommandText = "SELECT li,lm,lr,ll,ri,rm,rr,rl,lt,rt FROM " + dbFingerTable + " WHERE " + dbIdColumn + " = @id";
                 else
@@ -115,6 +116,49 @@ namespace DAO
                 //                if (reader.HasRows)   //Does not work for CE
                 if (reader.Read())
                 {
+
+                    if (!reader.IsDBNull(0) && ((byte[])reader[0]).Length != 1)
+                    {
+                        //binary = reader.GetSqlBinary(1);
+                        //if (id != 20031448)
+                        //{
+                        //    if (IMAGE_TYPE.wsq == imageType)
+                        //        buffer = (byte[])reader["wsq"];
+                        //    //buffer = (byte[])reader["AppWsq"];
+                        //    else
+                        //        buffer = (byte[])reader["picture"];
+                        //}
+                        //else
+                        /*
+                                                {
+                                                    if (IMAGE_TYPE.wsq == imageType)
+                                                        buffer = (byte[])reader["AppWsq"];
+                                                    else
+                                                        buffer = (byte[])reader["AppImage"];
+                                                }
+                        */
+                        if (IMAGE_TYPE.wsq == imageType)
+                        {
+                            buffer[0] = (byte[])reader[dbFingerColumn];  //(byte[])reader["AppWsq"];
+
+                            string[] result = fingerFields.Split(new char[] { ',' });
+
+                            int i = 1;
+                            foreach (string s in result)
+                            {
+                                buffer[i++] = (byte[])reader[s];  //(byte[])reader["li"];
+                            }
+                        }
+                        else
+                            buffer[0] = (byte[])reader[dbPictureColumn]; //(byte[])reader["AppImage"];
+
+                        //buffer = (byte[])reader["AppImage"];
+                        //int maxSize = 200000;
+                        //buffer = new byte[maxSize];
+                        //reader.GetBytes(1, 0L, buffer, 0, maxSize);
+                    }
+
+
                     //if (!reader.IsDBNull(0))
                     //    id = reader.GetInt32(0);
 //                    if (!reader.IsDBNull(0))
@@ -139,16 +183,16 @@ namespace DAO
                         */
 
 
-                        if (IMAGE_TYPE.picture == imageType)
-                        {
-                            if (!reader.IsDBNull(0))
-                                buffer = (byte[])reader[dbPictureColumn]; //(byte[])reader["AppImage"];
-                        }
-                        else if (IMAGE_TYPE.wsq == imageType)
-                        {
-                            if (!reader.IsDBNull(0))
-                                buffer = (byte[])reader[dbFingerColumn];  //(byte[])reader["AppWsq"];
-                        }
+                        //if (IMAGE_TYPE.picture == imageType)
+                        //{
+                        //    if (!reader.IsDBNull(0))
+                        //        buffer = (byte[])reader[dbPictureColumn]; //(byte[])reader["AppImage"];
+                        //}
+                        //else if (IMAGE_TYPE.wsq == imageType)
+                        //{
+                        //    if (!reader.IsDBNull(0))
+                        //        buffer = (byte[])reader[dbFingerColumn];  //(byte[])reader["AppWsq"];
+                        //}
                         //else if (IMAGE_TYPE.fingerTemplates == imageType)
                         //{
                         //    StringBuilder sb = new StringBuilder();

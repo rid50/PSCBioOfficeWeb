@@ -71,6 +71,7 @@ namespace WebHandlers
  */       
         public void ProcessRequest(HttpContext context)
         {
+            //context.Response.ContentType = "application/xop+xml";
             context.Response.Cache.SetCacheability(HttpCacheability.NoCache);
             context.Response.Cache.SetNoStore();
             context.Response.Cache.SetExpires(DateTime.MinValue);
@@ -96,6 +97,11 @@ namespace WebHandlers
                 try
                 {
                     cache.SetDirty();
+                }
+                catch (System.ServiceModel.FaultException ex)
+                {
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    context.Response.Write(serializer.Serialize(ex.Message));
                 }
                 catch (Exception ex)
                 {

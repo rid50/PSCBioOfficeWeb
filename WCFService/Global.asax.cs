@@ -13,11 +13,15 @@ namespace WCFService
 {
     public class Global : System.Web.HttpApplication
     {
-        IList<string> licensesMain = null;
-        IList<string> licensesBss = null;
+        //IList<string> licensesMain = null;
+        //IList<string> licensesBss = null;
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            //String _path = String.Concat(System.Environment.GetEnvironmentVariable("PATH"), ";",
+            //                             System.AppDomain.CurrentDomain.RelativeSearchPath);
+            //System.Environment.SetEnvironmentVariable("PATH", _path, EnvironmentVariableTarget.Process);
+            //String _path = System.Environment.GetEnvironmentVariable("PATH");
             try
             {
                 //context.Server.MapPath("/");

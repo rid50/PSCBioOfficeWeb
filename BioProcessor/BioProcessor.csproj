@@ -10,9 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BioProcessor</RootNamespace>
     <AssemblyName>BioProcessor</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,33 +62,58 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>..\bin\BioProcessor.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\BioProcessor.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neurotec, Version=3.1.1.2, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+    <Reference Include="Neurotec, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics">
+    <Reference Include="Neurotec.Biometrics, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Client">
+    <Reference Include="Neurotec.Biometrics.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Gui, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dotNET\Neurotec.Biometrics.Gui.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Devices">
-      <HintPath>..\dotNET\Neurotec.Devices.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Gui, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dotNET\Neurotec.Gui.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Licensing, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+    <Reference Include="Neurotec.Licensing, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Media">
+    <Reference Include="Neurotec.Media, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="System" />

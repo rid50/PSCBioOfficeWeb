@@ -55,14 +55,14 @@ namespace WCFService
         {
             //throw new FaultException<String>("MyFault");
 
-            //try
-            //{
+            try
+            {
                 MemoryCache.Default["dirty"] = "true";
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new FaultException<String>(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException<String>(ex.Message);
+            }
         }
 
         public byte[][] GetImage(IMAGE_TYPE imageType, int id)

@@ -7,4 +7,12 @@
     <StartAction>URL</StartAction>
     <StartURL>http://biooffice/</StartURL>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <StartURL>http://biooffice/</StartURL>
+    <StartAction>URL</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartURL>http://biooffice/</StartURL>
+    <StartAction>URL</StartAction>
+  </PropertyGroup>
 </Project>

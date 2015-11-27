@@ -84,41 +84,9 @@ namespace BioProcessor
                 {
 
                     wsqImage = fingersCollection[i] as WsqImage;
-                //if (wsqImage == null)
-                //{
-                    //rb.Enabled = false;
-                    //lab.Enabled = false;
-                //}
-                //else
-                //{
-                    //rb.Enabled = true;
-                    //lab.Enabled = true;
-                //}
-
-                //pb = this.Controls.Find("fpPictureBox" + (i + 1).ToString(), true)[0] as PictureBox;
-
-                //throw new Exception("Arr: " + (fingersCollection[i] != null).ToString());
-                //if (fingersCollection[i] != null)
-                //if (wsqImage != null)
-                //{
-                    //throw new Exception("Cont: " + wsqImage.Content.ToString());
-                    //WsqImage wsq = _fingersCollection[i] as WsqImage;
-
-                    //MemoryStream ms = null;
-                    //NImage nImage;
                     try
                     {
-                        //ms = new MemoryStream(wsqImage.Content);
-                        //throw new Exception("Cont2: " + wsqImage.Content.ToString());
-
-                        //Bitmap bm = new Bitmap(ms);
-
-                        //image = NImage.FromFile(fileName, NImageFormat.Wsq);
-
-                        //NImage nImage = NImageFormat.Wsq.LoadImage(ms);
-                        //throw new Exception("NImageFormat.Wsq.LoadImage(ms)");
                         NImage nImage = NImage.FromMemory(wsqImage.Content, NImageFormat.Wsq);
-
                         if (serializedWSQArray[i + 1].Length != 0)
                         {
                             NFRecord record = new NFRecord(serializedWSQArray[i + 1]);
@@ -129,28 +97,7 @@ namespace BioProcessor
                         else
                             pct = 0;
 
-                        //if (bestQuality < pct)
-                        //{
-                        //    bestQuality = pct;
-                        //    bestQualityImage = i;
-                        //}
-
-
-
-
-
-
-                        //float horzResolution = nImage.HorzResolution;
-                        ////throw new Exception("hor: " + nImage.HorzResolution.ToString());
-                        //float vertResolution = nImage.VertResolution;
-                        //if (horzResolution < 250) horzResolution = 500;
-                        //if (vertResolution < 250) vertResolution = 500;
-
-                        //NGrayscaleImage grayImage = (NGrayscaleImage)NImage.FromImage(NPixelFormat.Grayscale, 0, horzResolution, vertResolution, nImage);
-                        //throw new Exception(grayImage.Size.ToString());
-                        //int q = GetImageQuality(grayImage, this.Controls.Find("lbFinger" + (i + 1).ToString(), true)[0] as Label);
                         string label = ""; Brush brush = Brushes.Transparent;
-//                        int q = GetImageQuality(grayImage, out label, out brush);
 
                         if (pct > 0) {
                             label = string.Format("Q: {0:P0}", pct / 100.0);
@@ -164,8 +111,7 @@ namespace BioProcessor
                             label = string.Format("q: {0:P0}", 0);
                             brush = Brushes.Red;
                         }
-                        //label = "kuku";
-                        //brush = Brushes.Red;
+
                         //Bitmap bmp = new Bitmap(nImage.ToBitmap(), new Size(65, 95));
                         Bitmap bmp = new Bitmap(nImage.ToBitmap(), new Size(100, 120));
                         //RectangleF rectf = new RectangleF(0.0f, 2.0f, 65.0f, 40.0f);
@@ -178,54 +124,18 @@ namespace BioProcessor
                         g.DrawString(label, new Font("Areal", 13), brush, rectf);
                         g.Flush();
 
-                        //throw new Exception(bmp.Width.ToString());
-
-                        //throw new Exception("Quality: " + q.ToString());
-
-
-                        //if (bestQuality < q)
-                        //{
-                        //    bestQuality = q;
-                            //bestQualityRadioButton = i;
-                        //}
-
-                        //ms.Close();
-
                         using(var ms = new MemoryStream())
                         {
-                            //nImage.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                             bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                             fingersCollection[i] = ms.ToArray();
                         }
-
-                        //fingersCollection[i] = nImage.ToBitmap();
-                        //(fingersCollection[dict[wsqQuery]] as System.Drawing.Bitmap).ToByteArray(ImageFormat.Bmp);
-                        //throw new Exception("nImage.ToBitmap: " + nImage.Size.ToString());
-
-                        //pb.Image = nImage.ToBitmap();
-                        ////image = NImage.FromBitmap(bm);
-                        //pb.SizeMode = PictureBoxSizeMode.Zoom;
-
                     }
                     catch (Exception ex)
                     {
-                        //j++;
-                        //throw new Exception(e.Message);
-
-                        //MessageBox.Show(string.Format("Error creating image retrieved from database {0}", ex.Message),
-                        //  Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                        //string text = string.Format("Error creating image retrieved from database {0}", ex.Message);
-                        //ShowErrorMessage(text);
                         fingersCollection[i] = getEmptyBitmap();
 
                         continue;
                     }
-                    //finally
-                    //{
-                    //    if (ms != null)
-                    //        ms.Close();
-                    //}
                 }
                 else
                 {

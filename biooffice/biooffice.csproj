@@ -192,9 +192,6 @@
     <None Include="bundle\Messages.properties" />
     <None Include="bundle\Messages_ar.properties" />
     <None Include="bundle\Messages_en.properties" />
-    <Content Include="Copy of Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -20,16 +20,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://biooffice/WCFService/MemoryCacheService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://BiometricsService/MemoryCacheService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MemoryCacheService1.xsd" MetadataType="Schema" ID="b55420a4-274f-4f47-86bd-7ac94f5b454f" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd0" />
-    <MetadataFile FileName="MemoryCacheService3.xsd" MetadataType="Schema" ID="87ecfc8f-3b3d-45ae-892c-6653556b4ae5" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd3" />
-    <MetadataFile FileName="MemoryCacheService2.xsd" MetadataType="Schema" ID="27f2766e-6b45-4936-bd9c-bf043aa96729" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd2" />
-    <MetadataFile FileName="MemoryCacheService.disco" MetadataType="Disco" ID="04f6c8d7-49c4-4d78-b567-d4b6b387e4e7" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?disco" />
-    <MetadataFile FileName="MemoryCacheService.wsdl" MetadataType="Wsdl" ID="3932abc8-0bbc-471c-93dc-5d73b99d03de" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?wsdl" />
-    <MetadataFile FileName="MemoryCacheService.xsd" MetadataType="Schema" ID="ab5cc766-270a-4633-b283-7f645b9e7c11" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd1" />
-    <MetadataFile FileName="MemoryCacheService4.xsd" MetadataType="Schema" ID="22a39d11-2a6d-454b-b8e9-d35c21c07ac2" SourceId="1" SourceUrl="http://biooffice/WCFService/MemoryCacheService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MemoryCacheService5.xsd" MetadataType="Schema" ID="cd6de1c0-ed70-4c8b-b6d9-e52859add8d8" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MemoryCacheService51.xsd" MetadataType="Schema" ID="63fea613-2d79-4ffd-acb8-80d669f47af4" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MemoryCacheService52.xsd" MetadataType="Schema" ID="aea06290-273c-45d3-8058-fc320f4137ca" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MemoryCacheService1.disco" MetadataType="Disco" ID="7c8efd52-b0a2-437c-8933-e90c411dc6ab" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?disco" />
+    <MetadataFile FileName="MemoryCacheService53.xsd" MetadataType="Schema" ID="f6b94d79-dcff-4cec-a550-c31713d9fed7" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MemoryCacheService54.xsd" MetadataType="Schema" ID="9bb2ba26-f95d-4ad3-af7a-199806da06f2" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MemoryCacheService1.wsdl" MetadataType="Wsdl" ID="b974f355-e2bd-4061-ac16-3846d3ee3290" SourceId="1" SourceUrl="http://biometricsservice/MemoryCacheService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="WCFService.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="BiometricsService.Global" Language="C#" %>

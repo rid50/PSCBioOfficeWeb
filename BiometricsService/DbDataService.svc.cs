@@ -8,7 +8,7 @@ using System.Configuration;
 using System.ServiceModel.Activation;
 using DAO;
 
-namespace WCFService
+namespace BiometricsService
 {
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class DbDataService : IDbDataService

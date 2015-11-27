@@ -12,7 +12,7 @@ using System.Configuration;
 //using WCFService.ConfigurationService;
 //using DataService.ConfigurationService;
 
-namespace WCFService
+namespace BiometricsService
 {
     
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]

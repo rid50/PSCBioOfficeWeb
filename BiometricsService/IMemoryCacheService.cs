@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Collections;
 
-namespace WCFService
+namespace BiometricsService
 {
     [ServiceContract]
     //[ServiceKnownType(typeof(WsqImage))]

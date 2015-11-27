@@ -18,13 +18,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://biooffice/WCFService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://BiometricsService/ConfigurationService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConfigurationService.xsd" MetadataType="Schema" ID="8b933472-c4c2-4062-977f-14debb7fff06" SourceId="1" SourceUrl="http://biooffice/WCFService/ConfigurationService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ConfigurationService1.xsd" MetadataType="Schema" ID="365f86e7-33b6-453c-8e96-ff878698bbed" SourceId="1" SourceUrl="http://biooffice/WCFService/ConfigurationService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ConfigurationService.disco" MetadataType="Disco" ID="cdd1f850-6464-4dd9-bdb5-dc411db8488d" SourceId="1" SourceUrl="http://biooffice/WCFService/ConfigurationService.svc?disco" />
-    <MetadataFile FileName="ConfigurationService.wsdl" MetadataType="Wsdl" ID="609857ec-8a3e-4bd2-b132-5ee02c1500c2" SourceId="1" SourceUrl="http://biooffice/WCFService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService1.disco" MetadataType="Disco" ID="d162ff12-5a9c-4d59-9b1a-39ac6c2a882b" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="f3f06368-015b-47f6-99f0-fbf163fa9c70" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService1.wsdl" MetadataType="Wsdl" ID="14cee108-d95a-4cfe-8497-ca00140e42e4" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService21.xsd" MetadataType="Schema" ID="0eaa73d9-0d76-4bad-ac37-e518148c3001" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

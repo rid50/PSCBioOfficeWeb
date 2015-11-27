@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="WCFService.MemoryCacheService" CodeBehind="MemoryCacheService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="BiometricsService.MemoryCacheService" CodeBehind="MemoryCacheService.svc.cs" %>

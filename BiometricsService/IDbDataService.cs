@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using DAO;
 
-namespace WCFService
+namespace BiometricsService
 {
     [ServiceContract]
     public interface IDbDataService

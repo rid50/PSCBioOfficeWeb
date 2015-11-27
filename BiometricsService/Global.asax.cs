@@ -9,7 +9,7 @@ using System.Web.Routing;
 using System.Runtime.Caching;
 using BioProcessor;
 
-namespace WCFService
+namespace BiometricsService
 {
     public class Global : System.Web.HttpApplication
     {

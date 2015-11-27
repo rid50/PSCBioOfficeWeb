@@ -7,7 +7,7 @@ using System.Text;
 using System.Configuration;
 using System.ServiceModel.Activation;
 
-namespace WCFService
+namespace BiometricsService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class ConfigurationService : IConfigurationService

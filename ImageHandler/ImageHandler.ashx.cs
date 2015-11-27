@@ -280,7 +280,10 @@ namespace WebHandlers
                         //WsqImage wsqImage = fingersCollection[dict[wsqQuery]] as WsqImage;
                         //buffer = ConvertWSQToBmp(wsqImage);
 */
-                        context.Response.BinaryWrite(fingersCollection[dict[wsqQuery]] as byte[]);
+                        if (fingersCollection != null)
+                            context.Response.BinaryWrite(fingersCollection[dict[wsqQuery]] as byte[]);
+                        else
+                            throw new Exception("Finger collection is null");
                         //context.Response.Flush();
                     }
                     catch (Exception ex)

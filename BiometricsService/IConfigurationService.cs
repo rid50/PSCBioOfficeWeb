@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-namespace WCFService
+namespace BiometricsService
 {
     [ServiceContract]
     public interface IConfigurationService

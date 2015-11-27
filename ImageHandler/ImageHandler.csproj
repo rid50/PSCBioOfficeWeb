@@ -135,19 +135,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ImageHandler.ashx" />
-    <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
-    <None Include="Service References\CacheService\MemoryCacheService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -156,22 +143,35 @@
     <WCFMetadataStorage Include="Service References\CacheService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CacheService\MemoryCacheService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\CacheService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CacheService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CacheService\MemoryCacheService4.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService1.wsdl" />
+    <None Include="Service References\CacheService\MemoryCacheService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService51.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService52.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService53.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService54.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\CacheService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CacheService\MemoryCacheService1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

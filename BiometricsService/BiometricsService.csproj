@@ -96,6 +96,7 @@
     <Content Include="ConfigurationService.svc" />
     <Content Include="DbDataService.svc" />
     <Content Include="Global.asax" />
+    <Content Include="MatchingService.svc" />
     <Content Include="MemoryCacheService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -121,8 +122,12 @@
     </Compile>
     <Compile Include="IConfigurationService.cs" />
     <Compile Include="IDbDataService.cs" />
+    <Compile Include="IMatchingService.cs" />
     <Compile Include="IMemoryCacheService.cs" />
     <Compile Include="IWebDataService.cs" />
+    <Compile Include="MatchingService.svc.cs">
+      <DependentUpon>MatchingService.svc</DependentUpon>
+    </Compile>
     <Compile Include="MemoryCacheService.svc.cs">
       <DependentUpon>MemoryCacheService.svc</DependentUpon>
     </Compile>

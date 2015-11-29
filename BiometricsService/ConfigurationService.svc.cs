@@ -10,8 +10,43 @@ using System.ServiceModel.Activation;
 namespace BiometricsService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    //[DataContract]
+    //[KnownType(typeof(System.Collections.Specialized.NameValueCollection))]
     public class ConfigurationService : IConfigurationService
     {
+        //[DataMember]
+        //System.Collections.Specialized.NameValueCollection appSetting;
+
+        //[DataMember]
+        //public System.Collections.Specialized.NameValueCollection AppSetting { get { return ConfigurationManager.AppSettings; } }
+
+        public Dictionary<string, string> AppSettings()
+        {
+            Dictionary<string, string> settings = new Dictionary<string, string>();
+
+            foreach (var key in ConfigurationManager.AppSettings.AllKeys)
+            {
+                settings.Add(key, ConfigurationManager.AppSettings[key]);
+            }
+
+            return settings; 
+        }
+
+        public Dictionary<string, string> ConnectionStrings()
+        {
+            Dictionary<string, string> settings = new Dictionary<string, string>();
+
+            foreach (ConnectionStringSettings cs in ConfigurationManager.ConnectionStrings)
+            {
+                settings.Add(cs.Name, cs.ConnectionString);
+            }
+
+            return settings;
+        }
+        
+        //[DataMember]
+        public System.Configuration.ConnectionStringSettingsCollection ConnectionString { get { return ConfigurationManager.ConnectionStrings; } }
+
         public string getAppSetting(string key)
         {
             var setting = ConfigurationManager.AppSettings[key];

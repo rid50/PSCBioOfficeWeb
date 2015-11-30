@@ -97,6 +97,8 @@ namespace BioProcessor
                         else
                             pct = 0;
 
+                        //verify(nImage);
+
                         string label = ""; Brush brush = Brushes.Transparent;
 
                         if (pct > 0) {
@@ -132,6 +134,7 @@ namespace BioProcessor
                     }
                     catch (Exception ex)
                     {
+                        throw new Exception(ex.Message);
                         fingersCollection[i] = getEmptyBitmap();
 
                         continue;
@@ -195,6 +198,38 @@ namespace BioProcessor
 
                 bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                 return ms.ToArray();
+            }
+        }
+
+        void verify(NImage nImage)
+        {
+            var biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
+            var subject = new NSubject();
+            var finger = new NFinger { Image = nImage };
+            subject.Fingers.Add(finger);
+            //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
+            biometricClient.CreateTemplate(subject);
+
+            if (subject.Fingers[0].Objects[0].Template == null)
+            {
+                throw new Exception("Template is null");
+            }
+
+            var subject2 = new NSubject();
+            var finger2 = new NFinger { Image = nImage };
+            subject2.Fingers.Add(finger2);
+            //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
+            biometricClient.CreateTemplate(subject2);
+
+            if (subject2.Fingers[0].Objects[0].Template == null)
+            {
+                throw new Exception("Template2 is null");
+            }
+
+            var status = biometricClient.Verify(subject, subject2);
+            if (status != NBiometricStatus.Ok)
+            {
+                throw new Exception("Verification failed");
             }
         }
 

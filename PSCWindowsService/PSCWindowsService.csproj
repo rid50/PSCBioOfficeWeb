@@ -81,6 +81,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\WSQImageService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -90,6 +95,13 @@
   <ItemGroup>
     <Content Include="CommandServices.svc" />
     <Content Include="Installation Commands.txt" />
+    <None Include="Service References\WSQImageService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\WSQImageService\configuration.svcinfo" />
+    <None Include="Service References\WSQImageService\configuration91.svcinfo" />
+    <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\CacheService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -120,6 +132,13 @@
     <None Include="Service References\DatabaseService\configuration.svcinfo" />
     <None Include="Service References\DatabaseService\configuration91.svcinfo" />
     <None Include="Service References\DatabaseService\DbDataService.disco" />
+    <None Include="Service References\WSQImageService\WSQImageService.wsdl" />
+    <None Include="Service References\WSQImageService\WSQImageService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WSQImageService\WSQImageService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -143,6 +162,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CacheService\" />
     <WCFMetadataStorage Include="Service References\DatabaseService\" />
+    <WCFMetadataStorage Include="Service References\WSQImageService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

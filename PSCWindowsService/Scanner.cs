@@ -6,7 +6,8 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
-using WindowsService.DatabaseService;
+//using WindowsService.DatabaseService;
+using WindowsService.WSQImageService;
 
 namespace PSCWindowsService
 {
@@ -116,19 +117,20 @@ namespace PSCWindowsService
 
                 if (ErrorCode == 0)
                 {
-                    byte[] buff = null;
+                    //byte[] buff = null;
                     MemoryStream ms = new MemoryStream();
                     // Construct a BinaryFormatter and use it to serialize the data to the stream.
                     BinaryFormatter formatter = new BinaryFormatter();
                     try
                     {
                         formatter.Serialize(ms, _fingersCollection as ArrayList);
-                        buff = ms.ToArray();
+                        //buff = ms.ToArray();
 
-                        var client = new DbDataServiceClient();
-                        client.SendImage(IMAGE_TYPE.wsq, Convert.ToInt32(id), ref buff);
+                        //var client = new DbDataServiceClient();
+                        //client.SendImage(IMAGE_TYPE.wsq, Convert.ToInt32(id), ref buff);
 
-                        //saveWsqInDatabase(id, buff);
+                        var client = new WSQImageServiceClient();
+                        client.SaveWSQImage(Int32.Parse(id), ms.ToArray());
                     }
                     catch (SerializationException ex)
                     {

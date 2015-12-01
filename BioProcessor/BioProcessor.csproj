@@ -124,10 +124,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WsqSerializationBinder">
+      <HintPath>..\WsqSerializationBinder\bin\Release\WsqSerializationBinder.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BioProcessor.cs" />
-    <Compile Include="GenericBinder.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

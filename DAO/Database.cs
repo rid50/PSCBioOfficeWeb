@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DAO.ConfigurationService;
 using System.Text;
+using System.Collections.Generic;
 //using System.Runtime.Serialization.Json;
 
 namespace DAO
@@ -290,6 +291,82 @@ namespace DAO
                 cmd.Parameters["@id"].Value = id;
 
                 cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                //System.Windows.Forms.MessageBox.Show(ex.Message);
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                try
+                {
+                    if (conn != null && conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                        conn = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+
+        public void SaveWSQTemplate(int id, Dictionary<string, byte[]> templates)
+        {
+            SqlConnection conn = null;
+            SqlCommand cmd = null;
+            //object incrementId = null;
+            try
+            {
+                //conn = new SqlConnection(getConnectionString());
+                conn = new SqlConnection(configurationServiceClient.getConnectionString("ConnectionString"));
+
+                conn.Open();
+
+                cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                //string dbImageTable, dbImageColumn;
+                //dbImageTable = dbFingerTable;
+                //dbImageColumn = dbFingerColumn;
+
+                StringBuilder sb = new StringBuilder();
+                foreach (string key in templates.Keys)
+                {
+                    //indx = "@" + key;
+
+                    if (sb.Length == 0)
+                    {
+                        sb.Append("update {0} with (serializable) SET ");
+                        sb.Append(dbFingerColumn + "=@" + key);
+                        cmd.Parameters.Add(key, SqlDbType.VarBinary);
+                    }
+                    else
+                        sb.Append(",");
+
+                    sb.Append(key + "=@" + key);
+                    cmd.Parameters.Add("@" + key, SqlDbType.VarBinary);
+                    cmd.Parameters["@" + key].Value = templates[key];
+                }
+
+                if (sb.Length != 0)
+                {
+                    sb.Append(" where {1} = @id");
+                    cmd.CommandText = String.Format(sb.ToString(), dbFingerTable, dbIdColumn);
+                    cmd.Parameters.Add("@id", SqlDbType.Int);
+                    cmd.Parameters["@id"].Value = id;
+
+                    //conn2 = new SqlConnection(getConnectionString());
+                    //conn2.Open();
+                    //cmd2.Connection = MyConnection.Connection2;
+                    cmd.ExecuteNonQuery();
+
+                    //cmd2.CommandText = String.Format(@"update {0} with (serializable) SET li = @li
+                    //    where {1} = @id", dbFingerTable, dbIdColumn);
+                }
             }
             catch (Exception ex)
             {

@@ -11,16 +11,24 @@ namespace DAO
 {
     public class Database : DataSource
     {
-        static ConfigurationServiceClient configurationServiceClient;
+        //static ConfigurationServiceClient configurationServiceClient;
+        ConfigurationServiceClient configurationServiceClient;
 
-        static string dbPictureTable;
-        static string dbFingerTable;
-        static string dbIdColumn;
-        static string dbPictureColumn;
-        static string dbFingerColumn;
+        //static string dbPictureTable;
+        //static string dbFingerTable;
+        //static string dbIdColumn;
+        //static string dbPictureColumn;
+        //static string dbFingerColumn;
+        //string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+        string dbPictureTable;
+        string dbFingerTable;
+        string dbIdColumn;
+        string dbPictureColumn;
+        string dbFingerColumn;
         string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
 
-        static Database()
+        //static Database()
+        public Database()
         {
             //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(@"c:\temp\debug.log"));
 

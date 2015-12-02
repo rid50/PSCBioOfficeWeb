@@ -18,13 +18,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://BiometricsService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://PSCService/CommonService/ConfigurationService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConfigurationService1.disco" MetadataType="Disco" ID="d162ff12-5a9c-4d59-9b1a-39ac6c2a882b" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?disco" />
-    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="f3f06368-015b-47f6-99f0-fbf163fa9c70" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ConfigurationService1.wsdl" MetadataType="Wsdl" ID="14cee108-d95a-4cfe-8497-ca00140e42e4" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?wsdl" />
-    <MetadataFile FileName="ConfigurationService21.xsd" MetadataType="Schema" ID="0eaa73d9-0d76-4bad-ac37-e518148c3001" SourceId="1" SourceUrl="http://biometricsservice/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService.wsdl" MetadataType="Wsdl" ID="706007a1-a958-4a41-a5e4-fa137a4375e5" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService.xsd" MetadataType="Schema" ID="da62e907-3fa1-4cfa-a12e-7b29d2cdaf97" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ConfigurationService.disco" MetadataType="Disco" ID="3fa4a5f1-4395-49f3-956f-e74e28d54e15" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService1.xsd" MetadataType="Schema" ID="dca0259d-740e-419d-aec5-3abbc5f2c32c" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="9a7bc2c2-89f1-4b49-8e12-73f2d0abfac8" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

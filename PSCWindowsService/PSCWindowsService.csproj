@@ -62,21 +62,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ARHScanner.cs" />
-    <Compile Include="CommandServices.svc.cs">
-      <DependentUpon>CommandServices.svc</DependentUpon>
+    <Compile Include="CommandService.svc.cs">
+      <DependentUpon>CommandService.svc</DependentUpon>
     </Compile>
     <Compile Include="GenericBinder.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="ICommandServices.cs" />
+    <Compile Include="ICommandService.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Service References\CacheService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Service References\DatabaseService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -93,50 +88,43 @@
     <Compile Include="Scanner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CommandServices.svc" />
+    <Content Include="CommandService.svc" />
     <Content Include="Installation Commands.txt" />
+    <None Include="Service References\CacheService\MemoryCacheService1.disco" />
+    <None Include="Service References\CacheService\MemoryCacheService1.wsdl" />
+    <None Include="Service References\CacheService\MemoryCacheService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService51.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService52.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService53.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService54.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WSQImageService\WSQImageService1.disco" />
     <None Include="Service References\WSQImageService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\WSQImageService\configuration.svcinfo" />
     <None Include="Service References\WSQImageService\configuration91.svcinfo" />
-    <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\CacheService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\CacheService\configuration.svcinfo" />
     <None Include="Service References\CacheService\configuration91.svcinfo" />
-    <None Include="Service References\CacheService\MemoryCacheService.disco" />
-    <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
-    <None Include="Service References\CacheService\MemoryCacheService.xsd">
+    <None Include="Service References\WSQImageService\WSQImageService1.wsdl" />
+    <None Include="Service References\WSQImageService\WSQImageService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CacheService\MemoryCacheService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DatabaseService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\DatabaseService\configuration.svcinfo" />
-    <None Include="Service References\DatabaseService\configuration91.svcinfo" />
-    <None Include="Service References\DatabaseService\DbDataService.disco" />
-    <None Include="Service References\WSQImageService\WSQImageService.wsdl" />
-    <None Include="Service References\WSQImageService\WSQImageService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\WSQImageService\WSQImageService1.xsd">
+    <None Include="Service References\WSQImageService\WSQImageService21.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -145,23 +133,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\DatabaseService\DbDataService.wsdl" />
-    <None Include="Service References\DatabaseService\DbDataService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DatabaseService\DbDataService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DatabaseService\DbDataService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CacheService\" />
-    <WCFMetadataStorage Include="Service References\DatabaseService\" />
     <WCFMetadataStorage Include="Service References\WSQImageService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

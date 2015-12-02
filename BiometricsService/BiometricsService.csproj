@@ -67,6 +67,10 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BioProcessor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BioProcessor\bin\BioProcessor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -143,10 +147,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BioProcessor\BioProcessor.csproj">
-      <Project>{B14A562B-92B2-4368-BE53-860A0EAFBB69}</Project>
-      <Name>BioProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DAO\DAO.csproj">
       <Project>{D4C98875-6D45-44B2-8D9C-7B37CB1E71D9}</Project>
       <Name>DAO</Name>

@@ -1,6 +1,9 @@
-﻿installutil C:\PSCBioOffice\PSCWindowsService\bin\PSCWindowsService.exe
+﻿Visual Studio Command Prompt
+================================
+
+installutil C:\PSCBioOfficeWeb\PSCWindowsService\bin\PSCWindowsService.exe
 net start PSCWindowsService
 
 
-net stop PSCWCFWindowsService
-installutil /u C:\PSCBioOffice\PSCWindowsService\bin\PSCWindowsService.exe
+net stop PSCWindowsService
+installutil /u C:\PSCBioOfficeWeb\PSCWindowsService\bin\PSCWindowsService.exe

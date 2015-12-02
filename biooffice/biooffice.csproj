@@ -89,7 +89,6 @@
   <ItemGroup>
     <Content Include="css\style.css" />
     <Content Include="css\ui.jqgrid.css" />
-    <Content Include="Global.asax" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\ajax-loaderCircl.gif" />
     <Content Include="images\ajax-loaderCircle2.gif" />
@@ -175,9 +174,6 @@
     <Content Include="themes\smoothness\jquery-ui-1.10.3.custom.min.css" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,6 @@ form {
 
 h3 {
 	font-weight: normal;
-	//font-size: 1.2em;
 	margin: 0; 
 }
 
@@ -139,6 +138,18 @@ footer {
 	clear: both;
 	float: left;
 	width: inherit;
+}
+
+#photo 
+{
+	direction: ltr;
+	position: absolute;
+	border: 1px solid black;
+	//background-color: transparent;
+	margin-top:12px;
+	left: 12px;
+	height:286px;
+	width:241px;
 }
 
 #videoControl {

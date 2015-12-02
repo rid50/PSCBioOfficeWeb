@@ -114,10 +114,12 @@ $(document).ready(function () {
                             $('#divWsq').hide();
 							if (videoControl !== undefined) {
 								videoControl.StartAxVideoControl();
+								$('#divPhoto').hide();
 								$('#TakeImage').show();
-							} else
+							} else {
+								$('#divPhoto').show();
 								$('#TakeImage').hide();
-							
+							}
 /*
 							//if (!$(videoControl).is(':visible')) {
 								if (divWsq == null) {
@@ -145,6 +147,7 @@ $(document).ready(function () {
 
                             $('#divWsq').show();
                             $('#divVideo').hide();
+							$('#divPhoto').hide();
 							if (videoControl !== undefined)
 								videoControl.StopAxVideoControl();
 
@@ -227,7 +230,7 @@ $(document).ready(function () {
 		
 		$('#error_box').val("");	
         // Check if PSCWindowsService service was started
-		var url = "http://biooffice:8080/PSCWindowsService/CommandServices/CheckConnection/";
+		var url = "http://biooffice:8080/PSCWindowsService/CommandService/CheckConnection/";
 
 		$.blockUI();
 		
@@ -247,7 +250,7 @@ $(document).ready(function () {
 			return;	
 		}
 	
-		url = "http://biooffice:8080/PSCWindowsService/CommandServices/" + buttonId + "/" + id;
+		url = "http://biooffice:8080/PSCWindowsService/CommandService/" + buttonId + "/" + id;
 	
 		$.ajax({ 
 			type: "get",
@@ -334,6 +337,7 @@ $(document).ready(function () {
 	$('#left-section').html('<input type="text" id="error_box" readonly />');
 
 	$('#divVideo').appendTo('#left-section');
+	$('#divPhoto').appendTo('#left-section');
 	$('#divWsq').appendTo('#left-section');
 	$('#divVideo').show();
 //return;
@@ -344,8 +348,11 @@ $(document).ready(function () {
 		//$(videoControl).show();
 	} catch(e) { videoControl = undefined;}
 	
-	if (videoControl === undefined)
+	if (videoControl === undefined) {
+        $($('#accordion>span')[0]).text("Photo");
+	    $('#divPhoto').show();
 		$('#TakeImage').hide();
+    }
 
     $.get('ImageHandler/ImageHandler.ashx?clearSession=')
    		.done(function(data) {
@@ -482,6 +489,11 @@ $(function() {
 			ret = videoControl.GetIt(id);
             if (ret != "")
                 $('#error_box').val(ret);
+        } else {
+            var user_id = $('#user_id').val();
+            var urlImg = 'ImageHandler/ImageHandler.ashx';
+            var rand = Math.random();
+			$('#photo').prop('src', urlImg + '?id=' + user_id + '&rand=' + rand);
         }
 
 		$.blockUI();

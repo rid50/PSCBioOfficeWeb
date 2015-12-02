@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\PSCBioOfficeWeb\BiometricsService\bin\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -139,11 +139,14 @@
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
-    <None Include="Service References\ConfigurationService\ConfigurationService2.xsd">
+    <None Include="Service References\ConfigurationService\ConfigurationService.wsdl" />
+    <None Include="Service References\ConfigurationService\ConfigurationService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService21.xsd">
+    <None Include="Service References\ConfigurationService\ConfigurationService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ConfigurationService\Reference.svcmap">
@@ -152,7 +155,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
+    <None Include="Service References\ConfigurationService\ConfigurationService.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

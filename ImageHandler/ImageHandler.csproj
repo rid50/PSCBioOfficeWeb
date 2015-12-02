@@ -149,20 +149,20 @@
     <None Include="Service References\CacheService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CacheService\MemoryCacheService1.wsdl" />
-    <None Include="Service References\CacheService\MemoryCacheService5.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
+    <None Include="Service References\CacheService\MemoryCacheService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService51.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService52.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService53.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService54.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\CacheService\Reference.svcmap">
@@ -171,7 +171,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CacheService\MemoryCacheService1.disco" />
+    <None Include="Service References\CacheService\MemoryCacheService.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -15,6 +15,12 @@ namespace DAO.ConfigurationService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ConfigurationService.IConfigurationService")]
     public interface IConfigurationService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/AppSettings", ReplyAction="http://tempuri.org/IConfigurationService/AppSettingsResponse")]
+        System.Collections.Generic.Dictionary<string, string> AppSettings();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/ConnectionStrings", ReplyAction="http://tempuri.org/IConfigurationService/ConnectionStringsResponse")]
+        System.Collections.Generic.Dictionary<string, string> ConnectionStrings();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/getAppSetting", ReplyAction="http://tempuri.org/IConfigurationService/getAppSettingResponse")]
         string getAppSetting(string key);
         
@@ -47,6 +53,14 @@ namespace DAO.ConfigurationService {
         
         public ConfigurationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public System.Collections.Generic.Dictionary<string, string> AppSettings() {
+            return base.Channel.AppSettings();
+        }
+        
+        public System.Collections.Generic.Dictionary<string, string> ConnectionStrings() {
+            return base.Channel.ConnectionStrings();
         }
         
         public string getAppSetting(string key) {

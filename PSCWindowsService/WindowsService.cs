@@ -11,7 +11,6 @@ namespace PSCWindowsService
         {
             // Name the Windows Service
             ServiceName = "PSCWindowsService";
-
         }
 
         public static void Main()
@@ -29,7 +28,7 @@ namespace PSCWindowsService
 
             // Create a ServiceHost for the CalculatorService type and 
             // provide the base address.
-            serviceHost = new ServiceHost(typeof(CommandServices));
+            serviceHost = new ServiceHost(typeof(CommandService));
 
             // Open the ServiceHostBase to create listeners and start 
             // listening for messages.

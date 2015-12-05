@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using DAO.ConfigurationService;
+//using DAO.ConfigurationService;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +17,7 @@ namespace DAO
     public class Database : DataSource
     {
         //static ConfigurationServiceClient configurationServiceClient;
-        ConfigurationServiceClient configurationServiceClient;
+        //ConfigurationServiceClient configurationServiceClient;
 
         //static string dbPictureTable;
         //static string dbFingerTable;
@@ -582,10 +582,10 @@ namespace DAO
             }
         }
 
-        public string getAppSetting(string key)
-        {
-            return configurationServiceClient.getAppSetting(key);
-        }
+        //public string getAppSetting(string key)
+        //{
+        //    return configurationServiceClient.getAppSetting(key);
+        //}
 
 /*
         private SqlConnection buildConnectionString()

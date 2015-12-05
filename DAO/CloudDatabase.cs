@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Web;
-using DAO.ConfigurationService;
+//using DAO.ConfigurationService;
 
 namespace DAO
 {
@@ -22,23 +22,29 @@ namespace DAO
         //string dbPictureColumnWebService = System.Configuration.ConfigurationManager.AppSettings["dbPictureColumnWebService"];
         //string dbFingerColumnWebService = System.Configuration.ConfigurationManager.AppSettings["dbFingerColumnWebService"];
 
-        static ConfigurationServiceClient configurationServiceClient;
+        //static ConfigurationServiceClient configurationServiceClient;
 
-        static string siteUrl;
-        static string sitePictureTablePath;
-        static string siteFingerTablePath;
-        static string dbPictureColumnWebService;
-        static string dbFingerColumnWebService;
+        string siteUrl;
+        string sitePictureTablePath;
+        string siteFingerTablePath;
+        string dbPictureColumnWebService;
+        string dbFingerColumnWebService;
 
-        static CloudDatabase()
+        public CloudDatabase(Dictionary<string, string> settings)
         {
-            configurationServiceClient = new ConfigurationServiceClient();
+            //configurationServiceClient = new ConfigurationServiceClient();
 
-            siteUrl = configurationServiceClient.getAppSetting("siteUrl");
-            sitePictureTablePath = configurationServiceClient.getAppSetting("sitePictureTablePath");
-            siteFingerTablePath = configurationServiceClient.getAppSetting("siteFingerTablePath");
-            dbPictureColumnWebService = configurationServiceClient.getAppSetting("dbPictureColumnWebService");
-            dbFingerColumnWebService = configurationServiceClient.getAppSetting("dbFingerColumnWebService"); 
+            //siteUrl = configurationServiceClient.getAppSetting("siteUrl");
+            //sitePictureTablePath = configurationServiceClient.getAppSetting("sitePictureTablePath");
+            //siteFingerTablePath = configurationServiceClient.getAppSetting("siteFingerTablePath");
+            //dbPictureColumnWebService = configurationServiceClient.getAppSetting("dbPictureColumnWebService");
+            //dbFingerColumnWebService = configurationServiceClient.getAppSetting("dbFingerColumnWebService");
+
+            siteUrl = settings["siteUrl"];
+            sitePictureTablePath = settings["sitePictureTablePath"];
+            siteFingerTablePath = settings["siteFingerTablePath"];
+            dbPictureColumnWebService = settings["dbPictureColumnWebService"];
+            dbFingerColumnWebService = settings["dbFingerColumnWebService"];
         }
 
         public override byte[][] GetImage(IMAGE_TYPE imageType, int id)

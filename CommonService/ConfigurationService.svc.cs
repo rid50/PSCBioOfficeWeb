@@ -5,16 +5,13 @@ using System.ServiceModel.Activation;
 namespace CommonService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    //[DataContract]
-    //[KnownType(typeof(System.Collections.Specialized.NameValueCollection))]
     public class ConfigurationService : IConfigurationService
     {
-        //[DataMember]
-        //System.Collections.Specialized.NameValueCollection appSetting;
-
-        //[DataMember]
-        //public System.Collections.Specialized.NameValueCollection AppSetting { get { return ConfigurationManager.AppSettings; } }
-
+        public IConfigurationService GetConfigurationManager()
+        {
+            return this;
+        }
+        
         public Dictionary<string, string> AppSettings()
         {
             Dictionary<string, string> settings = new Dictionary<string, string>();
@@ -39,8 +36,9 @@ namespace CommonService
             return settings;
         }
         
-        //[DataMember]
-        public System.Configuration.ConnectionStringSettingsCollection ConnectionString { get { return ConfigurationManager.ConnectionStrings; } }
+        public System.Configuration.ConnectionStringSettingsCollection ConnectionString {
+            get { return ConfigurationManager.ConnectionStrings; } 
+        }
 
         public string getAppSetting(string key)
         {

@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using System.Collections;
 
 namespace BiometricService
 {
@@ -7,5 +8,12 @@ namespace BiometricService
     {
         [OperationContract]
         void SaveWSQImage(int id, byte[] buffer);
+
+        [OperationContract]
+        void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection);
+
+        [OperationContract]
+        //ArrayList processEnrolledData(byte[][] serializedWSQArray);
+        void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection);
     }
 }

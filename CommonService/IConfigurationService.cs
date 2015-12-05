@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Text;
 using System.Configuration;
 
 namespace CommonService
@@ -18,6 +14,10 @@ namespace CommonService
         //System.Configuration.ConnectionStringSettingsCollection ConnectionString;
 
         //System.Collections.Specialized.NameValueCollection AppSetting { [OperationContract()] get; }
+
+        [OperationContract]
+        IConfigurationService GetConfigurationManager();
+
         [OperationContract]
         Dictionary<string, string> AppSettings();
 

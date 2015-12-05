@@ -9,7 +9,7 @@ using System.Runtime.Caching;
 using System.Collections;
 using DAO;
 using System.Configuration;
-//using WCFService.ConfigurationService;
+using CommonService.WSQImageService;
 //using DataService.ConfigurationService;
 
 
@@ -70,7 +70,7 @@ namespace CommonService
 
             byte[][] buffer = new byte[11][]; 
             //byte[] buffer = new byte[1];
-            ArrayList fingersCollection = null;
+            //ArrayList fingersCollection = null;
 
             if (getAppSetting("Enroll") == "db")
             {
@@ -84,8 +84,9 @@ namespace CommonService
                 if (imageType == IMAGE_TYPE.wsq)
                 {
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
-                    var bioProcessor = new BioProcessor.BioProcessor();
-                    bioProcessor.processEnrolledData(buffer, out fingersCollection);
+
+                    //var bioProcessor = new BioProcessor.BioProcessor();
+                    //bioProcessor.processEnrolledData(buffer, out fingersCollection);
 
                 }
                 else if (imageType == IMAGE_TYPE.picture)
@@ -124,6 +125,9 @@ namespace CommonService
             {
                 var ds = new Database();
                 buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id))[0];
+                var biometricService = new WSQImageServiceClient();
+                fingersCollection = biometricService.DeserializeWSQArray(buffer);
+
                 //var bioProcessor = new BioProcessor.BioProcessor();
                 //bioProcessor.DeserializeWSQArray(buffer, out fingersCollection);
             }
@@ -153,8 +157,11 @@ namespace CommonService
                     //else
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
-                    var bioProcessor = new BioProcessor.BioProcessor();
-                    bioProcessor.processEnrolledData(buffer, out fingersCollection);
+                    var biometricService = new WSQImageServiceClient();
+                    fingersCollection = biometricService.processEnrolledData(buffer);
+
+                    //var bioProcessor = new BioProcessor.BioProcessor();
+                    //bioProcessor.processEnrolledData(buffer, out fingersCollection);
                     MemoryCache.Default["id"] = id;
                     MemoryCache.Default["fingersCollection"] = fingersCollection;
                     MemoryCache.Default["dirty"] = "false";

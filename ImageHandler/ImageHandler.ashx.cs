@@ -152,7 +152,8 @@ namespace WebHandlers
                 {
                     buffer = cache.GetPicture(id);
                     //buffer = ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id));
-                    context.Response.BinaryWrite(buffer);
+                    if (buffer != null)
+                        context.Response.BinaryWrite(buffer);
                     //context.Response.End();
                 }
                 catch (Exception ex)

@@ -7,6 +7,7 @@ using Neurotec.Biometrics;
 using System.IO;
 using System.Collections;
 using Neurotec.Images;
+using BiometricService.ConfigurationService;
 //using DAO;
 //using WsqSerializationBinder;
 
@@ -14,6 +15,21 @@ namespace BiometricService
 {
     public class WSQImageService : IWSQImageService
     {
+        public void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection)
+        {
+            var bioProcessor = new BioProcessor.BioProcessor();
+            bioProcessor.DeserializeWSQArray(serializedWSQArray, out fingersCollection);
+        }
+
+        //public ArrayList processEnrolledData(byte[][] serializedWSQArray)
+        public void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
+        {
+            //ArrayList fingersCollection;
+            var bioProcessor = new BioProcessor.BioProcessor();
+            bioProcessor.processEnrolledData(serializedWSQArray, out fingersCollection);
+            //return fingersCollection;
+        }
+
         public void SaveWSQImage(int id, byte[] buffer)
         {
             //string dbFingerTable = System.Configuration.ConfigurationManager.AppSettings["dbFingerTable"];
@@ -346,57 +362,27 @@ namespace BiometricService
 
             try
             {
-                var db = new DAO.Database();
+                var client = new ConfigurationServiceClient();
+
+                Dictionary<string, string> settings = new Dictionary<string, string>();
+                foreach (KeyValuePair<string, string> kvp in client.AppSettings())
+                {
+                    settings.Add(kvp.Key, kvp.Value);
+                }
+
+                foreach (var kvp in client.ConnectionStrings())
+                {
+                    settings.Add(kvp.Key, kvp.Value);
+                }
+
+                var db = new DAO.Database(settings);
                 db.SaveWSQTemplate(id, templates);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-                        //if (sb.Length != 0)
-                        //{
-                        //    sb.Append(" where {1} = @id");
-                        //    cmd2.CommandText = String.Format(sb.ToString(), dbFingerTable, dbIdColumn);
-                        //    cmd2.Parameters.Add("@id", SqlDbType.Int);
-                        //    cmd2.Parameters["@id"].Value = id;
 
-                        //    //conn2 = new SqlConnection(getConnectionString());
-                        //    //conn2.Open();
-                        //    //cmd2.Connection = MyConnection.Connection2;
-                        //    cmd2.ExecuteNonQuery();
-
-                        //    //cmd2.CommandText = String.Format(@"update {0} with (serializable) SET li = @li
-                        //    //    where {1} = @id", dbFingerTable, dbIdColumn);
-                        //}
-
-                        /*
-                                                cmd2.Parameters.Add("@id", SqlDbType.Int);
-                                                cmd2.Parameters["@id"].Value = id;
-
-                                                cmd2.Parameters.Add("@li", SqlDbType.VarBinary);
-                                                cmd2.Parameters["@li"].Value = arr[0];
-                                                //cmd.Parameters.Add("@lm", SqlDbType.VarBinary);
-                                                //cmd.Parameters["@lm"].Value = arr[1];
-
-                                                cmd2.ExecuteNonQuery();
-                        */
-                        //TimeSpan ts = stws.Elapsed;
-                        //string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00000000}",
-                        //            ts.Hours, ts.Minutes, ts.Seconds,
-                        //            ts.Milliseconds);
-
-                        //Console.WriteLine("Serialize WsqImage, Time elapsed: {0}", elapsedTime);
-
-                        //Console.WriteLine("Serialize WsqImage, Time elapsed: {0}", stws.Elapsed);
-                        //Console.WriteLine("TaskId: {0}, Serialize WsqImage, Time elapsed: {1}", threadId, stws.ElapsedMilliseconds);
-                        //Console.WriteLine("AppId: {0}", id);
-
-                        //arr.Clear();
-                        //if (record != null)
-                        //{
-                        //    record.Dispose();
-                        //    record = null;
-                        //}
             if (subject != null)
                 subject.Dispose();
 
@@ -408,58 +394,6 @@ namespace BiometricService
                 fingersCollection.Clear();
                 fingersCollection = null;
             }
-
-                        //for (int i = 0; i < 11; i++)
-                        //{
-                        //    if (ms[i] != null)
-                        //    {
-                        //        ms[i].Close();
-                        //        ms[i] = null;
-                        //    }
-                        //}
-
-                        //if (id % 10 == 0)
-                        //{
-                        //    //Console.WriteLine(id);
-                        //    Console.WriteLine("Number of Records Retrieved: {0}, Time elapsed: {1}", numRecordsRetrieved, stw.Elapsed);
-                        //    //Console.WriteLine("Thread Id: {3], Number of Records Retrieved: {0}, Time elapsed: {1}", numRecordsRetrieved, stw.Elapsed, threadId);
-                        //    //stw.Restart();
-                        //}
-                    //}
-                //}
-
-                //Console.WriteLine("From: {0}, To: {1}, Number of Records Retrieved: {2}", from, to, numRecordsRetrieved);
-                //Console.WriteLine("Thread Id: {0}, Number of Records Retrieved: {1}, Time elapsed: {2}", threadId, numRecordsRetrieved, stw.Elapsed);
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
-            //finally
-            //{
-            //    try
-            //    {
-            //        if (reader != null)
-            //            reader.Close();
-
-            //        if (conn != null && conn.State == ConnectionState.Open)
-            //        {
-            //            conn.Close();
-            //            conn = null;
-            //        }
-
-            //        if (conn2 != null && conn2.State == ConnectionState.Open)
-            //        {
-            //            conn2.Close();
-            //            conn2 = null;
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new Exception(ex.Message);
-            //    }
-            //}
         }
     }
 }

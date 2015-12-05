@@ -5,6 +5,11 @@ using System.Data.SqlClient;
 using DAO.ConfigurationService;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Drawing;
+using System.Net;
+using System.Web;
+using System.Runtime.Serialization.Json;
 //using System.Runtime.Serialization.Json;
 
 namespace DAO
@@ -20,6 +25,7 @@ namespace DAO
         //static string dbPictureColumn;
         //static string dbFingerColumn;
         //string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+        string _connectionString;
         string dbPictureTable;
         string dbFingerTable;
         string dbIdColumn;
@@ -28,7 +34,7 @@ namespace DAO
         string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
 
         //static Database()
-        public Database()
+        public Database(Dictionary<string, string> settings)
         {
             //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(@"c:\temp\debug.log"));
 
@@ -44,15 +50,21 @@ namespace DAO
             //System.Diagnostics.Debug.WriteLine("kuku", "DEBUG2::");
             //System.Diagnostics.Debug.Close();
 
-            configurationServiceClient = new ConfigurationServiceClient();
-            //System.Diagnostics.Debug.WriteLine("kuku2", "DEBUG2::");
-            //System.Diagnostics.Debug.Close();
+            //configurationServiceClient = new ConfigurationServiceClient();
+            //_connectionString = configurationServiceClient.getConnectionString("ConnectionString");
+            //dbPictureTable = configurationServiceClient.getAppSetting("dbPictureTable");
+            //dbFingerTable = configurationServiceClient.getAppSetting("dbFingerTable");
+            //dbIdColumn = configurationServiceClient.getAppSetting("dbIdColumn");
+            //dbPictureColumn = configurationServiceClient.getAppSetting("dbPictureColumn");
+            //dbFingerColumn = configurationServiceClient.getAppSetting("dbFingerColumn");
 
-            dbPictureTable = configurationServiceClient.getAppSetting("dbPictureTable");
-            dbFingerTable = configurationServiceClient.getAppSetting("dbFingerTable");
-            dbIdColumn = configurationServiceClient.getAppSetting("dbIdColumn");
-            dbPictureColumn = configurationServiceClient.getAppSetting("dbPictureColumn");
-            dbFingerColumn = configurationServiceClient.getAppSetting("dbFingerColumn");
+            _connectionString = settings["ConnectionString"];
+            dbPictureTable = settings["dbPictureTable"];
+            dbFingerTable = settings["dbFingerTable"];
+            dbIdColumn = settings["dbIdColumn"];
+            dbPictureColumn = settings["dbPictureColumn"];
+            dbFingerColumn = settings["dbFingerColumn"];
+
         }
 
         //string dbPictureTable = System.Configuration.ConfigurationManager.AppSettings["dbPictureTable"];
@@ -76,7 +88,7 @@ namespace DAO
             try
             {
                 //conn = buildConnectionString();
-                conn = new SqlConnection(configurationServiceClient.getConnectionString("ConnectionString"));
+                conn = new SqlConnection(_connectionString);
                 conn.Open();
 
                 cmd = new SqlCommand();
@@ -252,6 +264,10 @@ namespace DAO
                 }
             }
 
+
+            if (IMAGE_TYPE.picture == imageType && buffer[0] == null)
+                buffer[0] = getEmptyBitmap();
+
             return buffer;
 
         }
@@ -264,7 +280,7 @@ namespace DAO
             try
             {
                 //conn = new SqlConnection(getConnectionString());
-                conn = new SqlConnection(configurationServiceClient.getConnectionString("ConnectionString"));
+                conn = new SqlConnection(_connectionString);
 
                 conn.Open();
 
@@ -330,7 +346,7 @@ namespace DAO
             try
             {
                 //conn = new SqlConnection(getConnectionString());
-                conn = new SqlConnection(configurationServiceClient.getConnectionString("ConnectionString"));
+                conn = new SqlConnection(_connectionString);
 
                 conn.Open();
 
@@ -390,6 +406,174 @@ namespace DAO
                         conn.Close();
                         conn = null;
                     }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+
+        private byte[] getEmptyBitmap()
+        {
+            using (var ms = new MemoryStream())
+            {
+                //Properties.Resources.redcross
+                //Image newImage = Image.
+                //Bitmap bmp = new Bitmap(65, 95);
+                Bitmap bmp = new Bitmap(100, 120);
+
+                //Bitmap bmp = new Bitmap(65, 95, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
+                //bmp.Palette = System.Drawing.Imaging.ColorPalette.
+
+                int x, y;
+
+                // Loop through the images pixels to reset color. 
+                for (x = 0; x < bmp.Width; x++)
+                {
+                    for (y = 0; y < bmp.Height; y++)
+                    {
+                        //Color pixelColor = bmp.GetPixel(x, y);
+                        //int luma = (int)(pixelColor.R * 0.3 + pixelColor.G * 0.59 + pixelColor.B * 0.11);
+                        //bmp.SetPixel(x, y, Color.FromArgb(luma, luma, luma));
+
+                        //Color newColor = Color.FromArgb(pixelColor.R, 0, 0);
+                        //#eee
+                        Color newColor = System.Drawing.ColorTranslator.FromHtml("#eee");
+                        bmp.SetPixel(x, y, newColor);
+                    }
+                }
+
+
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                return ms.ToArray();
+            }
+        }
+
+
+        public byte[] GetImageFromWebService(IMAGE_TYPE imageType, int id)
+        {
+            String url;
+            if (imageType == IMAGE_TYPE.picture)
+                url = "http://nomad.host22.com/kuwaitindex/bio_picture.php?id=";
+            else
+                url = "http://nomad.host22.com/kuwaitindex/bio_wsq.php?id=";
+
+            url += id.ToString();
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+            byte[] bytes = null;
+            using (Stream sm = request.GetResponse().GetResponseStream())
+            {
+                try
+                {
+                    //List<JsonResult> result = jsonStr.FromJson<List<JsonResult>>(s);
+
+                    //StreamReader sr = new StreamReader(sm);
+                    //String str = sr.ReadToEnd();
+                    //sr.Close();
+                    DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(List<JsonResult>));
+                    List<JsonResult> result = serialiser.ReadObject(sm) as List<JsonResult>;
+                    if (result.Count != 0)
+                    {
+                        if (result[0].result != null && result[0].result != "success")
+                            throw new Exception(result[0].result);
+                        //MessageBox.Show(result[0].result);
+                        else
+                        {
+                            try
+                            {
+                                if (imageType == IMAGE_TYPE.picture)
+                                {
+                                    if (result[0].picture != null)
+                                        bytes = System.Convert.FromBase64String(result[0].picture);
+                                }
+                                else
+                                {
+                                    if (result[0].wsq != null)
+                                        bytes = System.Convert.FromBase64String(result[0].wsq);
+                                }
+                            }
+                            catch (Exception ex) { throw new Exception(ex.Message); }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            return bytes;
+        }
+
+        internal void UploadImage(IMAGE_TYPE imageType, int id, ref byte[] buffer)
+        {
+            String url;
+            if (imageType == IMAGE_TYPE.picture)
+                url = "http://nomad.host22.com/kuwaitindex/bio_picture.php?id=";
+            else
+                url = "http://nomad.host22.com/kuwaitindex/bio_wsq.php?id=";
+
+            url += id.ToString();
+
+            List<string> postData = new List<string>();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            postData.Add(HttpUtility.UrlEncode("id") + "=" + HttpUtility.UrlEncode(id.ToString()));
+
+            // Convert the binary input into Base64 UUEncoded output.
+            string base64String;
+            try
+            {
+                base64String = System.Convert.ToBase64String(buffer, 0, buffer.Length);
+            }
+            catch (System.ArgumentNullException ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            string urlEncode;
+            if (imageType == IMAGE_TYPE.picture)
+                urlEncode = HttpUtility.UrlEncode("picture");
+            else
+                urlEncode = HttpUtility.UrlEncode("wsq");
+
+            urlEncode += "=" + HttpUtility.UrlEncode(base64String.ToString());
+
+            postData.Add(urlEncode);
+            string queryString = String.Join("&", postData.ToArray());
+            byte[] byteArray = Encoding.UTF8.GetBytes(queryString);
+            //write to stream 
+            request.ContentLength = byteArray.Length;
+            Stream s = request.GetRequestStream();
+            s.Write(byteArray, 0, byteArray.Length);
+            s.Close();
+
+            //DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(JsonResult));
+
+            using (Stream sm = request.GetResponse().GetResponseStream())
+            {
+                //StreamReader sr = new StreamReader(sm);
+                //String jsonStr = sr.ReadToEnd(); 
+
+                //string json = @"{""Name"" : ""My Product""}";
+                //MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
+                try
+                {
+                    //List<JsonResult> result = jsonStr.FromJson<List<JsonResult>>(s);
+
+                    DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(List<JsonResult>));
+                    List<JsonResult> result = serialiser.ReadObject(sm) as List<JsonResult>;
+                    if (result[0].result != "success")
+                        throw new Exception(result[0].result);
+
+                    //List<JsonResult> result = JSONHelper.Deserialise<List<JsonResult>>(jsonStr);
+                    //JsonResult result = ser.ReadObject(sm) as JsonResult;
+                    //MessageBox.Show("Result: " + result.result[0]);
                 }
                 catch (Exception ex)
                 {

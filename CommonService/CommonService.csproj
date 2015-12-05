@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BioProcessor">
-      <HintPath>..\BioProcessor\bin\BioProcessor.dll</HintPath>
-    </Reference>
     <Reference Include="DAO, Version=10.0.4504.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -67,6 +64,13 @@
   <ItemGroup>
     <Content Include="ConfigurationService.svc" />
     <Content Include="MemoryCacheService.svc" />
+    <None Include="Service References\WSQImageService\WSQImageService.disco" />
+    <None Include="Service References\WSQImageService\configuration91.svcinfo" />
+    <None Include="Service References\WSQImageService\configuration.svcinfo" />
+    <None Include="Service References\WSQImageService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -74,6 +78,12 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Service References\WSQImageService\WSQImageService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WSQImageService\WSQImageService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationService.svc.cs">
@@ -85,9 +95,26 @@
       <DependentUpon>MemoryCacheService.svc</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\WSQImageService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WSQImageService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WSQImageService\WSQImageService.wsdl" />
+    <None Include="Service References\WSQImageService\WSQImageService.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

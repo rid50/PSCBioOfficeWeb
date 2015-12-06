@@ -132,7 +132,7 @@ namespace BioProcessor
                             fingersCollection[i] = ms.ToArray();
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         //throw new Exception(ex.Message);
                         fingersCollection[i] = getEmptyBitmap();

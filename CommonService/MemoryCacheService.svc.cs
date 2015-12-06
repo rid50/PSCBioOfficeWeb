@@ -18,7 +18,9 @@ namespace CommonService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class MemoryCacheService : IMemoryCacheService
     {
-        static public ConfigurationService configurationServiceClient;
+        //static public ConfigurationService configurationServiceClient;
+        static public Dictionary<string, string> _settings = new Dictionary<string, string>();
+        ArrayList _fingersCollection = null;
 
         static MemoryCacheService()
         {
@@ -36,11 +38,21 @@ namespace CommonService
             //System.Diagnostics.Debug.WriteLine("kuku", "DEBUG2::");
             //System.Diagnostics.Debug.Close();
 
-            configurationServiceClient = new ConfigurationService();
+            //configurationServiceClient = new ConfigurationService();
             //configurationServiceClient = new ConfigurationService();
             //System.Diagnostics.Debug.WriteLine("kuku2", "DEBUG2::");
             //System.Diagnostics.Debug.Close();
+            var client = new ConfigurationService();
 
+            foreach (KeyValuePair<string, string> kvp in client.AppSettings())
+            {
+                _settings.Add(kvp.Key, kvp.Value);
+            }
+
+            foreach (var kvp in client.ConnectionStrings())
+            {
+                _settings.Add(kvp.Key, kvp.Value);
+            }
         }
 
         private bool IsDirty(string id)
@@ -67,19 +79,22 @@ namespace CommonService
 
         public byte[][] GetImage(IMAGE_TYPE imageType, int id)
         {
-
             byte[][] buffer = new byte[11][]; 
             //byte[] buffer = new byte[1];
             //ArrayList fingersCollection = null;
 
-            if (getAppSetting("Enroll") == "db")
+            //if (getAppSetting("Enroll") == "db")
+            if (_settings["enroll"] == "db")
             {
                 DataSource ds = null;
 
                 //if (getAppSetting("provider") == "directDb")
-                    ds = new Database();
+                    //ds = new Database();
                 //else if (getAppSetting("provider") == "directWebService")
                 //    ds = new CloudDatabase();
+
+
+                ds = new DAO.Database(_settings);
 
                 if (imageType == IMAGE_TYPE.wsq)
                 {
@@ -114,19 +129,18 @@ namespace CommonService
                 return true;
         }
 
-        ArrayList fingersCollection = null;
-
         public byte[] GetRawFingerCollection(string id)
         {
             byte[] buffer = new byte[1];
             //ArrayList fingersCollection = null;
 
-            if (getAppSetting("Enroll") == "db")
+            //if (getAppSetting("Enroll") == "db")
+            if (_settings["enroll"] == "db")
             {
-                var ds = new Database();
+                var ds = new Database(_settings);
                 buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id))[0];
                 var biometricService = new WSQImageServiceClient();
-                fingersCollection = biometricService.DeserializeWSQArray(buffer);
+                _fingersCollection = biometricService.DeserializeWSQArray(buffer);
 
                 //var bioProcessor = new BioProcessor.BioProcessor();
                 //bioProcessor.DeserializeWSQArray(buffer, out fingersCollection);
@@ -144,11 +158,12 @@ namespace CommonService
 
                 //ArrayList fingersCollection = null;
 
-                if (getAppSetting("Enroll") == "db")
+                //if (getAppSetting("Enroll") == "db")
+                if (_settings["enroll"] == "db")
                 {
                     DataSource ds = null;
                     //if (getAppSetting("provider") == "directDb")
-                        ds = new Database();
+                    ds = new Database(_settings);
                     //else if (getAppSetting("provider") == "directWebService")
                     //    ds = new CloudDatabase();
 
@@ -158,16 +173,16 @@ namespace CommonService
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
                     var biometricService = new WSQImageServiceClient();
-                    fingersCollection = biometricService.processEnrolledData(buffer);
+                    _fingersCollection = biometricService.processEnrolledData(buffer);
 
                     //var bioProcessor = new BioProcessor.BioProcessor();
                     //bioProcessor.processEnrolledData(buffer, out fingersCollection);
                     MemoryCache.Default["id"] = id;
-                    MemoryCache.Default["fingersCollection"] = fingersCollection;
+                    MemoryCache.Default["fingersCollection"] = _fingersCollection;
                     MemoryCache.Default["dirty"] = "false";
                 }
 
-                return fingersCollection;
+                return _fingersCollection;
             }
             else
                 return MemoryCache.Default["fingersCollection"] as ArrayList;
@@ -175,9 +190,10 @@ namespace CommonService
 
         public byte[] GetPicture(string id)
         {
-            if (getAppSetting("Enroll") == "db")
+            //if (getAppSetting("Enroll") == "db")
+            if (_settings["enroll"] == "db")
             {
-                var ds = new Database();
+                var ds = new Database(_settings);
                 return ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id))[0];
             }
             else
@@ -193,34 +209,34 @@ namespace CommonService
             MemoryCache.Default["dirty"] = "false";
         }
 
-        public string getAppSetting(string key)
-        {
+        //public string getAppSetting(string key)
+        //{
 
-            //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(@"c:\temp\debug.log"));
-            //System.Diagnostics.Debug.WriteLine("setting", "DEBUG2::");
-            //System.Diagnostics.Debug.Close();
+        //    //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(@"c:\temp\debug.log"));
+        //    //System.Diagnostics.Debug.WriteLine("setting", "DEBUG2::");
+        //    //System.Diagnostics.Debug.Close();
 
-            //throw new FaultException(key);
+        //    //throw new FaultException(key);
 
-            //ConfigurationServiceClient configurationServiceClient = new ConfigurationService.ConfigurationServiceClient();
+        //    //ConfigurationServiceClient configurationServiceClient = new ConfigurationService.ConfigurationServiceClient();
 
-            var setting = configurationServiceClient.getAppSetting(key);
-            //if (string.IsNullOrEmpty(setting))
+        //    var setting = configurationServiceClient.getAppSetting(key);
+        //    //if (string.IsNullOrEmpty(setting))
 
 
-            //var setting = ConfigurationManager.AppSettings[key];
-            ////throw new Exception(setting);
+        //    //var setting = ConfigurationManager.AppSettings[key];
+        //    ////throw new Exception(setting);
 
-            //// If we didn't find setting, try to load it from current dll's config file
-            //if (string.IsNullOrEmpty(setting))
-            //{
-            //    var filename = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            //    var configuration = ConfigurationManager.OpenExeConfiguration(filename);
-            //    if (configuration != null)
-            //        setting = configuration.AppSettings.Settings[key].Value;
-            //}
-            //string setting = "aa";
-            return setting;
-        }
+        //    //// If we didn't find setting, try to load it from current dll's config file
+        //    //if (string.IsNullOrEmpty(setting))
+        //    //{
+        //    //    var filename = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        //    //    var configuration = ConfigurationManager.OpenExeConfiguration(filename);
+        //    //    if (configuration != null)
+        //    //        setting = configuration.AppSettings.Settings[key].Value;
+        //    //}
+        //    //string setting = "aa";
+        //    return setting;
+        //}
     }
 }

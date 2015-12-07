@@ -153,6 +153,9 @@ namespace CommonService
         {
             if (IsDirty(id))
             {
+                _fingersCollection = null;
+                MemoryCache.Default["dirty"] = "true";
+
                 //byte[] buffer = new byte[1];
                 byte[][] buffer = new byte[11][]; 
 
@@ -172,14 +175,20 @@ namespace CommonService
                     //else
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
-                    var biometricService = new WSQImageServiceClient();
-                    _fingersCollection = biometricService.processEnrolledData(buffer);
+                    if (buffer[0] != null)
+                    {
+                        var biometricService = new WSQImageServiceClient();
+                        _fingersCollection = biometricService.processEnrolledData(buffer);
 
-                    //var bioProcessor = new BioProcessor.BioProcessor();
-                    //bioProcessor.processEnrolledData(buffer, out fingersCollection);
-                    MemoryCache.Default["id"] = id;
-                    MemoryCache.Default["fingersCollection"] = _fingersCollection;
-                    MemoryCache.Default["dirty"] = "false";
+                        //var bioProcessor = new BioProcessor.BioProcessor();
+                        //bioProcessor.processEnrolledData(buffer, out fingersCollection);
+                        MemoryCache.Default["id"] = id;
+                        if (_fingersCollection != null)
+                        {
+                            MemoryCache.Default["fingersCollection"] = _fingersCollection;
+                            MemoryCache.Default["dirty"] = "false";
+                        }
+                    }
                 }
 
                 return _fingersCollection;

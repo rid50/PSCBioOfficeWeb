@@ -18,35 +18,42 @@ namespace BioProcessor
     {
         public void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection)
         {
-            if (serializedWSQArray == null)
+            fingersCollection = null;
+            if (serializedWSQArray != null)
             {
-                fingersCollection = new ArrayList();
-                for (int i = 0; i < 10; i++)
-                    fingersCollection.Add(getEmptyBitmap());
-            }
+                MemoryStream ms = new MemoryStream(serializedWSQArray);
 
-            MemoryStream ms = new MemoryStream(serializedWSQArray);
+                //Assembly.Load(string assemblyString)
+                // Construct a BinaryFormatter and use it to deserialize the data to the stream.
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    //formatter.Binder = new GenericBinder<WsqImage>();
+                    formatter.Binder = new WsqSerializationBinder.GenericBinder<WsqImage>();
+                    fingersCollection = formatter.Deserialize(ms) as ArrayList;
+                }
+                catch (SerializationException)
+                {
+                    //fingersCollection = new ArrayList();
+                    //for (int i = 0; i < 10; i++)
+                    //    fingersCollection.Add(getEmptyBitmap());
+                    //return;
+                    fingersCollection = null;
+                }
+                finally
+                {
+                    ms.Close();
+                }
+            }
+        }
 
-            //Assembly.Load(string assemblyString)
-            // Construct a BinaryFormatter and use it to deserialize the data to the stream.
-            BinaryFormatter formatter = new BinaryFormatter();
-            try
-            {
-                //formatter.Binder = new GenericBinder<WsqImage>();
-                formatter.Binder = new WsqSerializationBinder.GenericBinder<WsqImage>();
-                fingersCollection = formatter.Deserialize(ms) as ArrayList;
-            }
-            catch (SerializationException)
-            {
-                fingersCollection = new ArrayList();
-                for (int i = 0; i < 10; i++)
-                    fingersCollection.Add(getEmptyBitmap());
-                //return;
-            }
-            finally
-            {
-                ms.Close();
-            }
+        public int getImageQuality(byte[] wsqImage)
+        {
+            NFRecord record = new NFRecord(wsqImage);
+            if (record.Quality == 254)
+                return 0;
+            else
+                return record.Quality;
         }
 
         public void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
@@ -66,6 +73,9 @@ namespace BioProcessor
             //}
 
             DeserializeWSQArray(serializedWSQArray[0], out fingersCollection);
+            if (fingersCollection == null)
+                return;
+
             //byte[] buff = null;
             //System.Object theLock = new System.Object();
 

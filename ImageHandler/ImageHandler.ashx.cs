@@ -275,7 +275,7 @@ namespace WebHandlers
                         if (fingersCollection != null)
                             context.Response.BinaryWrite(fingersCollection[dict[wsqQuery]] as byte[]);
                         else
-                            throw new Exception("Finger collection is null");
+                            throw new Exception("Fingerprint image does not exist");
                         //context.Response.Flush();
                     }
                     catch (Exception ex)

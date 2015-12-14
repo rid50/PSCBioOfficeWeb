@@ -202,7 +202,7 @@ namespace SplitFingerTemplates
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
             //_biometricClient.FingersFastExtraction = true;
-            _biometricClient.FingersTemplateSize = NTemplateSize.Small;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
             _biometricClient.FingersQualityThreshold = 40;
             _biometricClient.Initialize();
 

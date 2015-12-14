@@ -34,7 +34,7 @@ namespace SplitFingerTemplates
                 //{
                 //    Console.WriteLine(ex.ToString());
                 //}
-                Run();
+                Run(args);
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ namespace SplitFingerTemplates
         }
 
         //static void Run(NFExtractor NFExtractor)
-        static void Run()
+        static void Run(string[] args)
         {
             Int32 rowcount = 0;
             for (int i = 0; i < 2; i++)
@@ -112,14 +112,39 @@ namespace SplitFingerTemplates
 
             Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 1000;
+            int limit = 10000;
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;
-            //Task[] taskArray = new Task[topindex];
-            Task[] taskArray = new Task[6];
+            Task[] taskArray = new Task[topindex];
+            //Task[] taskArray = new Task[1];
+            int offset = 0;
 
             Stopwatch stw = new Stopwatch();
             stw.Start();
+
+            bool go = false;
+            if (args != null && args.Length != 0)
+            {
+                if (Int32.TryParse(args[0], out offset))
+                {
+                    if (offset < topindex)
+                    {
+                        offset *= limit;
+                        limit = 1000;
+                        taskArray = new Task[10];
+                        go = true;
+                    }
+
+                    Console.WriteLine(offset);
+                }
+
+                if (!go)
+                {
+                    Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
+                    Console.ReadKey();
+                    return;
+                }
+            }
 
             for (int i = 0; i < taskArray.Length; i++)
             {
@@ -131,7 +156,10 @@ namespace SplitFingerTemplates
                     //try
                     //{
                     //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
-                    process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
+                    //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
+
+                    process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+
                     //}
                     //catch (Exception ex)
                     //{
@@ -141,19 +169,26 @@ namespace SplitFingerTemplates
                 },
                 new StateObject() {LoopCounter = i});
             }
+
             try
             {
                 Task.WaitAll(taskArray);
+                Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
             }
-            catch (AggregateException ex)
+            catch (Exception ex)
             {
-                throw ex.Flatten();
+                //Console.WriteLine(ex.Flatten().Message);
+                //throw ex.Flatten();
+                while ((ex is AggregateException) && (ex.InnerException != null))
+                    ex = ex.InnerException;
 
-                //Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
-
-            Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
-
+            finally
+            {
+                Console.WriteLine(" ------------------ Press any key to close -----------------------");
+                Console.ReadKey();
+            }
         }
 
 

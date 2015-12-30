@@ -32,6 +32,7 @@ namespace DAO
         string dbPictureColumn;
         string dbFingerColumn;
         string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+        string[] fingerFieldsArray = null;
 
         //static Database()
         public Database(Dictionary<string, string> settings)
@@ -65,6 +66,7 @@ namespace DAO
             dbPictureColumn = settings["dbPictureColumn"];
             dbFingerColumn = settings["dbFingerColumn"];
 
+            fingerFieldsArray = fingerFields.Split(new char[] { ',' });
         }
 
         //string dbPictureTable = System.Configuration.ConfigurationManager.AppSettings["dbPictureTable"];
@@ -162,10 +164,10 @@ namespace DAO
                         {
                             buffer[0] = (byte[])reader[dbFingerColumn];  //(byte[])reader["AppWsq"];
 
-                            string[] result = fingerFields.Split(new char[] { ',' });
+                            //string[] result = fingerFields.Split(new char[] { ',' });
 
                             int i = 1;
-                            foreach (string s in result)
+                            foreach (string s in fingerFieldsArray)
                             {
                                 buffer[i++] = (byte[])reader[s];  //(byte[])reader["li"];
                             }

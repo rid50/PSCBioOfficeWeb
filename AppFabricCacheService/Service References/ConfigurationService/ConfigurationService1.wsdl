@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ConfigurationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_IConfigurationService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IConfigurationService_GetConfigurationManager_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigurationManager" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetConfigurationManager_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigurationManagerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_AppSettings_InputMessage">
+    <wsdl:part name="parameters" element="tns:AppSettings" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_AppSettings_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AppSettingsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_ConnectionStrings_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectionStrings" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_ConnectionStrings_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectionStringsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_getAppSetting_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAppSetting" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_getAppSetting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAppSettingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_getConnectionString_InputMessage">
+    <wsdl:part name="parameters" element="tns:getConnectionString" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_getConnectionString_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getConnectionStringResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IConfigurationService">
+    <wsdl:operation name="GetConfigurationManager">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetConfigurationManager" message="tns:IConfigurationService_GetConfigurationManager_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetConfigurationManagerResponse" message="tns:IConfigurationService_GetConfigurationManager_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AppSettings">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/AppSettings" message="tns:IConfigurationService_AppSettings_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/AppSettingsResponse" message="tns:IConfigurationService_AppSettings_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectionStrings">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/ConnectionStrings" message="tns:IConfigurationService_ConnectionStrings_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/ConnectionStringsResponse" message="tns:IConfigurationService_ConnectionStrings_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getAppSetting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/getAppSetting" message="tns:IConfigurationService_getAppSetting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/getAppSettingResponse" message="tns:IConfigurationService_getAppSetting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getConnectionString">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/getConnectionString" message="tns:IConfigurationService_getConnectionString_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/getConnectionStringResponse" message="tns:IConfigurationService_getConnectionString_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IConfigurationService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetConfigurationManager">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetConfigurationManager" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AppSettings">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/AppSettings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectionStrings">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/ConnectionStrings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAppSetting">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/getAppSetting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getConnectionString">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/getConnectionString" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ConfigurationService">
+    <wsdl:port name="BasicHttpBinding_IConfigurationService" binding="tns:BasicHttpBinding_IConfigurationService">
+      <soap:address location="http://pscservice/CommonService/ConfigurationService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

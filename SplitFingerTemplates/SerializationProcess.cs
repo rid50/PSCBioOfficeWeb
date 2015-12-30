@@ -123,6 +123,7 @@ namespace SplitFingerTemplates
                 conn = new SqlConnection(getConnectionString());
                 conn.Open();
                 cmd = new SqlCommand();
+                cmd.CommandTimeout = 300;
                 cmd.Connection = conn;
                 cmd.CommandText = "SELECT count(*) FROM Egy_T_FingerPrint";
                 reader = cmd.ExecuteReader();

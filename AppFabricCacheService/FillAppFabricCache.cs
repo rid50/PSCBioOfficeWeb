@@ -12,15 +12,19 @@ namespace FillAppFabricCache
     {
         //private static DataCacheFactory _factory = null;
         private static DataCache _cache = null;
+        private static AppFabricCacheService.IPopulateCacheCallback _callback = null;
 
         static FillAppFabricCache()
         {
-            DataCacheFactory factory = new DataCacheFactory();
-            _cache = factory.GetCache("default");
+            //DataCacheFactory factory = new DataCacheFactory();
+            //_cache = factory.GetCache("default");
             //Debug.Assert(_cache == null);
         }
 
-        public FillAppFabricCache() {}
+        public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
+        {
+            _callback = callback;
+        }
 
         public static Int32 rowcount()
         {
@@ -113,8 +117,8 @@ namespace FillAppFabricCache
             //return;            
 
             string regionName = from.ToString();
-            _cache.RemoveRegion(regionName);
-            _cache.CreateRegion(regionName);
+            //_cache.RemoveRegion(regionName);
+            //_cache.CreateRegion(regionName);
 
             try
             {
@@ -149,6 +153,10 @@ namespace FillAppFabricCache
                     id = (int)reader[dbIdColumn];
 
                     rowNumber++;
+
+                    if (rowNumber % 1000 == 0)
+                        _callback.RespondWithRecordNumbers(1000);
+
                     //Console.WriteLine("{0}", rowNumber + from);
                     //Console.WriteLine("ID = {0}", id);
                     //if (id == 20000007)
@@ -179,8 +187,8 @@ namespace FillAppFabricCache
                                 buffer[i++] = new byte[0];
                         }
 
-                        if (confirmed)
-                            _cache.Add(id.ToString(), buffer, regionName);
+                        //if (confirmed)
+                        //    _cache.Add(id.ToString(), buffer, regionName);
 //                    }
                     //else
                     //{

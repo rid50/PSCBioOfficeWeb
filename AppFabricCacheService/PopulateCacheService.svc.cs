@@ -17,8 +17,17 @@ namespace AppFabricCacheService
     }
 
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PopulateCacheService : IPopulateCacheService
     {
+        public IPopulateCacheCallback CallBack
+        {
+            get
+            {
+                return OperationContext.Current.GetCallbackChannel<IPopulateCacheCallback>();
+            }
+        }
+
         public void Run(string[] args)
         {
 //            Stopwatch st = new Stopwatch();
@@ -32,13 +41,17 @@ namespace AppFabricCacheService
                     rowcount = FillAppFabricCache.FillAppFabricCache.rowcount();
                     break;
                 }
-                catch (System.Data.SqlClient.SqlException)
+                catch (System.Data.SqlClient.SqlException ex)
                 {
+                    CallBack.RespondWithError(ex.ToString());
+                    return;
                     //Console.WriteLine("Time out, try again ");
                 }
                 catch (Exception ex)
                 {
-                    throw new FaultException(ex.ToString());
+                    CallBack.RespondWithError(ex.ToString());
+                    return;
+                    //throw new FaultException(ex.ToString());
                     //Console.WriteLine("Time out, try again ");
                 }
             }
@@ -48,6 +61,7 @@ namespace AppFabricCacheService
             if (rowcount == 0)
                 return;
 
+            CallBack.RespondWithRecordNumbers(rowcount);
             //Console.WriteLine("Row count: " + rowcount);
 
             int limit = 100;
@@ -80,8 +94,9 @@ namespace AppFabricCacheService
 
                 if (!go)
                 {
-                    Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
-                    Console.ReadKey();
+                    CallBack.RespondWithError(" --- Wrong parameter value provided for AppFabricCache ---");
+                    //Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
+                    //Console.ReadKey();
                     return;
                 }
             }
@@ -90,11 +105,19 @@ namespace AppFabricCacheService
             {
                 for (int i = 0; i < taskArray.Length; i++)
                 {
-                    taskArray[i] = Task.Factory.StartNew((Object obj) =>
+                    //CallBack.RespondWithError(taskArray.Length.ToString());
+                    taskArray[i] = Task.Factory.StartNew((Object obj, IPopulateCacheCallback callBack) =>
                     {
+                        if (callBack != null)
+                            callBack.RespondWithError("Callback is not null");
+                        else
+                            callBack.RespondWithError("Callback is null");
+                        return;
+
                         StateObject state = obj as StateObject;
 
-                        var process = new FillAppFabricCache.FillAppFabricCache();
+                        var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+                        //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
                         //{
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
@@ -124,7 +147,12 @@ namespace AppFabricCacheService
                     while ((ex is AggregateException) && (ex.InnerException != null))
                         ex = ex.InnerException;
 
-                    Console.WriteLine(ex.ToString());
+                    //throw new FaultException(ex.ToString());
+                    CallBack.RespondWithError(ex.ToString());
+                    return;
+
+                    //CallBack.Respond(" --- AppFabricCache exception: " + ex.ToString());
+                    //Console.WriteLine(ex.ToString());
                 }
                 finally
                 {
@@ -136,7 +164,8 @@ namespace AppFabricCacheService
             {
                 try
                 {
-                    var process = new FillAppFabricCache.FillAppFabricCache();
+                    var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+                    //var process = new FillAppFabricCache.FillAppFabricCache();
                     for (int i = 0; i < taskArray.Length; i++)
                     {
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
@@ -156,7 +185,10 @@ namespace AppFabricCacheService
                     while ((ex is AggregateException) && (ex.InnerException != null))
                         ex = ex.InnerException;
 
-                    Console.WriteLine(ex.ToString());
+                    //throw new FaultException(ex.ToString());
+                    CallBack.RespondWithError(ex.ToString());
+                    return;
+                    //Console.WriteLine(ex.ToString());
                 }
                 finally
                 {
@@ -165,10 +197,13 @@ namespace AppFabricCacheService
             }
 
             stw.Stop();
+
+            CallBack.RespondWithResult(string.Format(" --- Loop time elapsed: {0}", stw.Elapsed));
+
             //Console.WriteLine(" ----- Count(*) time elapsed: {0}", st.Elapsed);
-            Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);
-            Console.WriteLine(" ------------------ Press any key to close -----------------------");
-            Console.ReadKey();
+            //Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);
+            //Console.WriteLine(" ------------------ Press any key to close -----------------------");
+            //Console.ReadKey();
         }
     }
 }

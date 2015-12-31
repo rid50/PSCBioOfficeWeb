@@ -12,6 +12,12 @@ namespace AppFabricCacheService
     public interface IPopulateCacheCallback
     {
         [OperationContract(IsOneWay = true)]
-        void Callback(string str);
+        void RespondWithRecordNumbers(int num);
+
+        [OperationContract(IsOneWay = true)]
+        void RespondWithResult(string str);
+
+        [OperationContract(IsOneWay = true)]
+        void RespondWithError(string str);
     }
 }

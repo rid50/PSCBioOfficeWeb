@@ -19,5 +19,8 @@ namespace AppFabricCacheService
 
         [OperationContract(IsOneWay = true)]
         void RespondWithError(string str);
+
+        [OperationContract(IsOneWay = true)]
+        void CacheComplete();
     }
 }

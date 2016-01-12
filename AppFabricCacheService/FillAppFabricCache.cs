@@ -5,6 +5,9 @@ using System.Data;
 using System.Diagnostics;
 using Microsoft.ApplicationServer.Caching;
 using AppFabricCacheService.ConfigurationService;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace FillAppFabricCache
 {
@@ -12,7 +15,9 @@ namespace FillAppFabricCache
     {
         //private static DataCacheFactory _factory = null;
         private static DataCache _cache = null;
-        private static AppFabricCacheService.IPopulateCacheCallback _callback = null;
+        private static SendOrPostCallback _callback = null;
+        //private static SynchronizationContext _context = null;
+        private static BlockingCollection<int> _bc = null;
 
         static FillAppFabricCache()
         {
@@ -21,10 +26,34 @@ namespace FillAppFabricCache
             //Debug.Assert(_cache == null);
         }
 
-        public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
+        //public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
+        //public FillAppFabricCache(SendOrPostCallback callback, SynchronizationContext context)
+        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback)
         {
+            _bc = bc;
             _callback = callback;
+            //_context = context;
         }
+
+        //public AppFabricCacheService.IPopulateCacheCallback CallBack
+        //{
+        //    get
+        //    {
+        //        return System.ServiceModel.OperationContext.Current.GetCallbackChannel<AppFabricCacheService.IPopulateCacheCallback>();
+        //    }
+        //}
+
+        //public void CallDelegate(object rowcount)
+        //{
+        //    //throw new Exception(Thread.CurrentThread.ManagedThreadId.ToString());
+        //    _callback(1000);
+        //    //if (CallBack == null)
+        //    //    throw new Exception("kuku");
+        //    //else
+        //    //    throw new Exception("ukuk");
+
+        //    //CallBack.RespondWithRecordNumbers(rowcount);
+        //}
 
         public static Int32 rowcount()
         {
@@ -140,6 +169,7 @@ namespace FillAppFabricCache
                 //cmd.CommandText = String.Format("SELECT AppID," + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) WHERE datalength(AppWsq) IS NOT NULL ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
 
 
+                //cmd.CommandText = "SELECT " + dbIdColumn + "," + fingerFields + " FROM " + dbFingerTable;
                 cmd.CommandText = String.Format("SELECT " + dbIdColumn + "," + fingerFields + " FROM " + dbFingerTable + " WITH (NOLOCK) ORDER BY " + dbIdColumn + " ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 //cmd.CommandText = String.Format("SELECT AppID, " + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 
@@ -155,8 +185,44 @@ namespace FillAppFabricCache
                     rowNumber++;
 
                     if (rowNumber % 1000 == 0)
-                        _callback.RespondWithRecordNumbers(1000);
+                    {
+                        if (_bc != null)
+                            _bc.Add(1000);
+                        else
+                            _callback(1000);
 
+                        //this.Invoke((Action<AppFabricCacheService.IPopulateCacheCallback>)((callback) =>
+                        //{
+                        //    callback.RespondWithRecordNumbers(1000);
+                        //}), _callback);
+                        //throw new Exception(_callback.GetType().ToString());
+
+                        //string conn_name = "foo";
+                        //uiContext.Post(new SendOrPostCallback((o) =>
+                        //{
+                        //    updateConnStatus(conn_name, true);
+                        //}), null);
+
+                        //_context.Post(_callback, 1000);
+
+
+                        //var task = Task.Factory.StartNew(() =>
+                        //{
+                        //    //int ii = 5 + 5;
+                        //    //throw new Exception("aaaaaaaaaaa: " + Thread.CurrentThread.ManagedThreadId);
+                        //    CallDelegate(1000);
+                        //}, CancellationToken.None, TaskCreationOptions.None, _context);
+
+                        //task.Wait();
+
+                        //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallBack.RespondWithRecordNumbers((int)state); }, state: 1000);
+                        //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallDelegate(state); }, state: 1000);
+
+                        //_context.Post(CallDelegate, 1000);
+                        //_callback(1000);
+
+                        //CallBack.RespondWithRecordNumbers(1000);
+                    }
                     //Console.WriteLine("{0}", rowNumber + from);
                     //Console.WriteLine("ID = {0}", id);
                     //if (id == 20000007)

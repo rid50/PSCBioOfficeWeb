@@ -8,19 +8,48 @@ using System.ServiceModel.Activation;
 using System.Diagnostics;
 //using FillAppFabricCache;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace AppFabricCacheService
 {
+    //delegate void SendOrPostCallbackDlgt(object num);
+
     class StateObject
     {
         public int LoopCounter;
+        //public SendOrPostCallback dlgt;
+        //public IPopulateCacheCallback CallBack;
+        //public SynchronizationContext Context;
+        public BlockingCollection<int> bc;
     }
 
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PopulateCacheService : IPopulateCacheService
     {
-        public IPopulateCacheCallback CallBack
+        static public void CallDelegate(object rowcount)
+        {
+            //try
+            //{
+            //    if (CallBack == null)
+            //        throw new Exception("kuku");
+            //    //throw new Exception("kuku" + rowcount + " : " + Thread.CurrentThread.ManagedThreadId);
+            //    else
+            //        throw new Exception("ukuk");
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("AAAAAAAAkuku");
+            //}
+
+            CallBack.RespondWithRecordNumbers((int)rowcount);
+        }
+
+        SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
+        delegate void d();
+
+        static public IPopulateCacheCallback CallBack
         {
             get
             {
@@ -62,9 +91,11 @@ namespace AppFabricCacheService
                 return;
 
             CallBack.RespondWithRecordNumbers(rowcount);
+            //CallBack.RespondWithRecordNumbers(Thread.CurrentThread.ManagedThreadId);
+            
             //Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 100;
+            int limit = 10000;
             int topindex = (int)(rowcount / limit + 1);
             //topindex = 100;
             Task[] taskArray = new Task[topindex];
@@ -101,22 +132,29 @@ namespace AppFabricCacheService
                 }
             }
 
+            //SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+            //SynchronizationContext Context = SynchronizationContext.Current;
+            //SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
+            BlockingCollection<int> bc = new BlockingCollection<int>();
+
             if (true)
             {
+                //TaskScheduler taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());
-                    taskArray[i] = Task.Factory.StartNew((Object obj, IPopulateCacheCallback callBack) =>
+                    taskArray[i] = Task.Factory.StartNew((Object obj) =>
                     {
-                        if (callBack != null)
-                            callBack.RespondWithError("Callback is not null");
-                        else
-                            callBack.RespondWithError("Callback is null");
-                        return;
-
                         StateObject state = obj as StateObject;
 
-                        var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+                        //if (state.Dlgt == null)
+                        //    state.CallBack.RespondWithError("Null");
+                        //else
+                        //    state.CallBack.RespondWithError("Not Null");
+
+                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null);
+                        //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
                         //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
                         //{
@@ -132,13 +170,37 @@ namespace AppFabricCacheService
                         //}
                         //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                     },
-                    new StateObject() { LoopCounter = i });
+                    new StateObject() { LoopCounter = i, bc = bc},
+                    //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
+                    System.Threading.CancellationToken.None,
+                    TaskCreationOptions.LongRunning,
+                    TaskScheduler.Default);
                 }
+
+                Task.Factory.ContinueWhenAll(taskArray, tasks =>
+                {
+                    bc.CompleteAdding();
+
+                    //foreach (Task<string> task in tasks)
+                    //{
+                    //    Console.WriteLine(task.Result);
+                    //}
+                });
+
+                d d = delegate
+                {
+                    foreach (var item in bc.GetConsumingEnumerable())
+                    {
+                        CallBack.RespondWithRecordNumbers(item);
+                        //Console.WriteLine(string.Format("Item: {0}, Current thread: {1}", item, Thread.CurrentThread.ManagedThreadId));
+                    }
+                };
+                d();
 
                 try
                 {
                     Task.WaitAll(taskArray);
-                    //                    Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
+                    //Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
                 }
                 catch (Exception ex)
                 {
@@ -164,8 +226,12 @@ namespace AppFabricCacheService
             {
                 try
                 {
-                    var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
-                    //var process = new FillAppFabricCache.FillAppFabricCache();
+
+                    //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+                    //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+                    //var process = new FillAppFabricCache.FillAppFabricCache(dlgt, Context);
+                    var process = new FillAppFabricCache.FillAppFabricCache(null, dlgt);
+                    //process.run(0, 0, 0);
                     for (int i = 0; i < taskArray.Length; i++)
                     {
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
@@ -197,8 +263,14 @@ namespace AppFabricCacheService
             }
 
             stw.Stop();
+            TimeSpan ts = stw.Elapsed;
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+                //ts.Milliseconds / 10);
 
-            CallBack.RespondWithResult(string.Format(" --- Loop time elapsed: {0}", stw.Elapsed));
+            CallBack.RespondWithResult(string.Format(" --- Time elapsed: {0}", elapsedTime));
+
+            CallBack.CacheComplete();
 
             //Console.WriteLine(" ----- Count(*) time elapsed: {0}", st.Elapsed);
             //Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);

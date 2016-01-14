@@ -8,30 +8,35 @@ using AppFabricCacheService.ConfigurationService;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Collections;
+using System.Text;
 
 namespace FillAppFabricCache
 {
     class FillAppFabricCache
     {
         //private static DataCacheFactory _factory = null;
-        private static DataCache _cache = null;
-        private static SendOrPostCallback _callback = null;
+        private static DataCache _cache;
+        private static SendOrPostCallback _callback;
         //private static SynchronizationContext _context = null;
-        private static BlockingCollection<int> _bc = null;
+        private ArrayList _fingerList;
+        private static BlockingCollection<int> _bc;
 
-        static FillAppFabricCache()
-        {
-            //DataCacheFactory factory = new DataCacheFactory();
-            //_cache = factory.GetCache("default");
-            //Debug.Assert(_cache == null);
-        }
+        //static FillAppFabricCache()
+        //{
+        //    DataCacheFactory factory = new DataCacheFactory();
+        //    _cache = factory.GetCache("default");
+        //    //Debug.Assert(_cache == null);
+        //}
 
         //public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
         //public FillAppFabricCache(SendOrPostCallback callback, SynchronizationContext context)
-        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback)
+        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, DataCache cache)
         {
-            _bc = bc;
-            _callback = callback;
+            _bc         = bc;
+            _callback   = callback;
+            _fingerList = fingerList;
+            _cache      = cache;
             //_context = context;
         }
 
@@ -106,7 +111,16 @@ namespace FillAppFabricCache
         public void run(int from, int to, int count)
         {
             //string fingerFields = "ri,rm,rr,rl";
-            string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+            //string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+            
+            var sb = new StringBuilder();
+            foreach (string finger in _fingerList)
+            {
+                sb.Append(finger + ",");
+            }
+
+            string fingerFields = sb.ToString();
+            fingerFields = fingerFields.Remove(fingerFields.Length - 1);
             string[] fingerFieldsArray = fingerFields.Split(new char[] { ',' });
 
             //string dbFingerTable = System.Configuration.ConfigurationManager.AppSettings["dbFingerTable"];
@@ -145,9 +159,24 @@ namespace FillAppFabricCache
             //}
             //return;            
 
+            //if (_cache.Get("fingerList") == null)
+            //    _cache.Add("fingerList", _fingerList);
+
             string regionName = from.ToString();
-            //_cache.RemoveRegion(regionName);
-            //_cache.CreateRegion(regionName);
+            _cache.RemoveRegion(regionName);
+            _cache.CreateRegion(regionName);
+
+            //ArrayList regionNameList;
+
+            //if (_cache.Get("regionNameList") == null)
+            //{
+            //    regionNameList = new ArrayList();
+            //    _cache.Add("regionNameList", regionNameList);
+            //}
+
+            ArrayList regionNameList = _cache.Get("regionNameList") as ArrayList;
+            regionNameList.Add(regionName);
+            _cache.Put("regionNameList", regionNameList, new TimeSpan(24, 0, 0));
 
             try
             {
@@ -253,8 +282,8 @@ namespace FillAppFabricCache
                                 buffer[i++] = new byte[0];
                         }
 
-                        //if (confirmed)
-                        //    _cache.Add(id.ToString(), buffer, regionName);
+                        if (confirmed)
+                            _cache.Add(id.ToString(), buffer, new TimeSpan(24, 0, 0), regionName);
 //                    }
                     //else
                     //{

@@ -10,24 +10,37 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.Collections;
+using Microsoft.ApplicationServer.Caching;
 
 namespace AppFabricCacheService
 {
     //delegate void SendOrPostCallbackDlgt(object num);
 
-    class StateObject
+    class PopulateStateObject
     {
         public int LoopCounter;
         //public SendOrPostCallback dlgt;
         //public IPopulateCacheCallback CallBack;
         //public SynchronizationContext Context;
+        public ArrayList fingerList;
         public BlockingCollection<int> bc;
+        public DataCache cache;
     }
 
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PopulateCacheService : IPopulateCacheService
     {
+        private static DataCache _cache = null;
+
+        static PopulateCacheService()
+        {
+            DataCacheFactory factory = new DataCacheFactory();
+            _cache = factory.GetCache("default");
+            //Debug.Assert(_cache == null);
+        }
+
         static public void CallDelegate(object rowcount)
         {
             //try
@@ -57,18 +70,19 @@ namespace AppFabricCacheService
             }
         }
 
-        public void Run(string[] args)
+        //public void Run(string[] args)
+        public void Run(ArrayList fingerList)
         {
 //            Stopwatch st = new Stopwatch();
 //            st.Start();
 
             Int32 rowcount = 0;
-            for (int i = 0; i < 2; i++)
-            {
+            //for (int i = 0; i < 2; i++)
+            //{
                 try
                 {
                     rowcount = FillAppFabricCache.FillAppFabricCache.rowcount();
-                    break;
+                    //break;
                 }
                 catch (System.Data.SqlClient.SqlException ex)
                 {
@@ -83,7 +97,7 @@ namespace AppFabricCacheService
                     //throw new FaultException(ex.ToString());
                     //Console.WriteLine("Time out, try again ");
                 }
-            }
+//            }
 
 //            st.Stop();
 
@@ -105,36 +119,40 @@ namespace AppFabricCacheService
             Stopwatch stw = new Stopwatch();
             stw.Start();
 
-            bool go = false;
-            if (args != null && args.Length != 0)
-            {
-                if (Int32.TryParse(args[0], out offset))
-                {
-                    if (offset < topindex)
-                    {
-                        offset *= limit;
-                        limit = 1000;
-                        taskArray = new Task[10];
-                        limit = 10000;
-                        taskArray = new Task[1];
-                        go = true;
-                    }
+            //bool go = false;
+            //if (args != null && args.Length != 0)
+            //{
+            //    if (Int32.TryParse(args[0], out offset))
+            //    {
+            //        if (offset < topindex)
+            //        {
+            //            offset *= limit;
+            //            limit = 1000;
+            //            taskArray = new Task[10];
+            //            limit = 10000;
+            //            taskArray = new Task[1];
+            //            go = true;
+            //        }
 
-                    //Console.WriteLine(offset);
-                }
+            //        //Console.WriteLine(offset);
+            //    }
 
-                if (!go)
-                {
-                    CallBack.RespondWithError(" --- Wrong parameter value provided for AppFabricCache ---");
-                    //Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
-                    //Console.ReadKey();
-                    return;
-                }
-            }
+            //    if (!go)
+            //    {
+            //        CallBack.RespondWithError(" --- Wrong parameter value provided for AppFabricCache ---");
+            //        //Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
+            //        //Console.ReadKey();
+            //        return;
+            //    }
+            //}
 
             //SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
             //SynchronizationContext Context = SynchronizationContext.Current;
             //SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
+
+            _cache.Put("fingerList", fingerList, new TimeSpan(24,0,0));
+            _cache.Put("regionNameList", new ArrayList(), new TimeSpan(24,0,0));
+
             BlockingCollection<int> bc = new BlockingCollection<int>();
 
             if (true)
@@ -146,14 +164,14 @@ namespace AppFabricCacheService
                     //CallBack.RespondWithError(taskArray.Length.ToString());
                     taskArray[i] = Task.Factory.StartNew((Object obj) =>
                     {
-                        StateObject state = obj as StateObject;
+                        PopulateStateObject state = obj as PopulateStateObject;
 
                         //if (state.Dlgt == null)
                         //    state.CallBack.RespondWithError("Null");
                         //else
                         //    state.CallBack.RespondWithError("Not Null");
 
-                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null);
+                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.cache);
                         //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
                         //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
@@ -170,7 +188,7 @@ namespace AppFabricCacheService
                         //}
                         //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                     },
-                    new StateObject() { LoopCounter = i, bc = bc},
+                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, cache = _cache },
                     //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
                     System.Threading.CancellationToken.None,
                     TaskCreationOptions.LongRunning,
@@ -230,7 +248,7 @@ namespace AppFabricCacheService
                     //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
                     //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
                     //var process = new FillAppFabricCache.FillAppFabricCache(dlgt, Context);
-                    var process = new FillAppFabricCache.FillAppFabricCache(null, dlgt);
+                    var process = new FillAppFabricCache.FillAppFabricCache(null, dlgt, fingerList, _cache);
                     //process.run(0, 0, 0);
                     for (int i = 0; i < taskArray.Length; i++)
                     {

@@ -61,6 +61,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MatchingService.svc" />
     <Content Include="PopulateCacheService.svc" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />
@@ -91,7 +92,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FillAppFabricCache.cs" />
+    <Compile Include="IMatchingService.cs" />
     <Compile Include="IPopulateCacheService.cs" />
+    <Compile Include="LookUp.cs" />
+    <Compile Include="MatchingService.svc.cs">
+      <DependentUpon>MatchingService.svc</DependentUpon>
+    </Compile>
     <Compile Include="PopulateCacheService.svc.cs">
       <DependentUpon>PopulateCacheService.svc</DependentUpon>
     </Compile>

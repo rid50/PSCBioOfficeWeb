@@ -1,12 +1,14 @@
 ﻿using System.ServiceModel;
+using System.Collections;
 
 namespace AppFabricCacheService
 {
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IPopulateCacheCallback))]
     public interface IPopulateCacheService
     {
-        [OperationContract(IsOneWay=true)]
-        void Run(string[] args);
+        [OperationContract(IsOneWay = true)]
+        void Run(ArrayList cbArray);
+        //void Run(string[] args);
     }
 
     public interface IPopulateCacheCallback

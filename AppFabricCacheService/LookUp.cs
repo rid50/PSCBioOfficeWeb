@@ -36,9 +36,11 @@ namespace AppFabricCacheService
                 
                 if (item.Key == "123") {
                     buffer = item.Value as byte[][];
-                    for(int i = 0; i < buffer.Length; i++) 
-                    if ((buffer[i]).Length != 0)
-                        return (UInt32)(buffer[i]).Length;
+                    for(int i = 0; i < buffer.Length; i++)
+                        if (buffer[i] != null && (buffer[i]).Length != 0)
+                        {
+                            return (UInt32)(buffer[i]).Length;
+                        }
                 }
             }
             

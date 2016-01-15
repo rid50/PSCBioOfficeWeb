@@ -50,12 +50,15 @@ namespace AppFabricCacheService
             }
 
             Task<UInt32>[] taskArray = new Task<UInt32>[regionNameList.Count];
+            //Task<UInt32>[] taskArray = new Task<UInt32>[2];
 
             int i = 0; UInt32 retcode = 0;
 
             var tokenSource = new CancellationTokenSource();
             CancellationToken ct = tokenSource.Token;
 
+            //string regionName = "0";
+            //for(int k = 0; k < 2; k++)
             foreach (string regionName in regionNameList)
             {
                 taskArray[i++] = Task.Factory.StartNew((Object obj) =>
@@ -82,6 +85,12 @@ namespace AppFabricCacheService
             try
             {
                 Task.WaitAll(taskArray);
+                foreach (var t in taskArray)
+                {
+                    if (t.Status == TaskStatus.RanToCompletion && (UInt32)t.Result != 0)
+                        return (UInt32)t.Result;
+                }
+
                 return 0;
                 //Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
             }
@@ -89,9 +98,9 @@ namespace AppFabricCacheService
             {
                 foreach (var t in taskArray)
                 {
-                    if (t.Status == TaskStatus.Canceled)
+                    if (t.Status == TaskStatus.RanToCompletion && (UInt32)t.Result != 0)
                         return (UInt32)t.Result;
-                    else if (t.Status == TaskStatus.Canceled)
+                    else if (t.Status == TaskStatus.Faulted)
                     {
                         while ((ex is AggregateException) && (ex.InnerException != null))
                             ex = ex.InnerException;

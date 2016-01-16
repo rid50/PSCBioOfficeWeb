@@ -368,13 +368,15 @@ namespace DAO
                     {
                         sb.Append("update {0} with (serializable) SET ");
                         sb.Append(dbFingerColumn + "=@" + key);
-                        cmd.Parameters.Add(key, SqlDbType.VarBinary);
+                        cmd.Parameters.Add("@" + key, SqlDbType.VarBinary);
                     }
                     else
-                        sb.Append(",");
+                    {
+                        //sb.Append(",");
+                        sb.Append("," + key + "=@" + key);
+                        cmd.Parameters.Add("@" + key, SqlDbType.VarBinary);
+                    }
 
-                    sb.Append(key + "=@" + key);
-                    cmd.Parameters.Add("@" + key, SqlDbType.VarBinary);
                     cmd.Parameters["@" + key].Value = templates[key];
                 }
 

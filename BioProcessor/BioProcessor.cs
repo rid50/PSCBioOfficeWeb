@@ -460,7 +460,16 @@ namespace BioProcessor
             }
 
             //sw = System.Diagnostics.Stopwatch.StartNew();
-            biometricClient.CreateTemplate(subject);
+            try
+            {
+                biometricClient.CreateTemplate(subject);
+            }
+            catch (Exception ex) {
+                while (ex.InnerException != null)
+                    ex = ex.InnerException;
+                throw new Exception(ex.Message);
+            }
+
             //sw.Stop();
             //TimeSpan ts = sw.Elapsed;
             //string elapsedTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);
@@ -560,7 +569,7 @@ namespace BioProcessor
 
                     if (!valid)
                     {
-                        templates.Add(dict[i], null);
+                        templates.Add(dict[i], new byte[0]);
                     }
                     else
                     {
@@ -571,7 +580,7 @@ namespace BioProcessor
                 }
                 else
                 {
-                    templates.Add(dict[i], null);
+                    templates.Add(dict[i], new byte[0]);
                 }
             }
 

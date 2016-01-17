@@ -16,6 +16,36 @@ namespace BioProcessor
 {
     public class BioProcessor
     {
+        private NBiometricClient _biometricClient;
+        private NSubject _probeSubject;
+
+        public BioProcessor()
+        {
+            _biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
+        }
+
+        public void enrollProbeTemplate(byte[] probeTemplate)
+        {
+            _probeSubject = NSubject.FromMemory(probeTemplate);
+            if (_probeSubject == null)
+                throw new Exception("Probe template is null");
+        }
+
+        public bool match(byte[] galleryTemplate)
+        {
+            NSubject gallerySubject = NSubject.FromMemory(galleryTemplate);
+            if (gallerySubject == null)
+                throw new Exception("Gallery template is null");
+
+            var status = _biometricClient.Verify(_probeSubject, gallerySubject);
+            if (status == NBiometricStatus.Ok)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection)
         {
             fingersCollection = null;
@@ -142,7 +172,7 @@ namespace BioProcessor
                             fingersCollection[i] = ms.ToArray();
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //throw new Exception(ex.Message);
                         fingersCollection[i] = getEmptyBitmap();

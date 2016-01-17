@@ -15,6 +15,8 @@ namespace FillAppFabricCache
 {
     class FillAppFabricCache
     {
+        enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
+
         //private static DataCacheFactory _factory = null;
         private static DataCache _cache;
         private static SendOrPostCallback _callback;
@@ -267,19 +269,22 @@ namespace FillAppFabricCache
                         //                        id = (int)reader[dbIdColumn];
                         bool approved = false, confirmed = false;
                         int i = 0;
-                        foreach (string s in fingerFieldsArray)
+                        foreach (string finger in fingerFieldsArray)
                         {
-                            if (!reader.IsDBNull(i + 1) && ((byte[])reader[s]).Length > 1)
+                            FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                            if (!reader.IsDBNull(i + 1) && ((byte[])reader[finger]).Length > 1)
                             {
                                 if (!approved)
                                     approved = true;
                                 else if (approved && !confirmed)
                                     confirmed = true;
 
-                                buffer[i++] = (byte[])reader[s];
+                                buffer[(int)f] = (byte[])reader[finger];
                             }
                             else
-                                buffer[i++] = new byte[0];
+                                buffer[(int)f] = new byte[0];
+                            
+                            i++;
                         }
 
                         if (confirmed)

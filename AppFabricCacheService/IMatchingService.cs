@@ -15,6 +15,9 @@ namespace AppFabricCacheService
         ArrayList getFingerList();
 
         [OperationContract]
+        void Terminate();
+
+        [OperationContract]
         UInt32 match(ArrayList arrOfFingers, byte[] template);
     }
 }

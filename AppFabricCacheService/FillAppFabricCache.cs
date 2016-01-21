@@ -18,6 +18,7 @@ namespace FillAppFabricCache
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
         //private static DataCacheFactory _factory = null;
+        private static CancellationToken _ct;
         private static DataCache _cache;
         private static SendOrPostCallback _callback;
         //private static SynchronizationContext _context = null;
@@ -33,11 +34,12 @@ namespace FillAppFabricCache
 
         //public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
         //public FillAppFabricCache(SendOrPostCallback callback, SynchronizationContext context)
-        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, DataCache cache)
+        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, CancellationToken ct, DataCache cache)
         {
             _bc         = bc;
             _callback   = callback;
             _fingerList = fingerList;
+            _ct         = ct;
             _cache      = cache;
             //_context = context;
         }
@@ -211,6 +213,11 @@ namespace FillAppFabricCache
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
+                    if (_ct.IsCancellationRequested)
+                    {
+                        _ct.ThrowIfCancellationRequested();
+                    }
+
                     id = (int)reader[dbIdColumn];
 
                     rowNumber++;
@@ -308,9 +315,15 @@ namespace FillAppFabricCache
                 //Console.WriteLine("Objects in Cache = {0}", k);
 
             }
-            catch (Exception ex)
+            catch (AggregateException ae)
             {
-                throw new Exception(ex.Message);
+                foreach (Exception e in ae.InnerExceptions)
+                {
+                    if (e is TaskCanceledException)
+                         _ct.ThrowIfCancellationRequested();
+                    else
+                        throw new Exception(e.Message);
+                }
             }
             finally
             {

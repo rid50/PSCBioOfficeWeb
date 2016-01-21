@@ -13,16 +13,18 @@ namespace AppFabricCacheService
 {
     class MatchStateObject
     {
-        public ArrayList fingerList;
-        public byte[] template;
-        public DataCache cache;
-        public String regionName;
+        public ArrayList    fingerList;
+        public byte[]       probeTemplate;
+        public DataCache    cache;
+        public String       regionName;
         public CancellationToken ct;
     }
 
     public class MatchingService : IMatchingService
     {
-        private static DataCache _cache = null;
+        private static CancellationTokenSource _tokenSource;
+        private static DataCache _cache;
+        //private static DataCacheFactory _factory;
 
         static MatchingService()
         {
@@ -33,10 +35,16 @@ namespace AppFabricCacheService
 
         public ArrayList getFingerList()
         {
+            //_cache = _factory.GetCache("default");
             return _cache.Get("fingerList") as ArrayList;
         }
 
-        public UInt32 match(ArrayList fingerList, byte[] template)
+        public void Terminate()
+        {
+            _tokenSource.Cancel();
+        }
+
+        public UInt32 match(ArrayList fingerList, byte[] probeTemplate)
         {
             ArrayList regionNameList;
 
@@ -52,32 +60,36 @@ namespace AppFabricCacheService
             Task<UInt32>[] taskArray = new Task<UInt32>[regionNameList.Count];
             //Task<UInt32>[] taskArray = new Task<UInt32>[2];
 
-            int i = 0; UInt32 retcode = 0;
+            UInt32 retcode = 0;
 
-            var tokenSource = new CancellationTokenSource();
-            CancellationToken ct = tokenSource.Token;
+            _tokenSource = new CancellationTokenSource();
+            CancellationToken ct = _tokenSource.Token;
 
             //string regionName = "0";
             //for(int k = 0; k < 2; k++)
+            int i = 0;
             foreach (string regionName in regionNameList)
             {
                 taskArray[i++] = Task.Factory.StartNew((Object obj) =>
                 {
-                    ct.ThrowIfCancellationRequested();
+                    if (ct.IsCancellationRequested)
+                    {
+                        ct.ThrowIfCancellationRequested();
+                    }
 
                     MatchStateObject state = obj as MatchStateObject;
 
-                    var process = new LookUp(state.fingerList, state.template, state.cache, state.ct);
+                    var process = new LookUp(state.fingerList, state.probeTemplate, state.cache, state.ct);
 
                     retcode = process.run(state.regionName);
 
                     if (retcode != 0)
-                        tokenSource.Cancel();
+                        _tokenSource.Cancel();
 
                     return retcode;
                 },
-                new MatchStateObject() { fingerList = fingerList, template = template, cache = _cache, regionName = regionName, ct = ct },
-                tokenSource.Token,
+                new MatchStateObject() { fingerList = fingerList, probeTemplate = probeTemplate, cache = _cache, regionName = regionName, ct = ct },
+                _tokenSource.Token,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);
             }
@@ -88,32 +100,43 @@ namespace AppFabricCacheService
                 foreach (var t in taskArray)
                 {
                     if (t.Status == TaskStatus.RanToCompletion && (UInt32)t.Result != 0)
-                        return (UInt32)t.Result;
+                    {
+                        retcode = (UInt32)t.Result;
+                        break;
+                    }
                 }
 
                 return 0;
-                //Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
             }
             catch (Exception ex)
             {
+
                 foreach (var t in taskArray)
                 {
-                    if (t.Status == TaskStatus.RanToCompletion && (UInt32)t.Result != 0)
-                        return (UInt32)t.Result;
+                    if (t.Status == TaskStatus.RanToCompletion && (int)t.Result != 0)
+                    {
+                        retcode = (UInt32)t.Result;
+                        break;
+                    }
                     else if (t.Status == TaskStatus.Faulted)
                     {
                         while ((ex is AggregateException) && (ex.InnerException != null))
                             ex = ex.InnerException;
                         throw new Exception(ex.Message);
                     }
-
-                    //Console.WriteLine("{0,10} {1,20} {2,14}",
-                    //                  t.Id, t.Status,
-                    //                  t.Status != TaskStatus.Canceled ? t.Status != TaskStatus.Faulted ? t.Result.ToString("N0") : "n/a" : "falted");
                 }
             }
+            finally
+            {
+                //if (ct.IsCancellationRequested)
+                //{
+                //    throw new Exception("The request was cancelled");
+                //}
 
-            return 0;
+                _tokenSource.Dispose();
+            }
+
+            return retcode;
         }
     }
 }

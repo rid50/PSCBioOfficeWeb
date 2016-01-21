@@ -20,6 +20,7 @@ namespace AppFabricCacheService
     class PopulateStateObject
     {
         public int LoopCounter;
+        public CancellationToken ct;
         //public SendOrPostCallback dlgt;
         //public IPopulateCacheCallback CallBack;
         //public SynchronizationContext Context;
@@ -32,7 +33,9 @@ namespace AppFabricCacheService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PopulateCacheService : IPopulateCacheService
     {
-        private static DataCache _cache = null;
+        private static CancellationTokenSource _tokenSource;
+        private static DataCache _cache;
+        //private static bool _terminate = false;
 
         static PopulateCacheService()
         {
@@ -43,19 +46,6 @@ namespace AppFabricCacheService
 
         static public void CallDelegate(object rowcount)
         {
-            //try
-            //{
-            //    if (CallBack == null)
-            //        throw new Exception("kuku");
-            //    //throw new Exception("kuku" + rowcount + " : " + Thread.CurrentThread.ManagedThreadId);
-            //    else
-            //        throw new Exception("ukuk");
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception("AAAAAAAAkuku");
-            //}
-
             CallBack.RespondWithRecordNumbers((int)rowcount);
         }
 
@@ -70,43 +60,84 @@ namespace AppFabricCacheService
             }
         }
 
+        public ArrayList getFingerList()
+        {
+            return _cache.Get("fingerList") as ArrayList;
+        }
+
+        public void Terminate()
+        {
+            _tokenSource.Cancel();
+        }
+
+        private void dumpCache() {
+            if (_cache.Get("regionNameList") != null)
+            {
+                ArrayList regionNameList = _cache.Get("regionNameList") as ArrayList;
+                foreach (string regionName in regionNameList)
+                {
+                    if (regionName != null)
+                        _cache.RemoveRegion(regionName);
+                }
+            }
+
+            _cache.Remove("fingerList");
+            _cache.Remove("regionNameList");
+        }
+
+
         //public void Run(string[] args)
         public void Run(ArrayList fingerList)
         {
 //            Stopwatch st = new Stopwatch();
 //            st.Start();
+            //_terminate = false;
+            _tokenSource = new CancellationTokenSource();
+            CancellationToken ct = _tokenSource.Token;
 
             Int32 rowcount = 0;
             //for (int i = 0; i < 2; i++)
             //{
-                try
-                {
-                    rowcount = FillAppFabricCache.FillAppFabricCache.rowcount();
-                    //break;
-                }
-                catch (System.Data.SqlClient.SqlException ex)
-                {
-                    CallBack.RespondWithError(ex.ToString());
-                    return;
-                    //Console.WriteLine("Time out, try again ");
-                }
-                catch (Exception ex)
-                {
-                    CallBack.RespondWithError(ex.ToString());
-                    return;
-                    //throw new FaultException(ex.ToString());
-                    //Console.WriteLine("Time out, try again ");
-                }
+            try
+            {
+                rowcount = FillAppFabricCache.FillAppFabricCache.rowcount();
+                //break;
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                dumpCache();
+                CallBack.RespondWithError(ex.ToString());
+                //CallBack.CacheOperationComplete();
+                _tokenSource.Dispose();
+                return;
+                //Console.WriteLine("Time out, try again ");
+            }
+            catch (Exception ex)
+            {
+                dumpCache();
+                CallBack.RespondWithError(ex.ToString());
+                //CallBack.CacheOperationComplete();
+                _tokenSource.Dispose();
+                return;
+                //throw new FaultException(ex.ToString());
+                //Console.WriteLine("Time out, try again ");
+            }
 //            }
 
 //            st.Stop();
 
-            if (rowcount == 0)
-                return;
-
             CallBack.RespondWithRecordNumbers(rowcount);
             //CallBack.RespondWithRecordNumbers(Thread.CurrentThread.ManagedThreadId);
-            
+
+            if (ct.IsCancellationRequested)
+            {
+                dumpCache();
+                CallBack.RespondWithText("The request was cancelled");
+                //CallBack.CacheOperationComplete();
+                _tokenSource.Dispose();
+                return;
+            }
+
             //Console.WriteLine("Row count: " + rowcount);
 
             int limit = 10000;
@@ -150,14 +181,27 @@ namespace AppFabricCacheService
             //SynchronizationContext Context = SynchronizationContext.Current;
             //SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
 
-            _cache.Put("fingerList", fingerList, new TimeSpan(24,0,0));
+
+            if (_cache.Get("regionNameList") != null)
+            {
+                ArrayList regionNameList = _cache.Get("regionNameList") as ArrayList;
+                foreach (string regionName in regionNameList)
+                {
+                    if (regionName != null)
+                        _cache.RemoveRegion(regionName);
+                }
+            }
+
+            _cache.Put("fingerList", new ArrayList(), new TimeSpan(24, 0, 0));
             _cache.Put("regionNameList", new ArrayList(), new TimeSpan(24,0,0));
+
+//            _tokenSource = new CancellationTokenSource();
+//            CancellationToken ct = _tokenSource.Token;
 
             BlockingCollection<int> bc = new BlockingCollection<int>();
 
-            if (true)
-            {
-                //TaskScheduler taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            //if (true)
+            //{
 
                 for (int i = 0; i < taskArray.Length; i++)
                 {
@@ -171,7 +215,7 @@ namespace AppFabricCacheService
                         //else
                         //    state.CallBack.RespondWithError("Not Null");
 
-                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.cache);
+                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.ct, state.cache);
                         //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
                         //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
@@ -188,9 +232,9 @@ namespace AppFabricCacheService
                         //}
                         //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                     },
-                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, cache = _cache },
+                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, ct = ct, cache = _cache },
                     //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
-                    System.Threading.CancellationToken.None,
+                    _tokenSource.Token,
                     TaskCreationOptions.LongRunning,
                     TaskScheduler.Default);
                 }
@@ -210,7 +254,6 @@ namespace AppFabricCacheService
                     foreach (var item in bc.GetConsumingEnumerable())
                     {
                         CallBack.RespondWithRecordNumbers(item);
-                        //Console.WriteLine(string.Format("Item: {0}, Current thread: {1}", item, Thread.CurrentThread.ManagedThreadId));
                     }
                 };
                 d();
@@ -218,67 +261,76 @@ namespace AppFabricCacheService
                 try
                 {
                     Task.WaitAll(taskArray);
-                    //Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
+                    _cache.Put("fingerList", fingerList, new TimeSpan(24, 0, 0));
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine(ex.Flatten().Message);
-                    //throw ex.Flatten();
-                    while ((ex is AggregateException) && (ex.InnerException != null))
-                        ex = ex.InnerException;
+                    foreach (var t in taskArray)
+                    {
+                        if (t.Status == TaskStatus.Faulted)
+                        {
+                            while ((ex is AggregateException) && (ex.InnerException != null))
+                                ex = ex.InnerException;
 
-                    //throw new FaultException(ex.ToString());
-                    CallBack.RespondWithError(ex.ToString());
-                    return;
-
-                    //CallBack.Respond(" --- AppFabricCache exception: " + ex.ToString());
-                    //Console.WriteLine(ex.ToString());
+                            dumpCache();
+                            CallBack.RespondWithError(ex.Message);
+                            //CallBack.CacheOperationComplete();
+                            return;
+                            //throw new FaultException(ex.Message);
+                        }
+                    }
                 }
                 finally
                 {
-                    //Console.WriteLine(" ------------------ Press any key to close -----------------------");
-                    //Console.ReadKey();
-                }
-            }
-            else
-            {
-                try
-                {
-
-                    //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
-                    //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
-                    //var process = new FillAppFabricCache.FillAppFabricCache(dlgt, Context);
-                    var process = new FillAppFabricCache.FillAppFabricCache(null, dlgt, fingerList, _cache);
-                    //process.run(0, 0, 0);
-                    for (int i = 0; i < taskArray.Length; i++)
+                    if (ct.IsCancellationRequested)
                     {
-                        //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
-                        //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
-
-                        process.run(i * limit + offset, i * limit + limit, limit);
+                        dumpCache();
+                        CallBack.RespondWithText("The request was cancelled");
                     }
 
-                    //stw.Stop();
-                    //Console.WriteLine(" ----- Count(*) time elapsed: {0}", st.Elapsed);
-                    //Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);
+                    _tokenSource.Dispose();
                 }
-                catch (Exception ex)
-                {
-                    //Console.WriteLine(ex.Flatten().Message);
-                    //throw ex.Flatten();
-                    while ((ex is AggregateException) && (ex.InnerException != null))
-                        ex = ex.InnerException;
+            //}
+            //else
+            //{
+            //    try
+            //    {
 
-                    //throw new FaultException(ex.ToString());
-                    CallBack.RespondWithError(ex.ToString());
-                    return;
-                    //Console.WriteLine(ex.ToString());
-                }
-                finally
-                {
-                    //                    Console.WriteLine(" ------------------ Press any key to close -----------------------");
-                }
-            }
+            //        //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+            //        //var process = new FillAppFabricCache.FillAppFabricCache(CallBack);
+            //        //var process = new FillAppFabricCache.FillAppFabricCache(dlgt, Context);
+            //        var process = new FillAppFabricCache.FillAppFabricCache(null, dlgt, fingerList, ct, _cache);
+            //        //process.run(0, 0, 0);
+            //        for (int i = 0; i < taskArray.Length; i++)
+            //        {
+            //            //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
+            //            //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
+
+            //            process.run(i * limit + offset, i * limit + limit, limit);
+            //        }
+
+            //        //stw.Stop();
+            //        //Console.WriteLine(" ----- Count(*) time elapsed: {0}", st.Elapsed);
+            //        //Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        //Console.WriteLine(ex.Flatten().Message);
+            //        //throw ex.Flatten();
+            //        while ((ex is AggregateException) && (ex.InnerException != null))
+            //            ex = ex.InnerException;
+
+            //        //throw new FaultException(ex.ToString());
+            //        CallBack.RespondWithError(ex.ToString());
+            //        return;
+            //        //Console.WriteLine(ex.ToString());
+            //    }
+            //    finally
+            //    {
+            //        _tokenSource.Dispose();
+            //        //                    Console.WriteLine(" ------------------ Press any key to close -----------------------");
+            //    }
+            //}
 
             stw.Stop();
             TimeSpan ts = stw.Elapsed;
@@ -286,9 +338,10 @@ namespace AppFabricCacheService
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
                 //ts.Milliseconds / 10);
 
-            CallBack.RespondWithResult(string.Format(" --- Time elapsed: {0}", elapsedTime));
+            if (_cache.Get("regionNameList") != null)
+                CallBack.RespondWithText(string.Format(" --- Time elapsed: {0}", elapsedTime));
 
-            CallBack.CacheComplete();
+            CallBack.CacheOperationComplete();
 
             //Console.WriteLine(" ----- Count(*) time elapsed: {0}", st.Elapsed);
             //Console.WriteLine(" ----- Loop time elapsed: {0}", stw.Elapsed);

@@ -8,7 +8,12 @@ namespace AppFabricCacheService
     {
         [OperationContract(IsOneWay = true)]
         void Run(ArrayList cbArray);
-        //void Run(string[] args);
+
+        [OperationContract]
+        ArrayList getFingerList();
+
+        [OperationContract]
+        void Terminate();
     }
 
     public interface IPopulateCacheCallback
@@ -17,12 +22,12 @@ namespace AppFabricCacheService
         void RespondWithRecordNumbers(int num);
 
         [OperationContract(IsOneWay = true)]
-        void RespondWithResult(string str);
+        void RespondWithText(string str);
 
         [OperationContract(IsOneWay = true)]
         void RespondWithError(string str);
 
         [OperationContract(IsOneWay = true)]
-        void CacheComplete();
+        void CacheOperationComplete();
     }
 }

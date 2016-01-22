@@ -46,8 +46,6 @@ namespace BiometricService
         //public static extern void MySetCallBack(DelegateNotify callback);
         public static extern void SetCallBack(CallBackDelegate callback);
 
-        //static public MulticastDelegate CallBack
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct CallBackStruct
         {

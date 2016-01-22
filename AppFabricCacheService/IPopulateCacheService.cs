@@ -7,7 +7,7 @@ namespace AppFabricCacheService
     public interface IPopulateCacheService
     {
         [OperationContract(IsOneWay = true)]
-        void Run(ArrayList cbArray);
+        void Run(ArrayList fingerList);
 
         [OperationContract]
         ArrayList getFingerList();

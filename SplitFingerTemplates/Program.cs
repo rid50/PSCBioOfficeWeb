@@ -8,6 +8,7 @@ namespace SplitFingerTemplates
     class StateObject
     {
         public int LoopCounter;
+        public int MaxPoolSize;
     }
 
     class Program
@@ -94,25 +95,39 @@ namespace SplitFingerTemplates
         static void Run(string[] args)
         {
             Int32 rowcount = 0;
-            for (int i = 0; i < 2; i++)
-            {
+            //for (int i = 0; i < 2; i++)
+            //{
                 try
                 {
                     rowcount = SerializationProcess.rowcount();
-                    break;
+                    //break;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Time out, try again ");
+                    Console.WriteLine(ex.ToString());
+                    //Console.WriteLine("Time out, try again ");
                 }
-            }
+            //}
 
             if (rowcount == 0)
+            {
+                Console.WriteLine("------- Database is empty, press any key to close -------");
+                Console.ReadKey();
                 return;
+            }
 
             Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 10000;
+            //int limit = 10000;
+            int limit;
+            int.TryParse(System.Configuration.ConfigurationManager.AppSettings["chunkSize"], out limit);
+            if (limit == 0)
+            {
+                Console.WriteLine("------- Chunk size is invalid, press any key to close -------");
+                Console.ReadKey();
+                return;
+            }
+
             int topindex = (int)(rowcount/limit + 1);
             //topindex = 100;
             Task[] taskArray = new Task[topindex];
@@ -152,7 +167,7 @@ namespace SplitFingerTemplates
                 {
                     StateObject state = obj as StateObject;
 
-                    var process = new SerializationProcess();
+                    var process = new SerializationProcess(state.MaxPoolSize);
                     //try
                     //{
                     //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
@@ -167,7 +182,7 @@ namespace SplitFingerTemplates
                     //}
                     //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                 },
-                new StateObject() {LoopCounter = i});
+                new StateObject() { LoopCounter = i, MaxPoolSize = taskArray.Length * 2});
             }
 
             try

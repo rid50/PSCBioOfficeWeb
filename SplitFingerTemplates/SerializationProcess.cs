@@ -79,7 +79,7 @@ namespace SplitFingerTemplates
     class SerializationProcess
     {
         private NBiometricClient _biometricClient;
-
+        private int _maxPoolSize;
         //private static readonly System.Object lockThis = new System.Object();
 
         //NFExtractor extractor;
@@ -92,8 +92,9 @@ namespace SplitFingerTemplates
         //    conn2.Open();
         //}
 
-        public SerializationProcess()
+        public SerializationProcess(int MaxPoolSize)
         {
+            _maxPoolSize = MaxPoolSize;
             //extractor = new NFExtractor();
         }
 
@@ -128,7 +129,8 @@ namespace SplitFingerTemplates
                 cmd.CommandText = "SELECT count(*) FROM Egy_T_FingerPrint";
                 reader = cmd.ExecuteReader();
                 reader.Read();
-                return reader.GetInt32(0);
+                int result = reader.GetInt32(0);
+                return result;
             }
             catch (Exception ex)
             {
@@ -217,7 +219,9 @@ namespace SplitFingerTemplates
             try
             {
                 //conn = buildConnectionString();
+                
                 var connStr = getConnectionString();
+                connStr += String.Format(";Max Pool Size={0}", _maxPoolSize);
                 conn = new SqlConnection(connStr);
                 conn.Open();
                 conn2 = new SqlConnection(connStr);
@@ -237,7 +241,8 @@ namespace SplitFingerTemplates
                 while (reader.Read())
                 {
                     rowNumber++;
-                    Console.WriteLine("{0}", rowNumber + from);
+                    if (rowNumber % 1000 == 0)
+                        Console.WriteLine("{0}", rowNumber + from);
 
                     if (!reader.IsDBNull(1))
                     {
@@ -263,8 +268,7 @@ namespace SplitFingerTemplates
                             cmd2.Dispose();
                             cmd2 = null;
                         }
-
-                        //scontinue;
+//continue;
 
                         if (sb.Length != 0)
                             sb.Clear();
@@ -544,8 +548,8 @@ namespace SplitFingerTemplates
             {
                 throw new Exception(ex.Message);
             }
-            finally
-            {
+            //finally
+            //{
                 try
                 {
                     if (reader != null)
@@ -567,7 +571,7 @@ namespace SplitFingerTemplates
                 {
                     throw new Exception(ex.Message);
                 }
-            }
+            //}
         }
 
         static private String getConnectionString()

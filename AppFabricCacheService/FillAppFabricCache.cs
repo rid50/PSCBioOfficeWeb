@@ -23,6 +23,7 @@ namespace FillAppFabricCache
         private static SendOrPostCallback _callback;
         //private static SynchronizationContext _context = null;
         private ArrayList _fingerList;
+        private short _maxPoolSize;
         private static BlockingCollection<int> _bc;
 
         //static FillAppFabricCache()
@@ -34,11 +35,12 @@ namespace FillAppFabricCache
 
         //public FillAppFabricCache(AppFabricCacheService.IPopulateCacheCallback callback)
         //public FillAppFabricCache(SendOrPostCallback callback, SynchronizationContext context)
-        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, CancellationToken ct, DataCache cache)
+        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, short maxPoolSize, CancellationToken ct, DataCache cache)
         {
             _bc         = bc;
             _callback   = callback;
             _fingerList = fingerList;
+            _maxPoolSize = maxPoolSize;
             _ct         = ct;
             _cache      = cache;
             //_context = context;
@@ -84,12 +86,13 @@ namespace FillAppFabricCache
                 cmd.CommandText = "SELECT count(*) FROM " + client.getAppSetting("dbFingerTable");
                 reader = cmd.ExecuteReader();
                 reader.Read();
-                return reader.GetInt32(0);
+                int result = reader.GetInt32(0);
+                return result;
             }
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             finally
             {
                 try
@@ -185,7 +188,11 @@ namespace FillAppFabricCache
             try
             {
                 //conn = buildConnectionString();
-                conn = new SqlConnection(client.getConnectionString("ConnectionString"));
+                //conn = new SqlConnection(client.getConnectionString("ConnectionString"));
+
+                var connStr = client.getConnectionString("ConnectionString");
+                connStr += String.Format(";Max Pool Size={0}", _maxPoolSize);
+                conn = new SqlConnection(connStr);
 
                 //var connStr = getConnectionString();
                 //conn = new SqlConnection(connStr);

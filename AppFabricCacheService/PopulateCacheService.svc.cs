@@ -12,6 +12,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections;
 using Microsoft.ApplicationServer.Caching;
+using AppFabricCacheService.ConfigurationService;
 
 namespace AppFabricCacheService
 {
@@ -25,6 +26,7 @@ namespace AppFabricCacheService
         //public IPopulateCacheCallback CallBack;
         //public SynchronizationContext Context;
         public ArrayList fingerList;
+        public short maxPoolSize;
         public BlockingCollection<int> bc;
         public DataCache cache;
     }
@@ -140,7 +142,18 @@ namespace AppFabricCacheService
 
             //Console.WriteLine("Row count: " + rowcount);
 
-            int limit = 10000;
+            //int limit = 10000;
+            var client = new ConfigurationServiceClient();
+            int limit;
+            int.TryParse(client.getAppSetting("chunkSize"), out limit);
+            if (limit == 0)
+            {
+                dumpCache();
+                CallBack.RespondWithError("Chunk size is invalid, press any key to close");
+                _tokenSource.Dispose();
+                return;
+            }
+
             int topindex = (int)(rowcount / limit + 1);
             //topindex = 100;
             Task[] taskArray = new Task[topindex];
@@ -215,7 +228,7 @@ namespace AppFabricCacheService
                         //else
                         //    state.CallBack.RespondWithError("Not Null");
 
-                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.ct, state.cache);
+                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
                         //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
                         //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
@@ -232,7 +245,7 @@ namespace AppFabricCacheService
                         //}
                         //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                     },
-                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, ct = ct, cache = _cache },
+                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, maxPoolSize = (short)taskArray.Length, ct = ct, cache = _cache },
                     //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
                     _tokenSource.Token,
                     TaskCreationOptions.LongRunning,

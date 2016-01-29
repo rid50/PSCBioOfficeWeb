@@ -282,11 +282,11 @@ namespace FillAppFabricCache
 //                    {
                         //                        id = (int)reader[dbIdColumn];
                         bool approved = false, confirmed = false;
-                        int i = 0;
+                        int i = 1;
                         foreach (string finger in fingerFieldsArray)
                         {
                             FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
-                            if (!reader.IsDBNull(i + 1) && ((byte[])reader[finger]).Length > 1)
+                            if (!reader.IsDBNull(i) && ((byte[])reader[finger]).Length > 1)
                             {
                                 if (!approved)
                                     approved = true;

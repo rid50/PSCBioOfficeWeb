@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageHandler", "ImageHandler\ImageHandler.csproj", "{A0B06382-840F-48E6-AEA1-897096C777F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioProcessor", "BioProcessor\BioProcessor.csproj", "{B14A562B-92B2-4368-BE53-860A0EAFBB69}"
@@ -133,8 +135,8 @@ Global
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|Mixed Platforms.Build.0 = Release|x64
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x64.ActiveCfg = Debug|x64
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x64.Build.0 = Debug|x64
-		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x86.ActiveCfg = Release|Any CPU
-		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x86.Build.0 = Release|Any CPU
+		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Debug|x86.Build.0 = Debug|Any CPU
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Release|Any CPU.ActiveCfg = Release|x86
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}.Release|Mixed Platforms.Build.0 = Release|x86

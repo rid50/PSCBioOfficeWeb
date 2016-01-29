@@ -150,7 +150,7 @@ namespace SplitFingerTemplates
                         go = true;
                     }
 
-                    Console.WriteLine(offset);
+                    //Console.WriteLine(offset);
                 }
 
                 if (!go)
@@ -161,6 +161,7 @@ namespace SplitFingerTemplates
                 }
             }
 
+            taskArray = new Task[10];
             for (int i = 0; i < taskArray.Length; i++)
             {
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>

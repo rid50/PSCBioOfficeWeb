@@ -37,13 +37,39 @@ namespace AppFabricCacheService
     {
         private static CancellationTokenSource _tokenSource;
         private static DataCache _cache;
+        //private static DataCacheFactory _factory;
         //private static bool _terminate = false;
 
-        static PopulateCacheService()
+        //static PopulateCacheService()
+        //{
+        //    _factory = new DataCacheFactory();
+        //    //try
+        //    //{
+        //    //    _cache = factory.GetCache("default");
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    throw new FaultException<string>(ex.Message);
+        //    //    //throw new FaultException(ex.Message);
+        //    //}
+        //    //Debug.Assert(_cache == null);
+        //}
+
+        private DataCache initDataCache()
         {
-            DataCacheFactory factory = new DataCacheFactory();
-            _cache = factory.GetCache("default");
-            //Debug.Assert(_cache == null);
+            try
+            {
+                if (_cache == null)
+                {
+                    DataCacheFactory factory = new DataCacheFactory();
+                    _cache = factory.GetCache("default");
+                }
+                return _cache;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         static public void CallDelegate(object rowcount)
@@ -64,7 +90,13 @@ namespace AppFabricCacheService
 
         public ArrayList getFingerList()
         {
-            return _cache.Get("fingerList") as ArrayList;
+            try {
+                return initDataCache().Get("fingerList") as ArrayList;
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException<string>(ex.Message);
+            }
         }
 
         public void Terminate()
@@ -91,9 +123,11 @@ namespace AppFabricCacheService
         //public void Run(string[] args)
         public void Run(ArrayList fingerList)
         {
-//            Stopwatch st = new Stopwatch();
-//            st.Start();
+            //            Stopwatch st = new Stopwatch();
+            //            st.Start();
             //_terminate = false;
+            initDataCache();
+
             _tokenSource = new CancellationTokenSource();
             CancellationToken ct = _tokenSource.Token;
 

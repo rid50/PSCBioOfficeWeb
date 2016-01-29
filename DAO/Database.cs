@@ -25,6 +25,8 @@ namespace DAO
         //static string dbPictureColumn;
         //static string dbFingerColumn;
         //string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
+        enum FingerListEnum { li = 1, lm, lr, ll, ri, rm, rr, rl, lt, rt }
+
         string _connectionString;
         string dbPictureTable;
         string dbFingerTable;
@@ -167,9 +169,15 @@ namespace DAO
                             //string[] result = fingerFields.Split(new char[] { ',' });
 
                             int i = 1;
-                            foreach (string s in fingerFieldsArray)
+                            foreach (string finger in fingerFieldsArray)
                             {
-                                buffer[i++] = (byte[])reader[s];  //(byte[])reader["li"];
+                                FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                                if (!reader.IsDBNull(i) && ((byte[])reader[finger]).Length > 1)
+                                    buffer[(int)f] = (byte[])reader[finger];  //(byte[])reader["li"];
+                                else
+                                    buffer[(int)f] = new byte[0];
+
+                                i++;
                             }
                         }
                         else

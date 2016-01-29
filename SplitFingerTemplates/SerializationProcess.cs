@@ -237,12 +237,22 @@ namespace SplitFingerTemplates
                 cmd.CommandText = String.Format("SELECT AppID, AppWsq FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 //cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
+                //sw.Start();
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
+
                     rowNumber++;
-                    if (rowNumber % 1000 == 0)
+                    if (rowNumber % 10 == 0)
+                    {
+                        //Console.WriteLine("{0} ----- Time elapsed: {1}", rowNumber + from, sw.Elapsed);
                         Console.WriteLine("{0}", rowNumber + from);
+                        //Console.WriteLine(" ----- Time elapsed: {0}", sw.Elapsed);
+                        //sw.Restart();
+                    }
+
+                    //continue;
+
 
                     if (!reader.IsDBNull(1))
                     {
@@ -281,6 +291,29 @@ namespace SplitFingerTemplates
                         NImage nImage = null;
                         //NFRecord template = null;
 
+                        //continue;
+
+                        //if (id == 20000017)
+                        //{
+                        //    sw.Start();
+                        //    for (int j = 0; j < 100; j++) { 
+
+                        //        for (int i = 0; i < fingersCollection.Count; i++)
+                        //        {
+                        //            if (fingersCollection[i] != null)
+                        //            {
+
+                        //                nImage = NImage.FromMemory((fingersCollection[i] as WsqImage).Content, NImageFormat.Wsq);
+
+                        //            }
+                        //        }
+                        //    }
+                        //    Console.WriteLine(" ----- Time elapsed: {0}", sw.Elapsed);
+
+
+                        //    return;
+                        //}
+
                         for (int i = 0; i < fingersCollection.Count; i++)
                         {
                             if (fingersCollection[i] != null)
@@ -290,14 +323,29 @@ namespace SplitFingerTemplates
                                     //ms[i + 1] = new MemoryStream((fingersCollection[i] as WsqImage).Content);
                                     //nImage = NImageFormat.Wsq.LoadImage(ms[i + 1]);
                                     //nImage = NImage.FromStream(ms[i + 1], NImageFormat.Wsq);
+
+                                    //break;
+
+                                    //sw.Restart();
                                     nImage = NImage.FromMemory((fingersCollection[i] as WsqImage).Content, NImageFormat.Wsq);
+                                    //Console.WriteLine(" ----- Time elapsed: {0}", sw.Elapsed);
+                                    //sw.Reset();
+
+                                    //break;
 
                                     var finger = new NFinger { Image = nImage };
                                     //if (subject.Fingers.Count > 0)
                                     //    subject.Fingers.RemoveAt(0);
 
+                                    //break;
+
                                     //var subject = new NSubject();
+                                    //sw.Restart();
                                     subject.Fingers.Add(finger);
+                                    //Console.WriteLine(" ----- Time elapsed: {0}", sw.Elapsed);
+
+                                    //break;
+
                                     switch (i)
                                     {
                                         case 0:
@@ -354,6 +402,8 @@ namespace SplitFingerTemplates
                                 }
                             }
                         }
+
+                        //continue;
 
                         //sw = System.Diagnostics.Stopwatch.StartNew();
                         _biometricClient.CreateTemplate(subject);

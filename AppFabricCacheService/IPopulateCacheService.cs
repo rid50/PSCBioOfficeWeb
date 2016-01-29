@@ -10,6 +10,7 @@ namespace AppFabricCacheService
         void Run(ArrayList fingerList);
 
         [OperationContract]
+        [FaultContractAttribute(typeof(string))]
         ArrayList getFingerList();
 
         [OperationContract]

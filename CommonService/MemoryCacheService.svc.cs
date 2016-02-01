@@ -79,22 +79,20 @@ namespace CommonService
 
         public byte[][] GetImage(IMAGE_TYPE imageType, int id)
         {
-            byte[][] buffer = new byte[11][]; 
+            byte[][] buffer = new byte[11][];
             //byte[] buffer = new byte[1];
             //ArrayList fingersCollection = null;
 
-            //if (getAppSetting("Enroll") == "db")
             if (_settings["enroll"] == "db")
             {
                 DataSource ds = null;
 
-                //if (getAppSetting("provider") == "directDb")
-                    //ds = new Database();
-                //else if (getAppSetting("provider") == "directWebService")
-                //    ds = new CloudDatabase();
-
-
-                ds = new DAO.Database(_settings);
+                if (_settings["dbProvider"] == "dedicatedServer")
+                    ds = new DAO.Database(_settings);
+                else if (_settings["dbProvider"] == "cloudServer")
+                    ds = new DAO.CloudDatabase(_settings);
+                else
+                    throw new Exception("Wrong database provider settings");
 
                 if (imageType == IMAGE_TYPE.wsq)
                 {
@@ -108,6 +106,7 @@ namespace CommonService
                 {
                     buffer = ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id));
                 }
+
             }
 
             return buffer;
@@ -137,7 +136,15 @@ namespace CommonService
             //if (getAppSetting("Enroll") == "db")
             if (_settings["enroll"] == "db")
             {
-                var ds = new Database(_settings);
+                //var ds = new Database(_settings);
+                DataSource ds = null;
+                if (_settings["dbProvider"] == "dedicatedServer")
+                    ds = new DAO.Database(_settings);
+                else if (_settings["dbProvider"] == "cloudServer")
+                    ds = new DAO.CloudDatabase(_settings);
+                else
+                    throw new Exception("Wrong database provider settings");
+
                 buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id))[0];
                 var biometricService = new WSQImageServiceClient();
                 _fingersCollection = biometricService.DeserializeWSQArray(buffer);
@@ -165,13 +172,20 @@ namespace CommonService
                 if (_settings["enroll"] == "db")
                 {
                     DataSource ds = null;
+                    if (_settings["dbProvider"] == "dedicatedServer")
+                        ds = new DAO.Database(_settings);
+                    else if (_settings["dbProvider"] == "cloudServer")
+                        ds = new DAO.CloudDatabase(_settings);
+                    else
+                        throw new Exception("Wrong database provider settings");
+
                     //if (getAppSetting("provider") == "directDb")
-                    ds = new Database(_settings);
+                    //ds = new Database(_settings);
                     //else if (getAppSetting("provider") == "directWebService")
                     //    ds = new CloudDatabase();
 
                     //if (getAppSetting("fingerTemplates") == "yes")
-                        //buffer = ds.GetImage(IMAGE_TYPE.fingerTemplates, Convert.ToInt32(id));
+                    //buffer = ds.GetImage(IMAGE_TYPE.fingerTemplates, Convert.ToInt32(id));
                     //else
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
@@ -202,7 +216,16 @@ namespace CommonService
             //if (getAppSetting("Enroll") == "db")
             if (_settings["enroll"] == "db")
             {
-                var ds = new Database(_settings);
+                //var ds = new Database(_settings);
+
+                DataSource ds = null;
+                if (_settings["dbProvider"] == "dedicatedServer")
+                    ds = new DAO.Database(_settings);
+                else if (_settings["dbProvider"] == "cloudServer")
+                    ds = new DAO.CloudDatabase(_settings);
+                else
+                    throw new Exception("Wrong database provider settings");
+
                 return ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id))[0];
             }
             else

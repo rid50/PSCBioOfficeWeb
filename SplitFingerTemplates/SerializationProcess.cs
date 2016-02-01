@@ -124,7 +124,7 @@ namespace SplitFingerTemplates
                 conn = new SqlConnection(getConnectionString());
                 conn.Open();
                 cmd = new SqlCommand();
-                cmd.CommandTimeout = 300;
+                cmd.CommandTimeout = 600;
                 cmd.Connection = conn;
                 cmd.CommandText = "SELECT count(*) FROM Egy_T_FingerPrint";
                 reader = cmd.ExecuteReader();
@@ -227,6 +227,7 @@ namespace SplitFingerTemplates
                 conn2 = new SqlConnection(connStr);
                 conn2.Open();
                 cmd = new SqlCommand();
+                cmd.CommandTimeout = 0;
                 cmd.Connection = conn;
 
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + dbFingerColumn + " FROM " + dbFingerTable + " WHERE AppID = 20095420";
@@ -241,7 +242,6 @@ namespace SplitFingerTemplates
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-
                     rowNumber++;
                     if (rowNumber % 10 == 0)
                     {
@@ -420,6 +420,7 @@ namespace SplitFingerTemplates
                             if (sb.Length == 0)
                             {
                                 cmd2 = new SqlCommand();
+                                cmd2.CommandTimeout = 0;
                                 cmd2.Connection = conn2;
 
                                 sb.Append("update {0} with (serializable) SET ");

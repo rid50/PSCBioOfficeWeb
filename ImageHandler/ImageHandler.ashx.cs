@@ -62,6 +62,10 @@ namespace WebHandlers
  */       
         public void ProcessRequest(HttpContext context)
         {
+//#if DEBUG
+//            System.Diagnostics.Debugger.Launch();
+//#endif
+
             //context.Response.ContentType = "application/xop+xml";
             context.Response.Cache.SetCacheability(HttpCacheability.NoCache);
             context.Response.Cache.SetNoStore();

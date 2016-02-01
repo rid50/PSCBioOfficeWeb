@@ -8,7 +8,7 @@ using System.IO;
 using System.Collections;
 using Neurotec.Images;
 using BiometricService.ConfigurationService;
-//using DAO;
+using DAO;
 //using WsqSerializationBinder;
 
 namespace BiometricService
@@ -375,7 +375,7 @@ namespace BiometricService
                     settings.Add(kvp.Key, kvp.Value);
                 }
 
-                var db = new DAO.Database(settings);
+                var db = new Database(settings);
                 db.SaveWSQTemplate(id, templates);
             }
             catch (Exception ex)

@@ -124,9 +124,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WsqSerializationBinder">
-      <HintPath>..\WsqSerializationBinder\bin\Release\WsqSerializationBinder.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BioProcessor.cs" />
@@ -161,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\redcross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WsqSerializationBinder\WsqSerializationBinder.csproj">
+      <Project>{f81e902f-88ea-4fe5-bcf7-806cfb180172}</Project>
+      <Name>WsqSerializationBinder</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

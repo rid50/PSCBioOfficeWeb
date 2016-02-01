@@ -44,9 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BioProcessor">
-      <HintPath>..\BioProcessor\bin\BioProcessor.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=101.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files\AppFabric 1.1 for Windows Server\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
@@ -138,6 +135,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ConfigurationService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BioProcessor\BioProcessor.csproj">
+      <Project>{b14a562b-92b2-4368-be53-860a0eafbb69}</Project>
+      <Name>BioProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

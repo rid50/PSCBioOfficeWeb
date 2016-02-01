@@ -16,8 +16,8 @@ namespace SplitFingerTemplates
         //[STAThread]
         static void Main(string[] args)
         {
-            const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-
+            //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
+            const string Components = "Biometrics.FingerExtraction,Images.WSQ";
             try
             {
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -128,7 +128,10 @@ namespace SplitFingerTemplates
                 return;
             }
 
-            int topindex = (int)(rowcount/limit + 1);
+            int topindex = (int)(rowcount / limit);
+            if (rowcount % limit != 0)
+                topindex++;
+            
             //topindex = 100;
             Task[] taskArray = new Task[topindex];
             //Task[] taskArray = new Task[1];
@@ -160,8 +163,8 @@ namespace SplitFingerTemplates
                     return;
                 }
             }
-
-            taskArray = new Task[10];
+            //limit = 20;
+            taskArray = new Task[20];
             for (int i = 0; i < taskArray.Length; i++)
             {
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>
@@ -189,7 +192,6 @@ namespace SplitFingerTemplates
             try
             {
                 Task.WaitAll(taskArray);
-                Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -202,6 +204,7 @@ namespace SplitFingerTemplates
             }
             finally
             {
+                Console.WriteLine(" ----- Time elapsed: {0}", stw.Elapsed);
                 Console.WriteLine(" ------------------ Press any key to close -----------------------");
                 Console.ReadKey();
             }

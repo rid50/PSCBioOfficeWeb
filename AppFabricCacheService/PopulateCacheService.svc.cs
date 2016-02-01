@@ -188,7 +188,10 @@ namespace AppFabricCacheService
                 return;
             }
 
-            int topindex = (int)(rowcount / limit + 1);
+            //int topindex = (int)(rowcount / limit + 1);
+            int topindex = (int)(rowcount / limit);
+            if (rowcount % limit != 0)
+                topindex++;
             //topindex = 100;
             Task[] taskArray = new Task[topindex];
             //Task[] taskArray = new Task[1];

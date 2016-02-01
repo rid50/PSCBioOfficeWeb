@@ -86,9 +86,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WsqSerializationBinder">
-      <HintPath>..\WsqSerializationBinder\bin\Release\WsqSerializationBinder.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -150,6 +147,12 @@
     <None Include="Service References\ConfigurationService\ConfigurationService.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WsqSerializationBinder\WsqSerializationBinder.csproj">
+      <Project>{f81e902f-88ea-4fe5-bcf7-806cfb180172}</Project>
+      <Name>WsqSerializationBinder</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

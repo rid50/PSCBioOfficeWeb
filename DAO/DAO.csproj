@@ -122,6 +122,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WsqSerializationBinder\WsqSerializationBinder.csproj">
+      <Project>{f81e902f-88ea-4fe5-bcf7-806cfb180172}</Project>
+      <Name>WsqSerializationBinder</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

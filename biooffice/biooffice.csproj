@@ -21,6 +21,11 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +82,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -160,9 +166,6 @@
     <Content Include="js\themes\default\d.png" />
     <Content Include="js\themes\default\style.css" />
     <Content Include="js\themes\default\throbber.gif" />
-    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.4.1.js" />
-    <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="themes\smoothness\images\animated-overlay.gif" />
     <Content Include="themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -197,6 +200,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageHandler\ImageHandler.csproj">
+      <Project>{a0b06382-840f-48e6-aea1-897096c777f2}</Project>
+      <Name>ImageHandler</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

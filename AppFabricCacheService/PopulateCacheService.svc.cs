@@ -37,6 +37,7 @@ namespace AppFabricCacheService
     {
         private static CancellationTokenSource _tokenSource;
         private static DataCache _cache;
+        private static List<FillAppFabricCache> _fillCacheClassList;
         //private static DataCacheFactory _factory;
         //private static bool _terminate = false;
 
@@ -101,7 +102,15 @@ namespace AppFabricCacheService
 
         public void Terminate()
         {
-            _tokenSource.Cancel();
+            if (_tokenSource != null)
+                _tokenSource.Cancel();
+
+            //int id = Thread.CurrentThread.ManagedThreadId;
+            foreach (var fillCacheClass in _fillCacheClassList)
+            {
+                if (fillCacheClass.cmd != null)
+                    fillCacheClass.cmd.Cancel();
+            }
         }
 
         private void dumpCache() {
@@ -119,6 +128,9 @@ namespace AppFabricCacheService
             _cache.Remove("regionNameList");
         }
 
+        public void Run2(ArrayList fingerList)
+        {
+        }
 
         //public void Run(string[] args)
         public void Run(ArrayList fingerList)
@@ -126,6 +138,12 @@ namespace AppFabricCacheService
             //            Stopwatch st = new Stopwatch();
             //            st.Start();
             //_terminate = false;
+            //int id = Thread.CurrentThread.ManagedThreadId;
+            if (_fillCacheClassList == null)
+                _fillCacheClassList = new List<FillAppFabricCache>();
+            else
+                _fillCacheClassList.Clear();
+
             initDataCache();
 
             _tokenSource = new CancellationTokenSource();
@@ -134,9 +152,19 @@ namespace AppFabricCacheService
             Int32 rowcount = 0;
             //for (int i = 0; i < 2; i++)
             //{
+
             try
             {
-                rowcount = FillAppFabricCache.FillAppFabricCache.rowcount();
+                _fillCacheClassList.Add(new FillAppFabricCache());
+                rowcount = _fillCacheClassList[0].rowcount();
+                if (rowcount == -1)
+                {
+                    dumpCache();
+                    CallBack.RespondWithText("The request was cancelled");
+                    CallBack.CacheOperationComplete();
+                    _tokenSource.Dispose();
+                    return;
+                }
                 //break;
             }
             catch (System.Data.SqlClient.SqlException ex)
@@ -158,9 +186,13 @@ namespace AppFabricCacheService
                 //throw new FaultException(ex.ToString());
                 //Console.WriteLine("Time out, try again ");
             }
+
+            _fillCacheClassList.Clear();
+
+
 //            }
 
-//            st.Stop();
+            //            st.Stop();
 
             CallBack.RespondWithRecordNumbers(rowcount);
             //CallBack.RespondWithRecordNumbers(Thread.CurrentThread.ManagedThreadId);
@@ -169,7 +201,7 @@ namespace AppFabricCacheService
             {
                 dumpCache();
                 CallBack.RespondWithText("The request was cancelled");
-                //CallBack.CacheOperationComplete();
+                CallBack.CacheOperationComplete();
                 _tokenSource.Dispose();
                 return;
             }
@@ -253,6 +285,8 @@ namespace AppFabricCacheService
             //if (true)
             //{
 
+                //taskArray = new Task[3];
+
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());
@@ -265,7 +299,10 @@ namespace AppFabricCacheService
                         //else
                         //    state.CallBack.RespondWithError("Not Null");
 
-                        var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
+                        var cl = new FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
+                        _fillCacheClassList.Add(cl);
+
+                        //var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
                         //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
                         //var process = new FillAppFabricCache.FillAppFabricCache();
                         //try
@@ -273,7 +310,8 @@ namespace AppFabricCacheService
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
                         //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
 
-                        process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+                        cl.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+                        //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
 
                         //}
                         //catch (Exception ex)
@@ -304,6 +342,7 @@ namespace AppFabricCacheService
                     foreach (var item in bc.GetConsumingEnumerable())
                     {
                         CallBack.RespondWithRecordNumbers(item);
+                        //Thread.Sleep(100);
                     }
                 };
                 d();
@@ -319,27 +358,65 @@ namespace AppFabricCacheService
                     {
                         if (t.Status == TaskStatus.Faulted)
                         {
+                        //if (ex is System.Data.SqlClient.SqlException)
+                        //{
+                        //    CallBack.RespondWithError("KUKUKU: " + ex.Message);
+                        //    dumpCache();
+                        //    _tokenSource.Dispose();
+                        //    return;
+                        //}
+                            bool fault = true;
                             while ((ex is AggregateException) && (ex.InnerException != null))
-                                ex = ex.InnerException;
+                            {
+                                if (ex.Message.EndsWith("Operation cancelled by user."))
+                                {
+                                    fault = false;
+                                    break;
+                                }
+                                else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
+                                {
+                                    if (ex.InnerException.Message.StartsWith("A task was canceled"))
+                                    {
+                                        fault = false;
+                                        break;
+                                    }
+                                }
 
-                            dumpCache();
-                            CallBack.RespondWithError(ex.Message);
-                            //CallBack.CacheOperationComplete();
-                            return;
-                            //throw new FaultException(ex.Message);
+                                ex = ex.InnerException;
+                            }
+
+                            if (fault)
+                            {
+                                CallBack.RespondWithError(ex.Message);
+                                dumpCache();
+                                _tokenSource.Dispose();
+                                return;
+                            }
+
+                        //ex = ex.InnerException;
+
+                        //}
+
+                        //if (!ex.Message.StartsWith("A task was canceled"))
+                        //{
+                        //    CallBack.RespondWithError("AAAAAAA: " + ex.Message);
+                        //    dumpCache();
+                        //    _tokenSource.Dispose();
+                        //    return;
+                        //}
                         }
                     }
                 }
-                finally
+                //finally
+                //{
+                if (ct.IsCancellationRequested)
                 {
-                    if (ct.IsCancellationRequested)
-                    {
-                        dumpCache();
-                        CallBack.RespondWithText("The request was cancelled");
-                    }
-
-                    _tokenSource.Dispose();
+                    dumpCache();
+                    CallBack.RespondWithText("The request was cancelled");
                 }
+
+                _tokenSource.Dispose();
+                //}
             //}
             //else
             //{

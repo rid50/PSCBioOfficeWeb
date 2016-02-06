@@ -72,10 +72,10 @@ namespace AppFabricCacheService
             {
                 taskArray[i++] = Task.Factory.StartNew((Object obj) =>
                 {
-                    if (ct.IsCancellationRequested)
-                    {
-                        ct.ThrowIfCancellationRequested();
-                    }
+                    //if (ct.IsCancellationRequested)
+                    //{
+                    ct.ThrowIfCancellationRequested();
+                    //}
 
                     MatchStateObject state = obj as MatchStateObject;
 

@@ -42,10 +42,10 @@ namespace AppFabricCacheService
                 //if (rowNumber % 1000 == 0)
                 //    Console.WriteLine("Region name: {0}, row number: {1}", regionName, rowNumber);
 
-                if (_ct.IsCancellationRequested)
-                {
-                    _ct.ThrowIfCancellationRequested();
-                }
+                //if (_ct.IsCancellationRequested)
+                //{
+                _ct.ThrowIfCancellationRequested();
+                //}
 
                 //if (item.Key == "123")
                 //if( false)

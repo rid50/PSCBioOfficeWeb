@@ -292,6 +292,8 @@ namespace AppFabricCacheService
                     //CallBack.RespondWithError(taskArray.Length.ToString());
                     taskArray[i] = Task.Factory.StartNew((Object obj) =>
                     {
+                        ct.ThrowIfCancellationRequested();
+
                         PopulateStateObject state = obj as PopulateStateObject;
 
                         //if (state.Dlgt == null)

@@ -18,6 +18,6 @@ namespace AppFabricCacheService
         void Terminate();
 
         [OperationContract]
-        UInt32 match(ArrayList arrOfFingers, byte[] template);
+        UInt32 match(ArrayList fingerList, byte[] probeTemplate);
     }
 }

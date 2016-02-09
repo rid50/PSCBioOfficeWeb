@@ -17,6 +17,9 @@ namespace AppFabricCacheService
         ArrayList getFingerList();
 
         [OperationContract]
+        System.DateTime getExpirationTime();
+
+        [OperationContract]
         void Terminate();
     }
 

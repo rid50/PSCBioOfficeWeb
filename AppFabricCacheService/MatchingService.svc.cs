@@ -67,6 +67,8 @@ namespace AppFabricCacheService
 
             //string regionName = "0";
             //for(int k = 0; k < 2; k++)
+            //string regionName = "4000";
+            //taskArray = new Task<UInt32>[1];
             int i = 0;
             foreach (string regionName in regionNameList)
             {
@@ -106,11 +108,10 @@ namespace AppFabricCacheService
                     }
                 }
 
-                return 0;
+                //return retcode;
             }
             catch (Exception ex)
             {
-
                 foreach (var t in taskArray)
                 {
                     if (t.Status == TaskStatus.RanToCompletion && (int)t.Result != 0)
@@ -120,21 +121,54 @@ namespace AppFabricCacheService
                     }
                     else if (t.Status == TaskStatus.Faulted)
                     {
+                        bool fault = true;
+                        if (ex.Message.Equals("The operation was canceled."))
+                        {
+                            continue;
+                        }
+
                         while ((ex is AggregateException) && (ex.InnerException != null))
+                        {
+                            if (ex.Message.EndsWith("Operation cancelled by user."))
+                            {
+                                fault = false;
+                                break;
+                            }
+                            else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
+                            {
+                                if (ex.InnerException.Message.StartsWith("A task was canceled"))
+                                {
+                                    fault = false;
+                                    break;
+                                }
+                            }
+
                             ex = ex.InnerException;
-                        throw new Exception(ex.Message);
+
+                            if (ex.Message.Equals("The operation was canceled."))
+                            {
+                                fault = false;
+                                break;
+                            }
+                        }
+
+                        if (fault)
+                        {
+                            _tokenSource.Dispose();
+                            throw new Exception(ex.Message);
+                        }
                     }
                 }
             }
-            finally
-            {
+            //finally
+            //{
                 //if (ct.IsCancellationRequested)
                 //{
                 //    throw new Exception("The request was cancelled");
                 //}
 
-                _tokenSource.Dispose();
-            }
+            _tokenSource.Dispose();
+            //}
 
             return retcode;
         }

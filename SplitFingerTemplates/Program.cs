@@ -164,7 +164,7 @@ namespace SplitFingerTemplates
                 }
             }
             //limit = 20;
-            taskArray = new Task[20];
+            taskArray = new Task[10];
             for (int i = 0; i < taskArray.Length; i++)
             {
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>

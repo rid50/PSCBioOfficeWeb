@@ -38,6 +38,8 @@ namespace AppFabricCacheService
         private static CancellationTokenSource _tokenSource;
         private static DataCache _cache;
         private static List<FillAppFabricCache> _fillCacheClassList;
+
+        private static TimeSpan cacheTimeSpan = new TimeSpan(24, 0, 0);
         //private static DataCacheFactory _factory;
         //private static bool _terminate = false;
 
@@ -93,6 +95,18 @@ namespace AppFabricCacheService
         {
             try {
                 return initDataCache().Get("fingerList") as ArrayList;
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException<string>(ex.Message);
+            }
+        }
+
+        public DateTime getExpirationTime()
+        {
+            try
+            {
+                return (DateTime)initDataCache().Get("cacheExpirationTime");
             }
             catch (Exception ex)
             {
@@ -274,8 +288,8 @@ namespace AppFabricCacheService
                 }
             }
 
-            _cache.Put("fingerList", new ArrayList(), new TimeSpan(24, 0, 0));
-            _cache.Put("regionNameList", new ArrayList(), new TimeSpan(24,0,0));
+            _cache.Put("fingerList", new ArrayList(), cacheTimeSpan);
+            _cache.Put("regionNameList", new ArrayList(), cacheTimeSpan);
 
 //            _tokenSource = new CancellationTokenSource();
 //            CancellationToken ct = _tokenSource.Token;
@@ -285,8 +299,8 @@ namespace AppFabricCacheService
             //if (true)
             //{
 
-                //taskArray = new Task[3];
-
+                //int i = 0;
+                //taskArray = new Task[5];
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());
@@ -352,7 +366,8 @@ namespace AppFabricCacheService
                 try
                 {
                     Task.WaitAll(taskArray);
-                    _cache.Put("fingerList", fingerList, new TimeSpan(24, 0, 0));
+                    _cache.Put("fingerList", fingerList, cacheTimeSpan);
+                    _cache.Put("cacheExpirationTime", DateTime.Now + cacheTimeSpan, cacheTimeSpan);
                 }
                 catch (Exception ex)
                 {

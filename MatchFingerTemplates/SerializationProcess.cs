@@ -180,7 +180,7 @@ namespace MatchFingerTemplates
             SqlDataReader reader = null;
 
             int AppId = 0;
-            int rowNumber = 0;
+            //int rowNumber = 0;
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
             _biometricClient.Initialize();

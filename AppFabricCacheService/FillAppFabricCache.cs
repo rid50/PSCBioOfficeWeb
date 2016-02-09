@@ -250,6 +250,10 @@ namespace AppFabricCacheService
 
                         id = (int)reader[dbIdColumn];
 
+                        //int k = 0;
+                        //if (id == 20005140)
+                        //    k = 1;
+
                         rowNumber++;
 
                         if (rowNumber % 100 == 0)

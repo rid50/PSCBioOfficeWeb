@@ -12,6 +12,7 @@ using Neurotec.Biometrics;
 using System.Drawing.Drawing2D;
 using Neurotec.Biometrics.Client;
 
+
 namespace BioProcessor
 {
     public class BioProcessor
@@ -68,9 +69,9 @@ namespace BioProcessor
             //_biometricClient.FingersCalculateNfiq = true;
             //NBiometricTask task = _biometricClient.CreateTask(NBiometricOperations.Segment | NBiometricOperations.CreateTemplate | NBiometricOperations.AssessQuality, _probeSubject);
 
-            NBiometricTask task = _biometricClient.CreateTask(NBiometricOperations.Segment | NBiometricOperations.CreateTemplate, _probeSubject);
-            _biometricClient.PerformTask(task);
-            if (task.Error == null)
+            //NBiometricTask task = _biometricClient.CreateTask(NBiometricOperations.Segment | NBiometricOperations.CreateTemplate, _probeSubject);
+            //_biometricClient.PerformTask(task);
+            //if (task.Error == null)
             {
                 //var sb = new StringBuilder();
 
@@ -80,7 +81,7 @@ namespace BioProcessor
                     //sb.Append(string.Format("Templates extracted: \n"));
                     if (_probeSubject.Fingers[0].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[0].Objects[0].Template.Position = getFingerPositionByTag(fingerList[0].ToString());
+                        _probeSubject.Fingers[0].Position = getFingerPositionByTag(fingerList[0].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[0].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[1].Objects[0].Quality), _probeSubject.Fingers[1].Objects[0].Template.GetSize()));
                     }
@@ -90,7 +91,7 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[1].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[1].Objects[0].Template.Position = getFingerPositionByTag(fingerList[1].ToString());
+                        _probeSubject.Fingers[1].Position = getFingerPositionByTag(fingerList[1].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[1].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[2].Objects[0].Quality), _probeSubject.Fingers[2].Objects[0].Template.GetSize()));
                     }
@@ -99,7 +100,7 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[2].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[2].Objects[0].Template.Position = getFingerPositionByTag(fingerList[2].ToString());
+                        _probeSubject.Fingers[2].Position = getFingerPositionByTag(fingerList[2].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[2].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[3].Objects[0].Quality), _probeSubject.Fingers[3].Objects[0].Template.GetSize()));
                     }
@@ -108,18 +109,18 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[3].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[3].Objects[0].Template.Position = getFingerPositionByTag(fingerList[3].ToString());
+                        _probeSubject.Fingers[3].Position = getFingerPositionByTag(fingerList[3].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[3].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[4].Objects[0].Quality), _probeSubject.Fingers[4].Objects[0].Template.GetSize()));
                     }
                 }
             }
-            else {
-                if (task.Error != null)
-                    throw new Exception("Probe template error: " + task.Error.Message);
-                else
-                    throw new Exception("Probe template unknown error");
-            }
+            //else {
+            //    if (task.Error != null)
+            //        throw new Exception("Probe template error: " + task.Error.Message);
+            //    else
+            //        throw new Exception("Probe template unknown error");
+            //}
 
             //                _probeSubject = NSubject.FromMemory(probeTemplate[0]);
 
@@ -130,7 +131,7 @@ namespace BioProcessor
         //public bool match(byte[] galleryTemplate)
         public bool match(ArrayList _fingerList, byte[][] galleryTemplate)
         {
-
+            bool retcode = false;
             var template = new NFTemplate();
 
             foreach (string finger in _fingerList)
@@ -176,11 +177,16 @@ namespace BioProcessor
 
             var status = _biometricClient.Verify(_probeSubject, gallerySubject);
             if (status == NBiometricStatus.Ok)
-            {
-                return true;
-            }
+                 retcode = true;
 
-            return false;
+            gallerySubject.Dispose();
+            return retcode;
+        }
+
+        public void CleanBiometrics()
+        {
+            _probeSubject.Dispose();
+            _biometricClient.Dispose();
         }
 
         public void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection)
@@ -378,37 +384,37 @@ namespace BioProcessor
             }
         }
 
-        private void verify(NImage nImage)
-        {
-            var biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
-            var subject = new NSubject();
-            var finger = new NFinger { Image = nImage };
-            subject.Fingers.Add(finger);
-            //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
-            biometricClient.CreateTemplate(subject);
+        //private void verify(NImage nImage)
+        //{
+        //    var biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
+        //    var subject = new NSubject();
+        //    var finger = new NFinger { Image = nImage };
+        //    subject.Fingers.Add(finger);
+        //    //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
+        //    biometricClient.CreateTemplate(subject);
 
-            if (subject.Fingers[0].Objects[0].Template == null)
-            {
-                throw new Exception("Template is null");
-            }
+        //    if (subject.Fingers[0].Objects[0].Template == null)
+        //    {
+        //        throw new Exception("Template is null");
+        //    }
 
-            var subject2 = new NSubject();
-            var finger2 = new NFinger { Image = nImage };
-            subject2.Fingers.Add(finger2);
-            //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
-            biometricClient.CreateTemplate(subject2);
+        //    var subject2 = new NSubject();
+        //    var finger2 = new NFinger { Image = nImage };
+        //    subject2.Fingers.Add(finger2);
+        //    //subject.Fingers[0].Image.Save(subject.Fingers[0].Position + ".png");
+        //    biometricClient.CreateTemplate(subject2);
 
-            if (subject2.Fingers[0].Objects[0].Template == null)
-            {
-                throw new Exception("Template2 is null");
-            }
+        //    if (subject2.Fingers[0].Objects[0].Template == null)
+        //    {
+        //        throw new Exception("Template2 is null");
+        //    }
 
-            var status = biometricClient.Verify(subject, subject2);
-            if (status != NBiometricStatus.Ok)
-            {
-                throw new Exception("Verification failed");
-            }
-        }
+        //    var status = biometricClient.Verify(subject, subject2);
+        //    if (status != NBiometricStatus.Ok)
+        //    {
+        //        throw new Exception("Verification failed");
+        //    }
+        //}
 
         public Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer)
         {

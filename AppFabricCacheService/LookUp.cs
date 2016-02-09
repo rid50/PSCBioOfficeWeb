@@ -90,6 +90,10 @@ namespace AppFabricCacheService
             {
                 throw new Exception(ex.Message);
             }
+            finally
+            {
+                matcher.CleanBiometrics();
+            }
         }
     }
 }

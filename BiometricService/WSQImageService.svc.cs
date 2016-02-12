@@ -1,12 +1,12 @@
-﻿using System;
+﻿//using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using Neurotec.Biometrics.Client;
-using Neurotec.Biometrics;
-using System.IO;
+//using System.Linq;
+//using System.Runtime.Serialization.Formatters.Binary;
+//using Neurotec.Biometrics.Client;
+//using Neurotec.Biometrics;
+//using System.IO;
 using System.Collections;
-using Neurotec.Images;
+//using Neurotec.Images;
 using BiometricService.ConfigurationService;
 using DAO;
 //using WsqSerializationBinder;
@@ -48,7 +48,7 @@ namespace BiometricService
                 settings.Add(kvp.Key, kvp.Value);
             }
 
-            var db = new DAO.Database(settings);
+            var db = new Database(settings);
             db.SaveWSQTemplate(id, templates);
         }
 

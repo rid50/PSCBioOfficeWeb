@@ -18,6 +18,9 @@ namespace AppFabricCacheService
         void Terminate();
 
         [OperationContract]
+        bool verify(byte[] probeTemplate, byte[] galleryTemplate);
+
+        [OperationContract]
         UInt32 match(ArrayList fingerList, byte[] probeTemplate);
     }
 }

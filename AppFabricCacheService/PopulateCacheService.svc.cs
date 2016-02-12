@@ -300,7 +300,7 @@ namespace AppFabricCacheService
             //{
 
                 //int i = 0;
-                //taskArray = new Task[5];
+                taskArray = new Task[5];
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());
@@ -373,6 +373,9 @@ namespace AppFabricCacheService
                 {
                     foreach (var t in taskArray)
                     {
+                        if (t == null)
+                            continue;
+
                         if (t.Status == TaskStatus.Faulted)
                         {
                         //if (ex is System.Data.SqlClient.SqlException)
@@ -404,9 +407,10 @@ namespace AppFabricCacheService
 
                             if (fault)
                             {
-                                CallBack.RespondWithError(ex.Message);
-                                dumpCache();
+                                _tokenSource.Cancel();
                                 _tokenSource.Dispose();
+                                dumpCache();
+                                CallBack.RespondWithError(ex.Message);
                                 return;
                             }
 
@@ -484,6 +488,16 @@ namespace AppFabricCacheService
 
             if (_cache.Get("regionNameList") != null)
                 CallBack.RespondWithText(string.Format(" --- Time elapsed: {0}", elapsedTime));
+
+            ArrayList list = _cache.Get("regionNameList") as ArrayList;
+            foreach (string regionName in list)
+            {
+                if (regionName == null)
+                {
+                    CallBack.RespondWithError(string.Format(" --- region name is null"));
+                    break;
+                }
+            }
 
             CallBack.CacheOperationComplete();
 

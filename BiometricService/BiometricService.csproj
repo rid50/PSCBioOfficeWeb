@@ -53,20 +53,8 @@
       <HintPath>..\DAO\bin\DAO.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Neurotec">
-      <HintPath>..\dotNET\Neurotec.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Biometrics">
-      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Biometrics.Client">
-      <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Neurotec.Licensing">
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Media">
-      <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />

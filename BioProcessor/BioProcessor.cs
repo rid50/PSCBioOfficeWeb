@@ -25,6 +25,30 @@ namespace BioProcessor
         {
             _biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
         }
+
+        public bool verify(byte[] probeTemplate, byte[] galleryTemplate)
+        {
+            bool retcode = false;
+
+            var probeSubject = NSubject.FromMemory(probeTemplate);
+            if (probeSubject == null)
+                throw new Exception("Probe template is null");
+
+            var gallerySubject = NSubject.FromMemory(galleryTemplate);
+            if (gallerySubject == null)
+                throw new Exception("Gallery template is null");
+
+            var status = _biometricClient.Verify(probeSubject, gallerySubject);
+            if (status == NBiometricStatus.Ok)
+                retcode = true;
+
+            probeSubject.Dispose();
+            gallerySubject.Dispose();
+            _biometricClient.Dispose();
+
+            return retcode;
+        }
+
         private NFPosition getFingerPositionByTag(string tag)
         {
             switch (tag)

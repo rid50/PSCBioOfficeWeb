@@ -44,6 +44,12 @@ namespace AppFabricCacheService
             _tokenSource.Cancel();
         }
 
+        public bool verify(byte[] probeTemplate, byte[] galleryTemplate)
+        {
+            var matcher = new BioProcessor.BioProcessor();
+            return matcher.verify(probeTemplate, galleryTemplate);
+        }
+
         public UInt32 match(ArrayList fingerList, byte[] probeTemplate)
         {
             ArrayList regionNameList;
@@ -72,6 +78,9 @@ namespace AppFabricCacheService
             int i = 0;
             foreach (string regionName in regionNameList)
             {
+                if (regionName == null)
+                    continue;
+
                 taskArray[i++] = Task.Factory.StartNew((Object obj) =>
                 {
                     //if (ct.IsCancellationRequested)
@@ -114,12 +123,15 @@ namespace AppFabricCacheService
             {
                 foreach (var t in taskArray)
                 {
+                    if (t == null)
+                        continue;
+
                     if (t.Status == TaskStatus.RanToCompletion && (int)t.Result != 0)
                     {
                         retcode = (UInt32)t.Result;
                         break;
                     }
-                    else if (t.Status == TaskStatus.Faulted)
+                    else if (t.Status == TaskStatus.Faulted || t.Status == TaskStatus.Running)
                     {
                         bool fault = true;
                         if (ex.Message.Equals("The operation was canceled."))
@@ -154,6 +166,7 @@ namespace AppFabricCacheService
 
                         if (fault)
                         {
+                            _tokenSource.Cancel();
                             _tokenSource.Dispose();
                             throw new Exception(ex.Message);
                         }

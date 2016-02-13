@@ -41,7 +41,11 @@ namespace AppFabricCacheService
 
         public void Terminate()
         {
-            _tokenSource.Cancel();
+            try
+            {
+                _tokenSource.Cancel();
+            }
+            catch (Exception) { }
         }
 
         public bool verify(byte[] probeTemplate, byte[] galleryTemplate)

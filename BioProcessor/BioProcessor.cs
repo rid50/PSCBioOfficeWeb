@@ -105,7 +105,8 @@ namespace BioProcessor
                     //sb.Append(string.Format("Templates extracted: \n"));
                     if (_probeSubject.Fingers[0].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[0].Position = getFingerPositionByTag(fingerList[0].ToString());
+                        if (_probeSubject.Fingers[0].Position == NFPosition.Unknown)
+                            _probeSubject.Fingers[0].Position = getFingerPositionByTag(fingerList[0].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[0].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[1].Objects[0].Quality), _probeSubject.Fingers[1].Objects[0].Template.GetSize()));
                     }
@@ -115,7 +116,8 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[1].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[1].Position = getFingerPositionByTag(fingerList[1].ToString());
+                        if (_probeSubject.Fingers[1].Position == NFPosition.Unknown)
+                            _probeSubject.Fingers[1].Position = getFingerPositionByTag(fingerList[1].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[1].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[2].Objects[0].Quality), _probeSubject.Fingers[2].Objects[0].Template.GetSize()));
                     }
@@ -124,7 +126,8 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[2].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[2].Position = getFingerPositionByTag(fingerList[2].ToString());
+                        if (_probeSubject.Fingers[2].Position == NFPosition.Unknown)
+                            _probeSubject.Fingers[2].Position = getFingerPositionByTag(fingerList[2].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[2].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[3].Objects[0].Quality), _probeSubject.Fingers[3].Objects[0].Template.GetSize()));
                     }
@@ -133,7 +136,8 @@ namespace BioProcessor
                 {
                     if (_probeSubject.Fingers[3].Objects[0].Template != null)
                     {
-                        _probeSubject.Fingers[3].Position = getFingerPositionByTag(fingerList[3].ToString());
+                        if (_probeSubject.Fingers[3].Position == NFPosition.Unknown)
+                            _probeSubject.Fingers[3].Position = getFingerPositionByTag(fingerList[3].ToString());
                         //sb.Append(string.Format("{0}: {1}. Size: {2}\n", fingerList[3].ToString(),
                         //                    string.Format("Quality: {0}", _probeSubject.Fingers[4].Objects[0].Quality), _probeSubject.Fingers[4].Objects[0].Template.GetSize()));
                     }
@@ -155,56 +159,126 @@ namespace BioProcessor
         //public bool match(byte[] galleryTemplate)
         public bool match(ArrayList _fingerList, byte[][] galleryTemplate)
         {
-            bool retcode = false;
-            var template = new NFTemplate();
+            //bool retcode = false;
 
-            foreach (string finger in _fingerList)
+            bool matched = true;
+            if (true)
             {
-                FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
-                if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
-                {
-                    var record = new NFRecord(galleryTemplate[(int)f]);
-                    if (record.Position == NFPosition.Unknown)
-                        record.Position = getFingerPositionByTag(f.ToString());
-                    template.Records.Add((NFRecord)record.Clone());
+                _biometricClient.MatchingWithDetails = true;
+                _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
+                int threshold = _biometricClient.FingersQualityThreshold;
+                var template = new NFTemplate();
 
-                    //matched = matcher.match(buffer[(int)f]);
-                    //if (matched)
-                    //{
-                    //    numOfMatches++;
-                    //}
+                foreach (string finger in _fingerList)
+                {
+                    FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                    if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
+                    {
+                        var record = new NFRecord(galleryTemplate[(int)f]);
+                        if (record.Position == NFPosition.Unknown)
+                            record.Position = getFingerPositionByTag(f.ToString());
+
+                        template.Records.Add((NFRecord)record.Clone());
+                    }
                 }
 
+                if (template == null)
+                    throw new Exception("Gallery template is null");
 
+                using (var gallerySubject = NSubject.FromMemory(template.Save().ToArray()))
+                {
+                    if (gallerySubject == null)
+                        throw new Exception("Gallery template is null");
 
+                    var status = _biometricClient.Verify(_probeSubject, gallerySubject);
+                    if (status == NBiometricStatus.Ok)
+                    {
+                        foreach (var matchingResult in _probeSubject.MatchingResults)
+                        {
+                            //int fsc = matchingResult.MatchingDetails.FingersScore;
+                            foreach (var finger in matchingResult.MatchingDetails.Fingers)
+                            {
+                                if (threshold > finger.Score)
+                                {
+                                    matched = false;
+                                    break;
+                                }
+                            }
+
+                            if (!matched)
+                                break;
+                        }
+                    } else
+                        matched = false;
+                }
+            }
+            else
+            {
+                var template = new NFTemplate();
+                foreach (string finger in _fingerList)
+                {
+                    FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                    if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
+                    {
+                        var record = new NFRecord(galleryTemplate[(int)f]);
+                        if (record.Position == NFPosition.Unknown)
+                            record.Position = getFingerPositionByTag(f.ToString());
+
+                        template.Records.Add((NFRecord)record.Clone());
+
+                        using (var subject = NSubject.FromMemory(template.Save().ToArray()))
+                        {
+                            var status = _biometricClient.Verify(_probeSubject, subject);
+                            if (status != NBiometricStatus.Ok)
+                            {
+                                matched = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        matched = false;
+                        break;
+                    }
+                }
             }
 
-            //var nfTemplate = new NFTemplate();
-            //for (int i = 0; i < args.Length - 1; i++)
+            //var template = new NFTemplate();
+
+            //foreach (string finger in _fingerList)
             //{
-            //    var template = new NTemplate(File.ReadAllBytes(args[i]));
-            //    if (template.Fingers != null)
+            //    FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+            //    if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
             //    {
-            //        foreach (NFRecord record in template.Fingers.Records)
-            //        {
-            //            nfTemplate.Records.Add((NFRecord)record.Clone());
-            //        }
+            //        var record = new NFRecord(galleryTemplate[(int)f]);
+            //        if (record.Position == NFPosition.Unknown)
+            //            record.Position = getFingerPositionByTag(f.ToString());
+            //        template.Records.Add((NFRecord)record.Clone());
+
+            //        //matched = matcher.match(buffer[(int)f]);
+            //        //if (matched)
+            //        //{
+            //        //    numOfMatches++;
+            //        //}
             //    }
+
+
+
             //}
 
-            if (template == null)
-                throw new Exception("Gallery template is null");
+            //if (template == null)
+            //    throw new Exception("Gallery template is null");
 
-            NSubject gallerySubject = NSubject.FromMemory(template.Save().ToArray());
-            if (gallerySubject == null)
-                throw new Exception("Gallery template is null");
+            //NSubject gallerySubject = NSubject.FromMemory(template.Save().ToArray());
+            //if (gallerySubject == null)
+            //    throw new Exception("Gallery template is null");
 
-            var status = _biometricClient.Verify(_probeSubject, gallerySubject);
-            if (status == NBiometricStatus.Ok)
-                 retcode = true;
+            //var status = _biometricClient.Verify(_probeSubject, gallerySubject);
+            //if (status == NBiometricStatus.Ok)
+            //     retcode = true;
 
-            gallerySubject.Dispose();
-            return retcode;
+            return matched;
         }
 
         public void CleanBiometrics()

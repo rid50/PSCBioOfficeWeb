@@ -116,8 +116,9 @@ namespace AppFabricCacheService
 
         public void Terminate()
         {
-            if (_tokenSource != null)
+            try {
                 _tokenSource.Cancel();
+            } catch (Exception) { }
 
             //int id = Thread.CurrentThread.ManagedThreadId;
             foreach (var fillCacheClass in _fillCacheClassList)
@@ -300,7 +301,7 @@ namespace AppFabricCacheService
             //{
 
                 //int i = 0;
-                taskArray = new Task[5];
+                //taskArray = new Task[5];
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());

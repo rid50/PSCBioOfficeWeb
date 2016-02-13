@@ -26,7 +26,7 @@ namespace AppFabricCacheService
         //public IPopulateCacheCallback CallBack;
         //public SynchronizationContext Context;
         public ArrayList fingerList;
-        public short maxPoolSize;
+        public int maxPoolSize;
         public BlockingCollection<int> bc;
         public DataCache cache;
     }
@@ -337,7 +337,7 @@ namespace AppFabricCacheService
                         //}
                         //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                     },
-                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, maxPoolSize = (short)taskArray.Length, ct = ct, cache = _cache },
+                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, maxPoolSize = taskArray.Length, ct = ct, cache = _cache },
                     //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
                     _tokenSource.Token,
                     TaskCreationOptions.LongRunning,

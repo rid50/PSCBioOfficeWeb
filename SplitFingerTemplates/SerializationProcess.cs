@@ -205,7 +205,7 @@ namespace SplitFingerTemplates
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
             //_biometricClient.FingersFastExtraction = true;
-            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Small;
             _biometricClient.FingersQualityThreshold = 40;
             _biometricClient.Initialize();
 
@@ -599,8 +599,8 @@ namespace SplitFingerTemplates
             {
                 throw new Exception(ex.Message);
             }
-            //finally
-            //{
+            finally
+            {
                 try
                 {
                     if (reader != null)
@@ -622,7 +622,7 @@ namespace SplitFingerTemplates
                 {
                     throw new Exception(ex.Message);
                 }
-            //}
+            }
         }
 
         static private String getConnectionString()

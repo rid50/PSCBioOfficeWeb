@@ -15,6 +15,8 @@ namespace AppFabricCacheService
 {
     class FillAppFabricCache
     {
+        private System.Object theLock = new System.Object();
+
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
         //private static DataCacheFactory _factory = null;
@@ -23,7 +25,7 @@ namespace AppFabricCacheService
         private static SendOrPostCallback _callback;
         //private static SynchronizationContext _context = null;
         private ArrayList _fingerList;
-        private static short _maxPoolSize;
+        private static int _maxPoolSize;
         private static BlockingCollection<int> _bc;
 
         //static FillAppFabricCache()
@@ -37,7 +39,7 @@ namespace AppFabricCacheService
         //public FillAppFabricCache(SendOrPostCallback callback, SynchronizationContext context)
         public FillAppFabricCache() {}
 
-        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, short maxPoolSize, CancellationToken ct, DataCache cache)
+        public FillAppFabricCache(BlockingCollection<int> bc, SendOrPostCallback callback, ArrayList fingerList, int maxPoolSize, CancellationToken ct, DataCache cache)
         {
             _bc         = bc;
             _callback   = callback;
@@ -67,7 +69,6 @@ namespace AppFabricCacheService
 
         //    //CallBack.RespondWithRecordNumbers(rowcount);
         //}
-
 
         private SqlCommand _command;
 
@@ -157,9 +158,9 @@ namespace AppFabricCacheService
 
             //return;
 
-            //SqlConnection conn = null;
+            SqlConnection conn = null;
             //SqlCommand cmd = null;
-            //SqlDataReader reader = null;
+            SqlDataReader reader = null;
 
             //byte[] buffer = new byte[0];
             byte[][] buffer = new byte[10][];
@@ -196,11 +197,12 @@ namespace AppFabricCacheService
             //    regionNameList = new ArrayList();
             //    _cache.Add("regionNameList", regionNameList);
             //}
-
-            ArrayList regionNameList = _cache.Get("regionNameList") as ArrayList;
-            regionNameList.Add(regionName);
-            _cache.Put("regionNameList", regionNameList, new TimeSpan(24, 0, 0));
-
+            lock (theLock)
+            {
+                ArrayList regionNameList = _cache.Get("regionNameList") as ArrayList;
+                regionNameList.Add(regionName);
+                _cache.Put("regionNameList", regionNameList, new TimeSpan(24, 0, 0));
+            }
             //try
             //{
             //conn = buildConnectionString();
@@ -210,8 +212,10 @@ namespace AppFabricCacheService
             connectionString += String.Format(";Max Pool Size={0}", _maxPoolSize);
             //conn = new SqlConnection(connectionString);
 
+            conn = new SqlConnection(connectionString);
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            //using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
                 //var connStr = getConnectionString();
                 //conn = new SqlConnection(connStr);
@@ -237,175 +241,146 @@ namespace AppFabricCacheService
                 //cmd.CommandText = String.Format("SELECT " + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 //cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
+                //using (SqlDataReader reader = cmd.ExecuteReader())
+                //{
+                    reader = cmd.ExecuteReader();
+
+                    if (reader.HasRows)
                     {
-                        if (_ct.IsCancellationRequested)
+                        while (reader.Read())
                         {
-                            break;
-                        //_ct.ThrowIfCancellationRequested();
-                        }
-
-                        id = (int)reader[dbIdColumn];
-
-                        //int k = 0;
-                        //if (id == 20005140)
-                        //    k = 1;
-
-                        rowNumber++;
-
-                        if (rowNumber % 100 == 0)
-                        {
-                            if (_bc != null)
-                                _bc.Add(100);
-                            else
-                                _callback(100);
-
-                            //this.Invoke((Action<AppFabricCacheService.IPopulateCacheCallback>)((callback) =>
-                            //{
-                            //    callback.RespondWithRecordNumbers(1000);
-                            //}), _callback);
-                            //throw new Exception(_callback.GetType().ToString());
-
-                            //string conn_name = "foo";
-                            //uiContext.Post(new SendOrPostCallback((o) =>
-                            //{
-                            //    updateConnStatus(conn_name, true);
-                            //}), null);
-
-                            //_context.Post(_callback, 1000);
-
-
-                            //var task = Task.Factory.StartNew(() =>
-                            //{
-                            //    //int ii = 5 + 5;
-                            //    //throw new Exception("aaaaaaaaaaa: " + Thread.CurrentThread.ManagedThreadId);
-                            //    CallDelegate(1000);
-                            //}, CancellationToken.None, TaskCreationOptions.None, _context);
-
-                            //task.Wait();
-
-                            //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallBack.RespondWithRecordNumbers((int)state); }, state: 1000);
-                            //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallDelegate(state); }, state: 1000);
-
-                            //_context.Post(CallDelegate, 1000);
-                            //_callback(1000);
-
-                            //CallBack.RespondWithRecordNumbers(1000);
-                        }
-                        //Console.WriteLine("{0}", rowNumber + from);
-                        //Console.WriteLine("ID = {0}", id);
-                        //if (id == 20000007)
-                        //    id = id;
-
-
-                        //if (!(reader.IsDBNull(1) && reader.IsDBNull(2) && reader.IsDBNull(3) && reader.IsDBNull(4) && reader.IsDBNull(5)
-                        //      && reader.IsDBNull(6) && reader.IsDBNull(7) && reader.IsDBNull(8) && reader.IsDBNull(9) && reader.IsDBNull(10)
-                        //     )
-                        //   )
-                        //if (!reader.IsDBNull(1))
-                        //                    {
-                        //                        id = (int)reader[dbIdColumn];
-                        bool approved = false, confirmed = false;
-                        int i = 1;
-                        foreach (string finger in fingerFieldsArray)
-                        {
-                            FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
-                            if (!reader.IsDBNull(i) && ((byte[])reader[finger]).Length > 1)
+                            if (_ct.IsCancellationRequested)
                             {
-                                if (!approved)
-                                    approved = true;
-                                else if (approved && !confirmed)
-                                    confirmed = true;
-
-                                buffer[(int)f] = (byte[])reader[finger];
+                                break;
+                                //_ct.ThrowIfCancellationRequested();
                             }
-                            else
-                                buffer[(int)f] = new byte[0];
 
-                            i++;
+                            id = (int)reader[dbIdColumn];
+
+                            //int k = 0;
+                            //if (id == 20005140)
+                            //    k = 1;
+
+                            rowNumber++;
+
+                            if (rowNumber % 100 == 0)
+                            {
+                                if (_bc != null)
+                                    _bc.Add(100);
+                                else
+                                    _callback(100);
+
+                                //this.Invoke((Action<AppFabricCacheService.IPopulateCacheCallback>)((callback) =>
+                                //{
+                                //    callback.RespondWithRecordNumbers(1000);
+                                //}), _callback);
+                                //throw new Exception(_callback.GetType().ToString());
+
+                                //string conn_name = "foo";
+                                //uiContext.Post(new SendOrPostCallback((o) =>
+                                //{
+                                //    updateConnStatus(conn_name, true);
+                                //}), null);
+
+                                //_context.Post(_callback, 1000);
+
+
+                                //var task = Task.Factory.StartNew(() =>
+                                //{
+                                //    //int ii = 5 + 5;
+                                //    //throw new Exception("aaaaaaaaaaa: " + Thread.CurrentThread.ManagedThreadId);
+                                //    CallDelegate(1000);
+                                //}, CancellationToken.None, TaskCreationOptions.None, _context);
+
+                                //task.Wait();
+
+                                //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallBack.RespondWithRecordNumbers((int)state); }, state: 1000);
+                                //_context.Send(state => { AppFabricCacheService.PopulateCacheService.CallDelegate(state); }, state: 1000);
+
+                                //_context.Post(CallDelegate, 1000);
+                                //_callback(1000);
+
+                                //CallBack.RespondWithRecordNumbers(1000);
+                            }
+                            //Console.WriteLine("{0}", rowNumber + from);
+                            //Console.WriteLine("ID = {0}", id);
+                            //if (id == 20000007)
+                            //    id = id;
+
+
+                            //if (!(reader.IsDBNull(1) && reader.IsDBNull(2) && reader.IsDBNull(3) && reader.IsDBNull(4) && reader.IsDBNull(5)
+                            //      && reader.IsDBNull(6) && reader.IsDBNull(7) && reader.IsDBNull(8) && reader.IsDBNull(9) && reader.IsDBNull(10)
+                            //     )
+                            //   )
+                            //if (!reader.IsDBNull(1))
+                            //                    {
+                            //                        id = (int)reader[dbIdColumn];
+                            bool approved = false, confirmed = false;
+                            int i = 1;
+                            foreach (string finger in fingerFieldsArray)
+                            {
+                                FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                                if (!reader.IsDBNull(i) && ((byte[])reader[finger]).Length > 1)
+                                {
+                                    if (!approved)
+                                        approved = true;
+                                    else if (approved && !confirmed)
+                                        confirmed = true;
+
+                                    buffer[(int)f] = (byte[])reader[finger];
+                                }
+                                else
+                                    buffer[(int)f] = new byte[0];
+
+                                i++;
+                            }
+
+                            if (confirmed)
+                                _cache.Add(id.ToString(), buffer, new TimeSpan(24, 0, 0), regionName);
+                            //                    }
+                            //else
+                            //{
+                            //    Console.WriteLine("NULL {0}", id);
+                            //}
                         }
 
-                        if (confirmed)
-                            _cache.Add(id.ToString(), buffer, new TimeSpan(24, 0, 0), regionName);
-                        //                    }
-                        //else
+                        //if (reader != null)
                         //{
-                        //    Console.WriteLine("NULL {0}", id);
+                        //cmd.Cancel();
+                        //cmd = null;
+                        //reader.Close();
                         //}
                     }
+                //}
 
-                    if (reader != null)
-                    {
-                        cmd.Cancel();
-                        cmd = null;
-                        reader.Close();
-                    }
-                }
-
-                //int k = 0;
-                //foreach (var cacheItem in _cache.GetObjectsInRegion(regionName))
+                //if (conn.State == ConnectionState.Open)
                 //{
-                //    k++;
-                //    //Console.WriteLine("Key={0} -- Value ={1}", cacheItem.Key, cacheItem.Value);
+                //conn.Close();
                 //}
+            }
+            finally
+            {
+                //try
+                //{
+                if (cmd != null)
+                    cmd.Cancel();
 
-                //Console.WriteLine("{0}", rowNumber + from);
-                //Console.WriteLine("Objects in Cache = {0}", k);
+                if (reader != null)
+                    reader.Close();
 
+                if (conn != null && conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                    //conn = null;
+                    //conn.Dispose();
+                    //SqlConnection.ClearPool(conn);
+                }
                 //}
-
                 //catch (Exception ex)
                 //{
-                //    if (ex is TaskCanceledException)
-                //        _ct.ThrowIfCancellationRequested();
-                //    else {
-                //        while ((ex is AggregateException) && (ex.InnerException != null))
-                //        {
-                //            ex = ex.InnerException;
-                //        }
-
-                //        throw new Exception(ex.Message);
-                //    }
-                //    //foreach (Exception e in ae.InnerExceptions)
-                //    //{
-                //    //    //if (e is TaskCanceledException)
-                //    //    //     _ct.ThrowIfCancellationRequested();
-                //    //    //else
-                //    //    throw new Exception(e.Message);
-                //    //}
+                //    throw new Exception(ex.Message);
                 //}
-                //catch (OperationCanceledException)
-                //{
-                //    throw new OperationCanceledException(_ct);
-                //}
-                //catch (AggregateException ae)
-                //{
-                //    foreach (Exception e in ae.InnerExceptions)
-                //        throw new Exception(e.Message);
-                //    }
-                //}
-                //finally
-                //{
-                //    //try
-                //    //{
-                //    if (reader != null)
-                //        reader.Close();
-
-                //    if (conn != null && conn.State == ConnectionState.Open)
-                //    {
-                //        conn.Close();
-                //        conn = null;
-                //    }
-                //    //}
-                //    //catch (Exception ex)
-                //    //{
-                //    //    throw new Exception(ex.Message);
-                //    //}
             }
-
             _ct.ThrowIfCancellationRequested();
         }
 

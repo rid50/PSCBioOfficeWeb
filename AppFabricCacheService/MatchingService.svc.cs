@@ -82,8 +82,8 @@ namespace AppFabricCacheService
             int i = 0;
             foreach (string regionName in regionNameList)
             {
-                if (regionName == null)
-                    continue;
+                //if (regionName == null)
+                  //  continue;
 
                 taskArray[i++] = Task.Factory.StartNew((Object obj) =>
                 {

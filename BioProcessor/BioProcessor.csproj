@@ -96,24 +96,16 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neurotec, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Neurotec">
       <HintPath>..\dotNET\Neurotec.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Neurotec.Biometrics">
       <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Biometrics.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Neurotec.Biometrics.Client">
       <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Licensing, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Media, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Neurotec.Media">
       <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -127,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BioProcessor.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

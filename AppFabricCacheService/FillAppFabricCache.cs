@@ -15,7 +15,7 @@ namespace AppFabricCacheService
 {
     class FillAppFabricCache
     {
-        private System.Object theLock = new System.Object();
+        private static System.Object theLock = new System.Object();
 
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 

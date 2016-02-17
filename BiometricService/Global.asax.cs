@@ -5,7 +5,7 @@ namespace BiometricService
 {
     public class Global : System.Web.HttpApplication
     {
-        const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
+        const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatchingFast,Images.WSQ";
         //const string Components = "Images.WSQ";
 
         protected void Application_Start(object sender, EventArgs e)

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
@@ -11,7 +10,6 @@ using Neurotec.Images;
 using Neurotec.Biometrics;
 using System.Drawing.Drawing2D;
 using Neurotec.Biometrics.Client;
-
 
 namespace BioProcessor
 {
@@ -23,7 +21,15 @@ namespace BioProcessor
 
         public BioProcessor()
         {
-            _biometricClient = new Neurotec.Biometrics.Client.NBiometricClient();
+            try {
+                _biometricClient = new NBiometricClient();
+            } catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                    ex = ex.InnerException;
+
+                throw new Exception(ex.Message);
+            }
         }
 
         public bool verify(byte[] probeTemplate, byte[] galleryTemplate)
@@ -166,7 +172,8 @@ namespace BioProcessor
             {
                 _biometricClient.MatchingWithDetails = true;
                 _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
-                int threshold = _biometricClient.FingersQualityThreshold;
+                _biometricClient.FingersQualityThreshold = 48;
+                int threshold = 48;
                 var template = new NFTemplate();
 
                 foreach (string finger in _fingerList)
@@ -564,9 +571,9 @@ namespace BioProcessor
             //private NBiometricClient _biometricClient;
 
             var biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            //_biometricClient.FingersFastExtraction = true;
+            _biometricClient.FingersFastExtraction = false;
             biometricClient.FingersTemplateSize = NTemplateSize.Small;
-            biometricClient.FingersQualityThreshold = 40;
+            biometricClient.FingersQualityThreshold = 48;
             biometricClient.Initialize();
 
             //Stopwatch sw = new Stopwatch();

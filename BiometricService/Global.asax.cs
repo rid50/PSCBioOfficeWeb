@@ -19,6 +19,9 @@ namespace BiometricService
             }
             catch (Exception ex)
             {
+                while (ex.InnerException != null)
+                    ex = ex.InnerException;
+
                 throw new System.ServiceModel.FaultException("Error FingersExtractor, FingersMatcher: " + ex.Message, System.ServiceModel.FaultCode.CreateSenderFaultCode("a1", "b1"));
             }
         }

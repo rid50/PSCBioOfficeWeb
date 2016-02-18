@@ -132,7 +132,8 @@ namespace AppFabricCacheService
 
         //public void run(int from, int to, int count, int threadId)
         //public void run(int from, int to)
-        public void run(int from, int to, int count)
+        //public void run(int from, int to, int count)
+        public void run(int from, int count)
         {
             //string fingerFields = "ri,rm,rr,rl";
             //string fingerFields = "li,lm,lr,ll,ri,rm,rr,rl,lt,rt";
@@ -155,16 +156,18 @@ namespace AppFabricCacheService
 
             string dbFingerTable = client.getAppSetting("dbFingerTable");
             string dbIdColumn = client.getAppSetting("dbIdColumn");
+            string dbPictureTable = client.getAppSetting("dbPictureTable");
+            string dbGenderColumn = client.getAppSetting("dbGenderColumn");
 
             //return;
 
-            SqlConnection conn = null;
+            //SqlConnection conn = null;
             //SqlCommand cmd = null;
-            SqlDataReader reader = null;
+            //SqlDataReader reader = null;
 
             //byte[] buffer = new byte[0];
             byte[][] buffer = new byte[10][];
-            int id = 0;
+            int id = 0; bool gender;
             int rowNumber = 0;
 
             Stopwatch sw = new Stopwatch();
@@ -212,10 +215,10 @@ namespace AppFabricCacheService
             connectionString += String.Format(";Max Pool Size={0}", _maxPoolSize);
             //conn = new SqlConnection(connectionString);
 
-            conn = new SqlConnection(connectionString);
+            //conn = new SqlConnection(connectionString);
 
-            //using (SqlConnection conn = new SqlConnection(connectionString))
-            try
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            //try
             {
                 //var connStr = getConnectionString();
                 //conn = new SqlConnection(connStr);
@@ -234,16 +237,20 @@ namespace AppFabricCacheService
 
 
                 //cmd.CommandText = "SELECT " + dbIdColumn + "," + fingerFields + " FROM " + dbFingerTable;
-                cmd.CommandText = String.Format("SELECT " + dbIdColumn + "," + fingerFields + " FROM " + dbFingerTable + " WITH (NOLOCK) ORDER BY " + dbIdColumn + " ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                //cmd.CommandText = String.Format("SELECT " + dbIdColumn + "," + fingerFields + " FROM " + dbFingerTable + " WITH (NOLOCK) ORDER BY " + dbIdColumn + " ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+                //cmd.CommandText = String.Format("SELECT A." + dbIdColumn + ", B." + dbGenderColumn + ", " + fingerFields + " FROM " + dbFingerTable + " As A WITH (NOLOCK) INNER JOIN " + dbPictureTable  + " ORDER BY " + dbIdColumn + " ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
+
+                cmd.CommandText = String.Format("SELECT A.{0} As Id, B.{1} As Gender, {2} FROM {3} As A WITH(NOLOCK) INNER JOIN {4} As B ON A.{0} = B.{0} ORDER BY A.{0} ASC OFFSET {5} ROWS FETCH NEXT {6} ROWS ONLY ",
+                                                        dbIdColumn, dbGenderColumn, fingerFields, dbFingerTable, dbPictureTable, from, count);
                 //cmd.CommandText = String.Format("SELECT AppID, " + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
 
 
                 //cmd.CommandText = String.Format("SELECT " + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 //cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
-                //using (SqlDataReader reader = cmd.ExecuteReader())
-                //{
-                    reader = cmd.ExecuteReader();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    //reader = cmd.ExecuteReader();
 
                     if (reader.HasRows)
                     {
@@ -255,8 +262,9 @@ namespace AppFabricCacheService
                                 //_ct.ThrowIfCancellationRequested();
                             }
 
-                            id = (int)reader[dbIdColumn];
-
+                            //id = (int)reader[dbIdColumn];
+                            id = (int)reader["Id"];
+                            gender = (bool)reader["Gender"];
                             //int k = 0;
                             //if (id == 20005140)
                             //    k = 1;
@@ -316,7 +324,7 @@ namespace AppFabricCacheService
                             //                    {
                             //                        id = (int)reader[dbIdColumn];
                             bool approved = false, confirmed = false;
-                            int i = 1;
+                            int i = 2; // 0 - Id column, 1 - Gender column, 2 is the first finger column we are interested in
                             foreach (string finger in fingerFieldsArray)
                             {
                                 FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
@@ -336,7 +344,7 @@ namespace AppFabricCacheService
                             }
 
                             if (confirmed)
-                                _cache.Add(id.ToString(), buffer, new TimeSpan(24, 0, 0), regionName);
+                                _cache.Add(id.ToString() + (gender ? "m" : "w"), buffer, new TimeSpan(24, 0, 0), regionName);
                             //                    }
                             //else
                             //{
@@ -351,36 +359,36 @@ namespace AppFabricCacheService
                         //reader.Close();
                         //}
                     }
-                //}
+                }
 
                 //if (conn.State == ConnectionState.Open)
                 //{
                 //conn.Close();
                 //}
             }
-            finally
-            {
-                //try
-                //{
-                if (cmd != null)
-                    cmd.Cancel();
+            //finally
+            //{
+            //    //try
+            //    //{
+            //    if (cmd != null)
+            //        cmd.Cancel();
 
-                if (reader != null)
-                    reader.Close();
+            //    if (reader != null)
+            //        reader.Close();
 
-                if (conn != null && conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                    //conn = null;
-                    //conn.Dispose();
-                    //SqlConnection.ClearPool(conn);
-                }
-                //}
-                //catch (Exception ex)
-                //{
-                //    throw new Exception(ex.Message);
-                //}
-            }
+            //    if (conn != null && conn.State == ConnectionState.Open)
+            //    {
+            //        conn.Close();
+            //        //conn = null;
+            //        //conn.Dispose();
+            //        //SqlConnection.ClearPool(conn);
+            //    }
+            //    //}
+            //    //catch (Exception ex)
+            //    //{
+            //    //    throw new Exception(ex.Message);
+            //    //}
+            //}
             _ct.ThrowIfCancellationRequested();
         }
 

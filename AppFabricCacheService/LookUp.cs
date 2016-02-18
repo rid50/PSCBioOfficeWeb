@@ -5,19 +5,22 @@ using System.Web;
 using Microsoft.ApplicationServer.Caching;
 using System.Collections;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace AppFabricCacheService
 {
     public class LookUp
     {
         private ArrayList   _fingerList;
+        private int         _gender;
         private byte[]      _probeTemplate;
         private DataCache   _cache;
         private CancellationToken _ct;
 
-        public LookUp(ArrayList fingerList, byte[] probeTemplate, DataCache cache, CancellationToken ct)
+        public LookUp(ArrayList fingerList, int gender, byte[] probeTemplate, DataCache cache, CancellationToken ct)
         {
             _fingerList     = fingerList;
+            _gender         = gender;
             _probeTemplate  = probeTemplate;
             _cache          = cache;
             _ct             = ct;
@@ -33,54 +36,37 @@ namespace AppFabricCacheService
                 matcher.enrollProbeTemplate(_fingerList, _probeTemplate);
 
                 byte[][] buffer = new byte[10][];
-                int rowNumber = 0;
+                //int rowNumber = 0;
                 UInt32 retcode = 0;
                 foreach (KeyValuePair<string, object> item in _cache.GetObjectsInRegion(regionName))
                 {
-                    //short numOfMatches = 0;
-                    bool matched = false;
-                    rowNumber++;
-                    //continue;
-                    //if (rowNumber % 1000 == 0)
-                    //    Console.WriteLine("Region name: {0}, row number: {1}", regionName, rowNumber);
-
-                    //if (_ct.IsCancellationRequested)
-                    //{
-                    _ct.ThrowIfCancellationRequested();
-                    //}
-
-                    //int i = 0;
-                    //if (item.Key == "20005140")
-                    //    i = 0;
-
-                    matched = matcher.match(_fingerList, item.Value as byte[][]);
-
-                    //if (item.Key == "123")
-                    //if( false)
-                    //{
-                    //    buffer = item.Value as byte[][];
-                    //for (int i = 0; i < buffer.Length; i++)
-                    //foreach (string finger in _fingerList)
-                    //{
-                    //    FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
-                    //    if (buffer[(int)f] != null && (buffer[(int)f]).Length != 0)
-                    //    {
-                    //        matched = matcher.match(buffer[(int)f]);
-                    //        if (matched)
-                    //        {
-                    //            numOfMatches++;
-                    //        }
-                    //    }
-
-
-
-                    //}
-                    //if (_fingerList.Count == numOfMatches)
-
-                    if (matched)
+                    if (_gender == 1 && Regex.IsMatch(item.Key, "m$") ||
+                        _gender == 2 && Regex.IsMatch(item.Key, "w$") ||
+                        _gender == 0)
                     {
-                        retcode = UInt32.Parse(item.Key);
-                        break;
+
+                        //short numOfMatches = 0;
+                        bool matched = false;
+                        //rowNumber++;
+                        //continue;
+                        //if (rowNumber % 1000 == 0)
+                        //    Console.WriteLine("Region name: {0}, row number: {1}", regionName, rowNumber);
+
+                        //if (_ct.IsCancellationRequested)
+                        //{
+                        _ct.ThrowIfCancellationRequested();
+                        //}
+
+                        //int i = 0;
+                        //if (item.Key == "20005140")
+                        //    i = 0;
+
+                        matched = matcher.match(_fingerList, item.Value as byte[][]);
+                        if (matched)
+                        {
+                            retcode = UInt32.Parse(Regex.Replace(item.Key, ".$", ""));
+                            break;
+                        }
                     }
                 }
 

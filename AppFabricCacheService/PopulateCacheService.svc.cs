@@ -327,7 +327,8 @@ namespace AppFabricCacheService
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
                         //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
 
-                        cl.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+                        cl.run(state.LoopCounter * limit + offset, limit);
+                        //cl.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
                         //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
 
                         //}

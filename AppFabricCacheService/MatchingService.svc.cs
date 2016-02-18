@@ -14,6 +14,7 @@ namespace AppFabricCacheService
     class MatchStateObject
     {
         public ArrayList    fingerList;
+        public int          gender;
         public byte[]       probeTemplate;
         public DataCache    cache;
         public String       regionName;
@@ -54,7 +55,7 @@ namespace AppFabricCacheService
             return matcher.verify(probeTemplate, galleryTemplate);
         }
 
-        public UInt32 match(ArrayList fingerList, byte[] probeTemplate)
+        public UInt32 match(ArrayList fingerList, int gender, byte[] probeTemplate)
         {
             ArrayList regionNameList;
 
@@ -77,7 +78,7 @@ namespace AppFabricCacheService
 
             //string regionName = "0";
             //for(int k = 0; k < 2; k++)
-            //string regionName = "4000";
+            //string regionName = "5000";
             //taskArray = new Task<UInt32>[1];
             int i = 0;
             foreach (string regionName in regionNameList)
@@ -94,7 +95,7 @@ namespace AppFabricCacheService
 
                     MatchStateObject state = obj as MatchStateObject;
 
-                    var process = new LookUp(state.fingerList, state.probeTemplate, state.cache, state.ct);
+                    var process = new LookUp(state.fingerList, state.gender, state.probeTemplate, state.cache, state.ct);
 
                     retcode = process.run(state.regionName);
 
@@ -103,7 +104,7 @@ namespace AppFabricCacheService
 
                     return retcode;
                 },
-                new MatchStateObject() { fingerList = fingerList, probeTemplate = probeTemplate, cache = _cache, regionName = regionName, ct = ct },
+                new MatchStateObject() { fingerList = fingerList, gender = gender, probeTemplate = probeTemplate, cache = _cache, regionName = regionName, ct = ct },
                 _tokenSource.Token,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);

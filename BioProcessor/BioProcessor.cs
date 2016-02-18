@@ -15,8 +15,8 @@ namespace BioProcessor
 {
     public class BioProcessor
     {
-        private NBiometricClient _biometricClient;
-        private NSubject _probeSubject;
+        private NBiometricClient    _biometricClient;
+        private NSubject            _probeSubject;
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
         public BioProcessor()
@@ -163,7 +163,7 @@ namespace BioProcessor
         }
 
         //public bool match(byte[] galleryTemplate)
-        public bool match(ArrayList _fingerList, byte[][] galleryTemplate)
+        public bool match(ArrayList fingerList, byte[][] galleryTemplate)
         {
             //bool retcode = false;
 
@@ -176,7 +176,7 @@ namespace BioProcessor
                 int threshold = 48;
                 var template = new NFTemplate();
 
-                foreach (string finger in _fingerList)
+                foreach (string finger in fingerList)
                 {
                     FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
                     if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
@@ -222,7 +222,7 @@ namespace BioProcessor
             else
             {
                 var template = new NFTemplate();
-                foreach (string finger in _fingerList)
+                foreach (string finger in fingerList)
                 {
                     FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
                     if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)

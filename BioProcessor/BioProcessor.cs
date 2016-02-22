@@ -83,6 +83,7 @@ namespace BioProcessor
                     return NFPosition.Unknown;
             }
         }
+
         public void enrollProbeTemplate(ArrayList fingerList, byte[] probeTemplate)
         {
             _probeSubject = NSubject.FromMemory(probeTemplate);

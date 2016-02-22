@@ -13,9 +13,25 @@ namespace ExtractFingerRecords
 
     class Program
     {
-        //[STAThread]
-        static void Main(string[] args)
+        private static int Usage()
         {
+            Console.WriteLine("usage:");
+            //Console.WriteLine("\t[chunk offset] [number of chunks] ( chunk size set in app.config file )");
+            Console.WriteLine("\t[chunk offset] [number of chunks] ( chunk size is 10.000 database records )");
+            Console.WriteLine("\t[chunk offset]     - chunk position in a database");
+            Console.WriteLine("\t[number of chunks] - number of chunks to process");
+            Console.WriteLine(" ------------------ Press any key to close -----------------------");
+            Console.ReadKey();
+            return 1;
+        }
+        //[STAThread]
+        static int Main(string[] args)
+        {
+            if (args.Length > 2)
+            {
+                return Usage();
+            }
+
             //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
             const string Components = "Biometrics.FingerExtractionFast,Images.WSQ";
             try
@@ -36,12 +52,15 @@ namespace ExtractFingerRecords
                 //    Console.WriteLine(ex.ToString());
                 //}
                 Run(args);
+
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine(ex.ToString());
-
+                Console.WriteLine(" ------------------ Press any key to close -----------------------");
+                Console.ReadKey();
+                return 1;
                 //MessageBox.Show("Error. Details: " + ex.Message, "Fingers Sample", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -51,6 +70,7 @@ namespace ExtractFingerRecords
                 //Helpers.ReleaseLicenses(licensesBss);
             }
 
+            return 0;
             //IList<string> licensesMain = new List<string>(new string[] { "FingersExtractor", "FingersMatcher" });
             //IList<string> licensesBss = new List<string>(new string[] { "FingersBSS" });
 
@@ -90,7 +110,6 @@ namespace ExtractFingerRecords
             //var worker = new BackgroundWorkerProcess();
             //worker.startProcess();
         }
-
         //static void Run(NFExtractor NFExtractor)
         static void Run(string[] args)
         {
@@ -118,9 +137,8 @@ namespace ExtractFingerRecords
 
             Console.WriteLine("Row count: " + rowcount);
 
-            //int limit = 10000;
-            int limit;
-            int.TryParse(System.Configuration.ConfigurationManager.AppSettings["chunkSize"], out limit);
+            int limit = 10000;
+//            int.TryParse(System.Configuration.ConfigurationManager.AppSettings["chunkSize"], out limit);
             if (limit == 0)
             {
                 Console.WriteLine("------- Chunk size is invalid, press any key to close -------");
@@ -141,9 +159,9 @@ namespace ExtractFingerRecords
             Stopwatch stw = new Stopwatch();
             stw.Start();
 
-            bool go = false;
             if (args != null && args.Length != 0)
             {
+                bool go = false;
                 if (Int32.TryParse(args[0], out offset))
                 {
                     if (offset < topindex)
@@ -157,15 +175,25 @@ namespace ExtractFingerRecords
                     //Console.WriteLine(offset);
                 }
 
+                int numofchunks = 0;
+                if (args.Length > 1 && Int32.TryParse(args[1], out numofchunks))
+                {
+                    taskArray = new Task[numofchunks * 10];
+                    if (offset + (taskArray.Length * 1000) > rowcount)
+                        go = false;
+                }
+
                 if (!go)
                 {
-                    Console.WriteLine(" --- Wrong parameter value, press any key to close ---");
+                    Console.WriteLine(" --- Wrong parameters value, number of records to process exceeds the number of records in the database, press any key to close ---");
                     Console.ReadKey();
                     return;
                 }
             }
+
+            //return;
             //limit = 20;
-            taskArray = new Task[10];
+            //taskArray = new Task[10];
             for (int i = 0; i < taskArray.Length; i++)
             {
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>
@@ -209,7 +237,6 @@ namespace ExtractFingerRecords
                 Console.ReadKey();
             }
         }
-
 
 /*
         var results = new Double[taskArray.Length];

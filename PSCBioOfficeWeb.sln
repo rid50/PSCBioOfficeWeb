@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppFabricCacheService", "Ap
 		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {7FD160D9-F401-4C22-88FF-E14C93CF91A4}
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ExtractFingerRecordsSetup", "ExtractFingerRecordsSetup\ExtractFingerRecordsSetup.vdproj", "{4AF1E821-61C4-4F50-AFDD-951451286470}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -243,6 +245,14 @@ Global
 		{908BBF33-EA26-4069-989E-AD6D2B11577F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{908BBF33-EA26-4069-989E-AD6D2B11577F}.Release|x64.ActiveCfg = Release|Any CPU
 		{908BBF33-EA26-4069-989E-AD6D2B11577F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Debug|Any CPU.ActiveCfg = Debug
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Debug|x64.ActiveCfg = Debug
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Debug|x86.ActiveCfg = Release
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Release|Any CPU.ActiveCfg = Release
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Release|Mixed Platforms.ActiveCfg = Release
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Release|x64.ActiveCfg = Release
+		{4AF1E821-61C4-4F50-AFDD-951451286470}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

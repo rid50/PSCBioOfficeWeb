@@ -25,6 +25,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConfigurationService.svc" />
+    <Content Include="DataService.svc" />
     <Content Include="MemoryCacheService.svc" />
     <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\WSQImageService\configuration91.svcinfo" />
@@ -74,7 +76,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -92,7 +96,11 @@
     <Compile Include="ConfigurationService.svc.cs">
       <DependentUpon>ConfigurationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="DataService.svc.cs">
+      <DependentUpon>DataService.svc</DependentUpon>
+    </Compile>
     <Compile Include="IConfigurationService.cs" />
+    <Compile Include="IDataService.cs" />
     <Compile Include="IMemoryCacheService.cs" />
     <Compile Include="MemoryCacheService.svc.cs">
       <DependentUpon>MemoryCacheService.svc</DependentUpon>

@@ -26,7 +26,13 @@ namespace BiometricService
         {
             //ArrayList fingersCollection;
             var bioProcessor = new BioProcessor.BioProcessor();
-            bioProcessor.processEnrolledData(serializedWSQArray, out fingersCollection);
+            try {
+                bioProcessor.processEnrolledData(serializedWSQArray, out fingersCollection);
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
             //return fingersCollection;
         }
 

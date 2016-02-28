@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="BiometricService.WSQImageService" CodeBehind="WSQImageService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="BiometricService.WSQImageService" CodeBehind="WSQImageService.svc.cs" Factory="BiometricService.Global" %>

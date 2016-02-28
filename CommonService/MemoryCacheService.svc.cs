@@ -15,7 +15,7 @@ using CommonService.WSQImageService;
 
 namespace CommonService
 {
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class MemoryCacheService : IMemoryCacheService
     {
         //static public ConfigurationService configurationServiceClient;

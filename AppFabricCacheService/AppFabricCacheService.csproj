@@ -76,7 +76,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Global.asax" />
     <Content Include="MatchingService.svc" />
     <Content Include="PopulateCacheService.svc" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
@@ -108,9 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FillAppFabricCache.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="IMatchingService.cs" />
     <Compile Include="IPopulateCacheService.cs" />
     <Compile Include="LookUp.cs" />

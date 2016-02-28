@@ -7,7 +7,6 @@ using System.Text;
 using DAO;
 namespace CommonService
 {
-    // NOTE: In order to launch WCF Test Client for testing this service, please select DataService.svc or DataService.svc.cs at the Solution Explorer and start debugging.
     public class DataService : IDataService
     {
         static public Dictionary<string, string> _settings = new Dictionary<string, string>();

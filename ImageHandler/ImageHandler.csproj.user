@@ -12,7 +12,9 @@
     <StartAction>URL</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartURL>http://biooffice/ImageHandler/ImageHandler.ashx%3fid=20095420&amp;rand=0.9157382503700377</StartURL>
+    <StartURL>http://biooffice/ImageHandler/ImageHandler.ashx%3fid=20095420&amp;wsq=li</StartURL>
     <StartAction>URL</StartAction>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>

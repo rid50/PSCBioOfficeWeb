@@ -4,7 +4,7 @@ using System.ServiceModel.Activation;
 
 namespace CommonService
 {
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class ConfigurationService : IConfigurationService
     {
         public IConfigurationService GetConfigurationManager()

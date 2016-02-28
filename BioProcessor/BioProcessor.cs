@@ -421,11 +421,12 @@ namespace BioProcessor
                             fingersCollection[i] = ms.ToArray();
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //throw new Exception(ex.Message);
-                        fingersCollection[i] = getEmptyBitmap();
+                        if (ex.Message == "Operation is not activated")
+                            throw new Exception(ex.Message);
 
+                        fingersCollection[i] = getEmptyBitmap();
                         continue;
                     }
                 }

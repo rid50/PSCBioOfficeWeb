@@ -75,12 +75,12 @@ namespace AppFabricCacheService
             }
         }
 
-        static public void CallDelegate(object rowcount)
-        {
-            CallBack.RespondWithRecordNumbers((int)rowcount);
-        }
+        //static public void CallDelegate(object rowcount)
+        //{
+        //    CallBack.RespondWithRecordNumbers((int)rowcount);
+        //}
 
-        SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
+        //SendOrPostCallback dlgt = new SendOrPostCallback(CallDelegate);
         delegate void d();
 
         static public IPopulateCacheCallback CallBack

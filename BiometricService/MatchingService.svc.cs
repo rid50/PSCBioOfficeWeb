@@ -43,7 +43,6 @@ namespace BiometricService
         public static extern void terminate();
 
         [DllImport("Lookup.dll", CharSet = CharSet.Auto)]
-        //public static extern void MySetCallBack(DelegateNotify callback);
         public static extern void SetCallBack(CallBackDelegate callback);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -58,14 +57,32 @@ namespace BiometricService
         //public delegate void DelegateNotify(int notifyCode, ref NotifyStruct notifyInfo);
         //public delegate void DelegateNotify(int notifyCode);
         //public delegate void CallBackDelegate(int callBackParam);
+
         public delegate void CallBackDelegate(ref CallBackStruct callBackParam);
 
         //public void OnCallback(int x, ref NotifyStruct notifyInfo)
         public void OnCallback(ref CallBackStruct callBackParam)
         {
-            CallBack.RespondWithRecordNumbers(callBackParam.code);
-            CallBack.RespondWithText(callBackParam.text);
+            if (callBackParam.code == 0)
+            {
+                CallBack.CacheOperationComplete();
+            }
+            else if (callBackParam.code == 1)
+            {
+                int result;
+                int.TryParse(callBackParam.text, out result);
+                CallBack.RespondWithRecordNumbers(result);
+            }
+            else if (callBackParam.code == 2)
+                CallBack.RespondWithText(callBackParam.text);
+            else if (callBackParam.code == 3)
+                CallBack.RespondWithError(callBackParam.text);
         }
+
+        //public void setCallBack(CallBackDelegate callback)
+        //{
+        //    SetCallBack(callback);
+        //}
 
         static public IMatchingServiceCallback CallBack
         {
@@ -82,9 +99,9 @@ namespace BiometricService
         public void fillCache(string[] fingerList, int fingerListSize, string[] appSettings)
         {
             //DelegateNotify d = new DelegateNotify(OnCallback);
-            CallBackDelegate d = new CallBackDelegate(OnCallback);
+            //CallBackDelegate d = new CallBackDelegate(OnCallback);
 
-            SetCallBack(d);
+            SetCallBack(new CallBackDelegate(OnCallback));
             //SetNotifyCallBack(CallBack as MulticastDelegate);
             fillCacheOnly(fingerList, fingerListSize, appSettings);
         }

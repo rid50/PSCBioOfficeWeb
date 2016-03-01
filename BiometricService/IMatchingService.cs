@@ -1,11 +1,25 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
+using System.Threading;
 
 namespace BiometricService
 {
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    //public struct CallBackStruct
+    //{
+    //    public short code;
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+    //    public string text;
+    //    //public System.Text.StringBuilder text;
+    //}
+
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IMatchingServiceCallback))]
     public interface IMatchingService
     {
+        //[OperationContract]
+        //void setCallBack(CallBackDelegate callback);
+
         [OperationContract(IsOneWay = true)]
         void fillCache2(string[] fingerList, int fingerListSize, string[] appSettings);
 

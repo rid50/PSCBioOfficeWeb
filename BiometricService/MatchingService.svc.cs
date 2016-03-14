@@ -26,7 +26,7 @@ namespace BiometricService
             [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)]
             string[] fingerList, int fingerListSize,
             [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)]
-            string[] appSettings);
+            string[] appSettings, CallBackDelegate callback);
 
         [DllImport("Lookup.dll", EntryPoint = "match", CallingConvention = CallingConvention.StdCall)]
         public static extern UInt32 matchTemplate(
@@ -42,8 +42,8 @@ namespace BiometricService
         [DllImport("Lookup.dll", EntryPoint = "terminateMatchingService", CallingConvention = CallingConvention.StdCall)]
         public static extern void terminate();
 
-        [DllImport("Lookup.dll", CharSet = CharSet.Auto)]
-        public static extern void SetCallBack(CallBackDelegate callback);
+        //[DllImport("Lookup.dll", CharSet = CharSet.Auto)]
+        //public static extern void SetCallBack(CallBackDelegate callback);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct CallBackStruct
@@ -101,9 +101,9 @@ namespace BiometricService
             //DelegateNotify d = new DelegateNotify(OnCallback);
             //CallBackDelegate d = new CallBackDelegate(OnCallback);
 
-            SetCallBack(new CallBackDelegate(OnCallback));
+            //SetCallBack(new CallBackDelegate(OnCallback));
             //SetNotifyCallBack(CallBack as MulticastDelegate);
-            fillCacheOnly(fingerList, fingerListSize, appSettings);
+            fillCacheOnly(fingerList, fingerListSize, appSettings, new CallBackDelegate(OnCallback));
         }
 
         public UInt32 match(string[] fingerList, int fingerListSize, byte[] probeTemplate, UInt32 probeTemplateSize, string[] appSettings, ref System.Text.StringBuilder errorMessage, int messageSize)

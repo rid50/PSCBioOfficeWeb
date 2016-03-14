@@ -78,6 +78,7 @@ namespace AppFabricCacheService
 
             //string regionName = "0";
             //for(int k = 0; k < 2; k++)
+
             //string regionName = "5000";
             //taskArray = new Task<UInt32>[1];
             int i = 0;
@@ -144,7 +145,8 @@ namespace AppFabricCacheService
                             continue;
                         }
 
-                        while ((ex is AggregateException) && (ex.InnerException != null))
+                        //while ((ex is AggregateException) && (ex.InnerException != null))
+                        while (ex.InnerException != null)
                         {
                             if (ex.Message.EndsWith("Operation cancelled by user."))
                             {

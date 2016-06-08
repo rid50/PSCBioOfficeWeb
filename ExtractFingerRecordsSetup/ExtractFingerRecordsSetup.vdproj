@@ -124,12 +124,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FD37F5211DAC1AB9AB1ED1A8B3557A57"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4A865FF2F6414A0080E4EFE5B21949C2"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -161,6 +155,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_92B36C692CE9F50F6BE240051A877873"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FD37F5211DAC1AB9AB1ED1A8B3557A57"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -272,14 +272,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec.Media, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec.Media, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_92B36C692CE9F50F6BE240051A877873"
-                    {
-                    "Name" = "8:Neurotec.Media.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.Media.dll"
             "TargetName" = "8:"
@@ -303,14 +298,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec.Devices, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec.Devices, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_9A1B4FE5C181580BB4F8F9C93B8A4558"
-                    {
-                    "Name" = "8:Neurotec.Devices.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.Devices.dll"
             "TargetName" = "8:"
@@ -334,14 +324,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec.Biometrics.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec.Biometrics.Client, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B1EE2BFBEB5647EDDDF3B5C3D9CF725C"
-                    {
-                    "Name" = "8:Neurotec.Biometrics.Client.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.Biometrics.Client.dll"
             "TargetName" = "8:"
@@ -365,14 +350,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec.Biometrics, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec.Biometrics, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C5E18BC0099C189F89AD42F379475440"
-                    {
-                    "Name" = "8:Neurotec.Biometrics.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.Biometrics.dll"
             "TargetName" = "8:"
@@ -396,14 +376,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec.Licensing, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec.Licensing, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C83405BEB8FE96725A727B169B986B89"
-                    {
-                    "Name" = "8:Neurotec.Licensing.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.Licensing.dll"
             "TargetName" = "8:"
@@ -427,14 +402,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Neurotec, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Neurotec, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FD37F5211DAC1AB9AB1ED1A8B3557A57"
-                    {
-                    "Name" = "8:Neurotec.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Neurotec.dll"
             "TargetName" = "8:"
@@ -509,9 +479,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:ExtractFingerRecordsSetup"
+        "ProductName" = "8:ExtractFingerRecords"
         "ProductCode" = "8:{56B9F7B7-DB6E-456D-A828-22F87CE0611D}"
-        "PackageCode" = "8:{D4F939D9-35DF-4D4F-86F2-92BC971A82F7}"
+        "PackageCode" = "8:{CA3F9F71-75B6-4023-B532-13F4AB0A2ECD}"
         "UpgradeCode" = "8:{F94CB5A8-867B-4DF5-9D1B-4CCFFE1BE028}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -522,7 +492,7 @@
         "Manufacturer" = "8:PSC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:ExtractFingerRecordsSetup"
+        "Title" = "8:ExtractFingerRecords"
         "Subject" = "8:"
         "ARPCONTACT" = "8:yaruss.org"
         "Keywords" = "8:"

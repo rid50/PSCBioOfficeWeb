@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BioProcessor</RootNamespace>
     <AssemblyName>BioProcessor</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -111,6 +111,9 @@
     <Reference Include="Neurotec.Biometrics.Client">
       <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Neurotec.Licensing">
+      <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="Neurotec.Media">
       <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
     </Reference>
@@ -122,6 +125,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WsqSerializationBinder">
+      <HintPath>..\WsqSerializationBinder\bin\WsqSerializationBinder.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BioProcessor.cs" />
@@ -155,12 +161,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\redcross.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WsqSerializationBinder\WsqSerializationBinder.csproj">
-      <Project>{f81e902f-88ea-4fe5-bcf7-806cfb180172}</Project>
-      <Name>WsqSerializationBinder</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,11 @@
+﻿<parameters>
+  <parameter name="MemoryCacheService WCF Endpoint Address"
+    description="Please provide the endpoint URL for the WCF service in the destination environment."
+    defaultValue="http://pscservice/CommonService/MemoryCacheService.svc"
+    tags="">
+    <parameterEntry
+        kind="XmlFile"
+        scope="obj\\Release\\Package\\PackageTmp\\Web\.config$"
+        match="/configuration/system.serviceModel/client/endpoint[@name='BasicHttpBinding_IMemoryCacheService']/@address" />
+  </parameter>
+</parameters>

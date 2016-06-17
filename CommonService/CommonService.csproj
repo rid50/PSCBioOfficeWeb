@@ -37,6 +37,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <PublishDatabases>false</PublishDatabases>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <IncludeAppPool>true</IncludeAppPool>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -78,6 +82,7 @@
     <Content Include="ConfigurationService.svc" />
     <Content Include="DataService.svc" />
     <Content Include="MemoryCacheService.svc" />
+    <None Include="Properties\PublishProfiles\CommonService.pubxml" />
     <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\WSQImageService\configuration91.svcinfo" />
     <None Include="Service References\WSQImageService\configuration.svcinfo" />
@@ -85,6 +90,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="parameters.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

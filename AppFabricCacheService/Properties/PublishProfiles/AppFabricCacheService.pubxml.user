@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAbgvWW+excUy2GUUdZ15OTwAAAAACAAAAAAAQZgAAAAEAACAAAACzIv5MeZqJnBvnj1KC+p8/0f6/nzv0YeSaDyOK3cK2ygAAAAAOgAAAAAIAACAAAAD1DGgkQ3UFX8e8gvGXCBOu/qr48zqiTwEBXB41zj4VliAAAAD4KkOtU2ZZkG/7ko/CCMJD7PX7Fx9HpPtDX5GP10aKLEAAAACKVfQrLCaIZw4fbq5v7c9fFGDpT/SwEa3SgIVod9UKkqx4kj1zgc8Qgs/bUjIh4iX6xfBLSEPAfjAFnyEulQ5B</EncryptedPassword>
+    <_PublishTargetUrl>http://emefingerprint/psc/PSCBioOfficeWeb/AppFabricCacheService</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

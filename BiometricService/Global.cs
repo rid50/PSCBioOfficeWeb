@@ -12,7 +12,7 @@ namespace BiometricService
     {
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
-            const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Images.WSQ";
+            const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatchingFast,Images.WSQ";
             try
             {
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -25,7 +25,7 @@ namespace BiometricService
                 while (ex.InnerException != null)
                     ex = ex.InnerException;
 
-                throw new System.ServiceModel.FaultException("Error FingersExtractor, FingersMatcher: " + ex.Message, System.ServiceModel.FaultCode.CreateSenderFaultCode("a1", "b1"));
+                throw new System.ServiceModel.FaultException("Error FingersExtractorFast2, FingersMatcher: " + ex.Message, System.ServiceModel.FaultCode.CreateSenderFaultCode("a1", "b1"));
             }
 
             ServiceHost host = new ServiceHost(serviceType, baseAddresses);

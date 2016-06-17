@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>biooffice</RootNamespace>
     <AssemblyName>biooffice</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
     <FileUpgradeFlags>
@@ -36,6 +36,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <IncludeAppPool>true</IncludeAppPool>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <PublishDatabases>false</PublishDatabases>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +66,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -77,6 +84,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -166,6 +174,13 @@
     <Content Include="js\themes\default\d.png" />
     <Content Include="js\themes\default\style.css" />
     <Content Include="js\themes\default\throbber.gif" />
+    <None Include="Service References\CacheService\MemoryCacheService.disco" />
+    <None Include="Service References\CacheService\configuration91.svcinfo" />
+    <None Include="Service References\CacheService\configuration.svcinfo" />
+    <None Include="Service References\CacheService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="themes\smoothness\images\animated-overlay.gif" />
     <Content Include="themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -181,9 +196,33 @@
     <Content Include="themes\smoothness\images\ui-icons_888888_256x240.png" />
     <Content Include="themes\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="themes\smoothness\jquery-ui-1.10.3.custom.min.css" />
+    <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
+    <None Include="Service References\CacheService\MemoryCacheService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CacheService\MemoryCacheService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageHandler\ImageHandler.ashx.cs">
+      <DependentUpon>ImageHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\CacheService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -194,18 +233,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bundle\Messages.properties" />
-    <None Include="bundle\Messages_ar.properties" />
-    <None Include="bundle\Messages_en.properties" />
+    <Content Include="bundle\Messages.properties" />
+    <Content Include="bundle\Messages_ar.properties" />
+    <Content Include="bundle\Messages_en.properties" />
+    <Content Include="ImageHandler\ImageHandler.ashx" />
+    <None Include="Properties\PublishProfiles\biooffice.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImageHandler\ImageHandler.csproj">
-      <Project>{a0b06382-840f-48e6-aea1-897096c777f2}</Project>
-      <Name>ImageHandler</Name>
-    </ProjectReference>
+    <WCFMetadataStorage Include="Service References\CacheService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

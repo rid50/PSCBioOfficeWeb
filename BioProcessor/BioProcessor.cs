@@ -169,7 +169,8 @@ namespace BioProcessor
             //bool retcode = false;
 
             bool matched = true;
-            if (true)
+            bool matchMethod1 = true;
+            if (matchMethod1)
             {
                 _biometricClient.MatchingWithDetails = true;
                 _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;

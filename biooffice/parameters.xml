@@ -1,7 +1,7 @@
 ﻿<parameters>
   <parameter name="MemoryCacheService WCF Endpoint Address"
     description="Please provide the endpoint URL for the WCF service in the destination environment."
-    defaultValue="http://pscservice/CommonService/MemoryCacheService.svc"
+    defaultValue="http://localhost/CommonService/MemoryCacheService.svc"
     tags="">
     <parameterEntry
         kind="XmlFile"

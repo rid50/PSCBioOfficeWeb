@@ -1,7 +1,7 @@
 ﻿<parameters>
   <parameter name="ConfigurationService WCF Endpoint Address"
     description="Please provide the endpoint URL for the WCF service in the destination environment."
-    defaultValue="http://pscservice/CommonService/ConfigurationService.svc"
+    defaultValue="http://localhost/CommonService/ConfigurationService.svc"
     tags="">
     <parameterEntry
         kind="XmlFile"

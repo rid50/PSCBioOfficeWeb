@@ -17,6 +17,9 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PSCWindowsServiceSetup", "PSCWindowsServiceSetup\PSCWindowsServiceSetup.vdproj", "{F993B112-FFB1-4E12-B36F-1180B38885C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "biooffice", "biooffice\biooffice.csproj", "{17E09742-830E-430A-B605-DE5CA3C132EF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {7FD160D9-F401-4C22-88FF-E14C93CF91A4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractFingerRecords", "ExtractFingerRecords\ExtractFingerRecords.csproj", "{AD9A45A1-990E-42D9-BC4F-50F6DDFDD6C9}"
 EndProject

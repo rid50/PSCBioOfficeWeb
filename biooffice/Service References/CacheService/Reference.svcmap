@@ -23,13 +23,13 @@
     <MetadataSource Address="http://pscservice/CommonService/MemoryCacheService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MemoryCacheService.disco" MetadataType="Disco" ID="18ec2a3b-b3ef-46d5-9f1d-101e9d429e00" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?disco" />
-    <MetadataFile FileName="MemoryCacheService.xsd" MetadataType="Schema" ID="b5098a79-456d-453e-8fd1-0756e0abfde0" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd4" />
-    <MetadataFile FileName="MemoryCacheService1.xsd" MetadataType="Schema" ID="3e0b0d91-3e36-4f75-9804-14e35437ff45" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd3" />
-    <MetadataFile FileName="MemoryCacheService2.xsd" MetadataType="Schema" ID="0138fb2c-d772-4695-ad10-8d83f0fd6133" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd0" />
-    <MetadataFile FileName="MemoryCacheService.wsdl" MetadataType="Wsdl" ID="2a8f3aab-a55e-4364-a2d1-cec085f1368d" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?wsdl" />
-    <MetadataFile FileName="MemoryCacheService3.xsd" MetadataType="Schema" ID="b6073d6d-8a9a-4693-9c06-c0c96cc16281" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd1" />
-    <MetadataFile FileName="MemoryCacheService4.xsd" MetadataType="Schema" ID="99b5cda3-e2ef-4c45-87c3-92e7f8f0dbbe" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MemoryCacheService.disco" MetadataType="Disco" ID="00784e10-d97e-4e67-9f88-b31bb30f0599" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?disco" />
+    <MetadataFile FileName="MemoryCacheService.xsd" MetadataType="Schema" ID="3dd6c3d1-429a-41eb-8d21-01b02b6de987" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MemoryCacheService1.xsd" MetadataType="Schema" ID="ac09d1b5-b51a-4ef4-90b7-72d7bef8cf1f" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MemoryCacheService2.xsd" MetadataType="Schema" ID="680749c0-1191-4fab-97f2-400d45f79adb" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MemoryCacheService.wsdl" MetadataType="Wsdl" ID="04d923ed-9310-4612-8df4-f45680d72060" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?wsdl" />
+    <MetadataFile FileName="MemoryCacheService3.xsd" MetadataType="Schema" ID="5fce6053-7415-4c2b-8431-9f2b55154d4c" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MemoryCacheService4.xsd" MetadataType="Schema" ID="c1521bcf-8062-41d6-b0e1-3eb95dcfe76d" SourceId="1" SourceUrl="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

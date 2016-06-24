@@ -1,7 +1,7 @@
 ﻿<parameters>
   <parameter name="WSQImageService WCF Endpoint Address"
     description="Please provide the endpoint URL for the WCF service in the destination environment."
-    defaultValue="http://pscservice/BiometricService/WSQImageService.svc"
+    defaultValue="http://localhost/BiometricService/WSQImageService.svc"
     tags="">
     <parameterEntry
         kind="XmlFile"

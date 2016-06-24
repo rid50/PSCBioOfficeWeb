@@ -107,6 +107,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\TiTGActiveXControl.cab" />
     <Content Include="css\style.css" />
     <Content Include="css\ui.jqgrid.css" />
     <Content Include="images\ajax-loader.gif" />
@@ -175,29 +176,8 @@
     <Content Include="js\themes\default\style.css" />
     <Content Include="js\themes\default\throbber.gif" />
     <Content Include="js\jquery-1.10.2.min.map" />
-    <None Include="Service References\CacheService\MemoryCacheService.disco" />
     <None Include="Service References\CacheService\configuration91.svcinfo" />
     <None Include="Service References\CacheService\configuration.svcinfo" />
-    <None Include="Service References\CacheService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <Content Include="parameters.xml" />
-    <Content Include="themes\smoothness\images\animated-overlay.gif" />
-    <Content Include="themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="themes\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="themes\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="themes\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="themes\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="themes\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="themes\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="themes\smoothness\images\ui-icons_222222_256x240.png" />
-    <Content Include="themes\smoothness\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="themes\smoothness\images\ui-icons_454545_256x240.png" />
-    <Content Include="themes\smoothness\images\ui-icons_888888_256x240.png" />
-    <Content Include="themes\smoothness\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="themes\smoothness\jquery-ui-1.10.3.custom.min.css" />
     <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
     <None Include="Service References\CacheService\MemoryCacheService.xsd">
       <SubType>Designer</SubType>
@@ -214,6 +194,27 @@
     <None Include="Service References\CacheService\MemoryCacheService4.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\CacheService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="parameters.xml" />
+    <None Include="Service References\CacheService\MemoryCacheService.disco" />
+    <Content Include="themes\smoothness\images\animated-overlay.gif" />
+    <Content Include="themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="themes\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="themes\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="themes\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="themes\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="themes\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="themes\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="themes\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="themes\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="themes\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="themes\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="themes\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="themes\smoothness\jquery-ui-1.10.3.custom.min.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageHandler\ImageHandler.ashx.cs">
@@ -258,16 +259,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>7455</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://biooffice</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

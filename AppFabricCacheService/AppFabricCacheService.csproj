@@ -65,6 +65,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />

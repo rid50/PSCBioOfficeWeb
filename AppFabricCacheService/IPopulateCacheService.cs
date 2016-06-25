@@ -13,7 +13,7 @@ namespace AppFabricCacheService
         void Run2(ArrayList fingerList);
 
         [OperationContract]
-        [FaultContractAttribute(typeof(string))]
+        [FaultContractAttribute(typeof(System.ComponentModel.DataAnnotations.ValidationException))]
         ArrayList getFingerList();
 
         [OperationContract]

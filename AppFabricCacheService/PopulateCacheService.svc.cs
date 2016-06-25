@@ -13,6 +13,7 @@ using System.Collections.Concurrent;
 using System.Collections;
 using Microsoft.ApplicationServer.Caching;
 using AppFabricCacheService.ConfigurationService;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppFabricCacheService
 {
@@ -71,7 +72,7 @@ namespace AppFabricCacheService
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(ex.ToString());
             }
         }
 
@@ -98,7 +99,7 @@ namespace AppFabricCacheService
             }
             catch (Exception ex)
             {
-                throw new FaultException<string>(ex.Message);
+                throw new FaultException<ValidationException>(new ValidationException(), new FaultReason(ex.Message));
             }
         }
 

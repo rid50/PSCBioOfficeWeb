@@ -176,8 +176,8 @@ namespace AppFabricCacheService
                 if (rowcount == -1)
                 {
                     dumpCache();
-                    CallBack.RespondWithText("The request was cancelled");
-                    CallBack.CacheOperationComplete();
+                    CallBack.RespondWithError("The request was cancelled");
+                    //CallBack.CacheOperationComplete();
                     _tokenSource.Dispose();
                     return;
                 }
@@ -186,7 +186,7 @@ namespace AppFabricCacheService
             catch (System.Data.SqlClient.SqlException ex)
             {
                 dumpCache();
-                CallBack.RespondWithError(ex.ToString());
+                CallBack.RespondWithError(ex.Message);
                 //CallBack.CacheOperationComplete();
                 _tokenSource.Dispose();
                 return;
@@ -195,7 +195,7 @@ namespace AppFabricCacheService
             catch (Exception ex)
             {
                 dumpCache();
-                CallBack.RespondWithError(ex.ToString());
+                CallBack.RespondWithError(ex.Message);
                 //CallBack.CacheOperationComplete();
                 _tokenSource.Dispose();
                 return;
@@ -216,8 +216,8 @@ namespace AppFabricCacheService
             if (ct.IsCancellationRequested)
             {
                 dumpCache();
-                CallBack.RespondWithText("The request was cancelled");
-                CallBack.CacheOperationComplete();
+                CallBack.RespondWithError("The request was cancelled");
+                //CallBack.CacheOperationComplete();
                 _tokenSource.Dispose();
                 return;
             }
@@ -436,7 +436,7 @@ namespace AppFabricCacheService
                 if (ct.IsCancellationRequested)
                 {
                     dumpCache();
-                    CallBack.RespondWithText("The request was cancelled");
+                    CallBack.RespondWithError("The request was cancelled");
                 }
 
                 _tokenSource.Dispose();

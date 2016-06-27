@@ -462,7 +462,7 @@ namespace DAO
             }
         }
 
-
+/*
         public byte[] GetImageFromWebService(IMAGE_TYPE imageType, int id)
         {
             String url;
@@ -520,7 +520,8 @@ namespace DAO
             }
             return bytes;
         }
-
+*/
+/*
         internal void UploadImage(IMAGE_TYPE imageType, int id, ref byte[] buffer)
         {
             String url;
@@ -593,7 +594,7 @@ namespace DAO
                 }
             }
         }
-
+*/
         //public string getAppSetting(string key)
         //{
         //    return configurationServiceClient.getAppSetting(key);

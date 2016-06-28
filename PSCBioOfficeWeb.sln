@@ -28,9 +28,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsqSerializationBinder", "WsqSerializationBinder\WsqSerializationBinder.csproj", "{F81E902F-88EA-4FE5-BCF7-806CFB180172}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PSCService", "PSCService", "{00DF90E1-8FDD-48F1-86CF-672FCD1B1E70}"
-	ProjectSection(SolutionItems) = preProject
-		PSCService\Web.config = PSCService\Web.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiometricService", "BiometricService\BiometricService.csproj", "{B2CD2619-4D3F-4682-ADFA-46B8EF9DF4EB}"
 	ProjectSection(ProjectDependencies) = postProject

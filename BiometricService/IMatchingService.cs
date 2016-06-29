@@ -21,10 +21,10 @@ namespace BiometricService
         //void setCallBack(CallBackDelegate callback);
 
         [OperationContract(IsOneWay = true)]
-        void fillCache(string[] fingerList, int fingerListSize, string[] appSettings);
+        void fillCache2(string[] fingerList, int fingerListSize, string[] appSettings);
 
         [OperationContract]
-        void fillCache2(string[] fingerList, int fingerListSize, string[] appSettings);
+        void fillCache(string[] fingerList, int fingerListSize, string[] appSettings);
 
         [OperationContract]
         UInt32 match(string[] fingerList, int fingerListSize, byte[] probeTemplate, UInt32 probeTemplateSize, string[] appSettings, ref System.Text.StringBuilder errorMessage, int messageSize);

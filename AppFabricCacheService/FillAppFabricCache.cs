@@ -212,7 +212,7 @@ namespace AppFabricCacheService
             //conn = new SqlConnection(client.getConnectionString("ConnectionString"));
 
             var connectionString = client.getConnectionString("ConnectionString");
-            connectionString += String.Format(";Max Pool Size={0}", _maxPoolSize);
+            connectionString += String.Format(";Connect Timeout=0;Pooling=true;Min Pool Size=1;Max Pool Size={0}", _maxPoolSize);
             //conn = new SqlConnection(connectionString);
 
             //conn = new SqlConnection(connectionString);
@@ -392,9 +392,9 @@ namespace AppFabricCacheService
             _ct.ThrowIfCancellationRequested();
         }
 
-        static private String getConnectionString()
-        {
-            return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
-        }
+        //static private String getConnectionString()
+        //{
+        //    return ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+        //}
     }
 }

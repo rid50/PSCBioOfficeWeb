@@ -487,18 +487,21 @@ namespace AppFabricCacheService
             TimeSpan ts = stw.Elapsed;
             // Format and display the TimeSpan value.
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
-                //ts.Milliseconds / 10);
-
-            if (_cache.Get("regionNameList") != null)
-                CallBack.RespondWithText(string.Format(" --- Time elapsed: {0}", elapsedTime));
+            //ts.Milliseconds / 10);
 
             ArrayList list = _cache.Get("regionNameList") as ArrayList;
-            foreach (string regionName in list)
+            if (list != null)
             {
-                if (regionName == null)
+                CallBack.RespondWithText(string.Format(" --- Time elapsed: {0}", elapsedTime));
+
+                //ArrayList list = _cache.Get("regionNameList") as ArrayList;
+                foreach (string regionName in list)
                 {
-                    CallBack.RespondWithError(string.Format(" --- region name is null"));
-                    break;
+                    if (regionName == null)
+                    {
+                        CallBack.RespondWithError(string.Format(" --- region name is null"));
+                        break;
+                    }
                 }
             }
 

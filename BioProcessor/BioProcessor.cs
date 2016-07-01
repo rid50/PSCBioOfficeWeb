@@ -44,13 +44,25 @@ namespace BioProcessor
             if (gallerySubject == null)
                 throw new Exception("Gallery template is null");
 
-            var status = _biometricClient.Verify(probeSubject, gallerySubject);
-            if (status == NBiometricStatus.Ok)
-                retcode = true;
+            try
+            {
+                var status = _biometricClient.Verify(probeSubject, gallerySubject);
+                if (status == NBiometricStatus.Ok)
+                    retcode = true;
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                    ex = ex.InnerException;
 
-            probeSubject.Dispose();
-            gallerySubject.Dispose();
-            _biometricClient.Dispose();
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                probeSubject.Dispose();
+                gallerySubject.Dispose();
+            }
+            //_biometricClient.Dispose();
 
             return retcode;
         }
@@ -169,7 +181,7 @@ namespace BioProcessor
             //bool retcode = false;
 
             bool matched = true;
-            bool matchMethod1 = true;
+            bool matchMethod1 = false;
             if (matchMethod1)
             {
                 _biometricClient.MatchingWithDetails = true;
@@ -574,7 +586,7 @@ namespace BioProcessor
             //private NBiometricClient _biometricClient;
 
             var biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            _biometricClient.FingersFastExtraction = false;
+            _biometricClient.FingersFastExtraction = true;
             biometricClient.FingersTemplateSize = NTemplateSize.Small;
             biometricClient.FingersQualityThreshold = 48;
             biometricClient.Initialize();

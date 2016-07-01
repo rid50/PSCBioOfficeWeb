@@ -85,7 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MatchingService.svc" />
-    <None Include="Properties\PublishProfiles\BiometricService.pubxml" />
+    <None Include="Properties\PublishProfiles\BiometricService.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ConfigurationService\ConfigurationService.disco" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />

@@ -111,6 +111,9 @@
     <Reference Include="Neurotec.Biometrics.Client">
       <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Neurotec.Devices">
+      <HintPath>..\dotNET\Neurotec.Devices.dll</HintPath>
+    </Reference>
     <Reference Include="Neurotec.Licensing">
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
     </Reference>

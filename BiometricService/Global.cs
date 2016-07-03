@@ -12,13 +12,36 @@ namespace BiometricService
     {
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
-            const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatchingFast,Images.WSQ";
+            const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatching,Images.WSQ";
             try
             {
+
+
+                if (!System.Diagnostics.EventLog.SourceExists("BiometricService"))
+                {
+                    System.Diagnostics.EventLog.CreateEventSource("BiometricService", "Application");
+                }
+
+
+                //System.IO.StreamWriter sw = System.IO.File.AppendText(System.Web.Hosting.HostingEnvironment.MapPath("App_Data/log2.txt"));
+                //System.IO.StreamWriter sw = new System.IO.StreamWriter(HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
+
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    NLicense.ObtainComponents("/local", "5000", component);
+                    //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
+                    //sw.WriteLine("bio: " + component);
+                    if (!NLicense.IsComponentActivated(component))
+                    {
+                        //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio2: " + component);
+                        //sw.WriteLine("bio2: " + component);
+                        NLicense.ObtainComponents("/local", "5000", component);
+                    }
                 }
+
+                System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio:=======================================================");
+
+                //sw.WriteLine("bio:=======================================================");
+                //sw.Close();
             }
             catch (Exception ex)
             {

@@ -84,6 +84,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Global.asax" />
     <Content Include="MatchingService.svc" />
     <None Include="Properties\PublishProfiles\BiometricService.pubxml">
       <SubType>Designer</SubType>
@@ -114,7 +115,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Global.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="IMatchingService.cs" />
     <Compile Include="IWSQImageService.cs" />
     <Compile Include="MatchingService.svc.cs">

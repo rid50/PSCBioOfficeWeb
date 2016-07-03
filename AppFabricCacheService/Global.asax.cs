@@ -6,17 +6,30 @@ namespace AppFabricCacheService
     public class Global : System.Web.HttpApplication
     {
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatchingFast,Images.WSQ";
+        const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatching,Images.WSQ";
         //const string Components = "Images.WSQ";
 
         protected void Application_Start(object sender, EventArgs e)
         {
             try
             {
+                System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    NLicense.ObtainComponents("/local", "5000", component);
+                    //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
+                    sw.WriteLine("app: " + component);
+                    if (!NLicense.IsComponentActivated(component))
+                    {
+                        //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio2: " + component);
+                        sw.WriteLine("app2: " + component);
+                        NLicense.ObtainComponents("/local", "5000", component);
+                    }
                 }
+
+                //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio:=======================================================");
+
+                sw.WriteLine("app:=======================================================");
+                sw.Close();
             }
             catch (Exception ex)
             {

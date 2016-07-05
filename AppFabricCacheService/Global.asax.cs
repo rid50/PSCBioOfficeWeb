@@ -6,30 +6,29 @@ namespace AppFabricCacheService
     public class Global : System.Web.HttpApplication
     {
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatching,Images.WSQ";
-        //const string Components = "Images.WSQ";
+        const string Components = "Biometrics.FingerMatchingFast";
 
         protected void Application_Start(object sender, EventArgs e)
         {
             try
             {
-                System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
+                //System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
-                    sw.WriteLine("app: " + component);
+                    //sw.WriteLine("app: " + component);
                     if (!NLicense.IsComponentActivated(component))
                     {
                         //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio2: " + component);
-                        sw.WriteLine("app2: " + component);
+                        //sw.WriteLine("app2: " + component);
                         NLicense.ObtainComponents("/local", "5000", component);
                     }
                 }
 
                 //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio:=======================================================");
 
-                sw.WriteLine("app:=======================================================");
-                sw.Close();
+                //sw.WriteLine("app:=======================================================");
+                //sw.Close();
             }
             catch (Exception ex)
             {
@@ -40,21 +39,6 @@ namespace AppFabricCacheService
             }
         }
 
-        protected void Session_Start(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-
-        }
-
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exc = Server.GetLastError();
@@ -62,11 +46,6 @@ namespace AppFabricCacheService
 
             //Response.Write(exc.Message);
             //Server.ClearError();
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
-
         }
 
         protected void Application_End(object sender, EventArgs e)

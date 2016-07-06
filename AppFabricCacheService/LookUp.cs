@@ -58,8 +58,8 @@ namespace AppFabricCacheService
                         //}
 
                         //int i = 0;
-                        //if (item.Key == "20005140")
-                        //    i = 0;
+                        //if (Regex.Replace(item.Key, ".$", "") == "20005140")
+                            //matched = true;
 
                         matched = matcher.match(_fingerList, item.Value as byte[][]);
                         if (matched)

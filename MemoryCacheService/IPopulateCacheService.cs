@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Collections;
 
-namespace AppFabricCacheService
+namespace MemoryCacheService
 {
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IPopulateCacheCallback))]
     public interface IPopulateCacheService

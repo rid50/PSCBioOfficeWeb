@@ -1,12 +1,17 @@
-﻿using System;
-using Neurotec.Licensing;
+﻿using Neurotec.Licensing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.SessionState;
 
-namespace BiometricService
+namespace MemoryCacheService
 {
     public class Global : System.Web.HttpApplication
     {
-        //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Images.WSQ";
+        //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Devices.FingerScanners,Images.WSQ";
+        const string Components = "Biometrics.FingerMatching";
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -15,15 +20,19 @@ namespace BiometricService
                 //System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    //sw.WriteLine("bio: " + component);
+                    //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
+                    //sw.WriteLine("app: " + component);
                     if (!NLicense.IsComponentActivated(component))
                     {
-                        //sw.WriteLine("bio2: " + component);
+                        //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio2: " + component);
+                        //sw.WriteLine("app2: " + component);
                         NLicense.ObtainComponents("/local", "5000", component);
                     }
                 }
 
-                //sw.WriteLine("bio:=======================================================");
+                //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio:=======================================================");
+
+                //sw.WriteLine("app:=======================================================");
                 //sw.Close();
             }
             catch (Exception ex)

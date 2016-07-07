@@ -5,8 +5,8 @@ namespace AppFabricCacheService
 {
     public class Global : System.Web.HttpApplication
     {
-        //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerMatchingFast";
+        //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Devices.FingerScanners,Images.WSQ";
+        const string Components = "Biometrics.FingerMatching";
 
         protected void Application_Start(object sender, EventArgs e)
         {

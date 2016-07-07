@@ -184,7 +184,7 @@ namespace BioProcessor
             bool matchMethod1 = false;
             if (matchMethod1)
             {
-                _biometricClient.MatchingWithDetails = false;
+                _biometricClient.MatchingWithDetails = true;
                 _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
                 _biometricClient.FingersQualityThreshold = 48;
                 int threshold = 48;

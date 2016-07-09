@@ -178,20 +178,20 @@
     <Content Include="js\jquery-1.10.2.min.map" />
     <None Include="Service References\CacheService\configuration91.svcinfo" />
     <None Include="Service References\CacheService\configuration.svcinfo" />
-    <None Include="Service References\CacheService\MemoryCacheService.wsdl" />
-    <None Include="Service References\CacheService\MemoryCacheService.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService1.wsdl" />
+    <None Include="Service References\CacheService\MemoryCacheService5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService1.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService51.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService2.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService52.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService3.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService53.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\CacheService\MemoryCacheService4.xsd">
+    <None Include="Service References\CacheService\MemoryCacheService54.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\CacheService\Reference.svcmap">
@@ -199,7 +199,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Content Include="parameters.xml" />
-    <None Include="Service References\CacheService\MemoryCacheService.disco" />
+    <None Include="Service References\CacheService\MemoryCacheService1.disco" />
     <Content Include="themes\smoothness\images\animated-overlay.gif" />
     <Content Include="themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />

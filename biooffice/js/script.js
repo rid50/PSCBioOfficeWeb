@@ -230,7 +230,7 @@ $(document).ready(function () {
 		
 		$('#error_box').val("");	
         // Check if PSCWindowsService service was started
-		var url = "http://biooffice:8080/PSCWindowsService/CommandService/CheckConnection/";
+		var url = "http://localhost:8080/CommandService/CheckConnection/";
 
 		$.blockUI();
 		
@@ -250,7 +250,7 @@ $(document).ready(function () {
 			return;	
 		}
 	
-		url = "http://biooffice:8080/PSCWindowsService/CommandService/" + buttonId + "/" + id;
+		url = "http://localhost:8080/CommandService/" + buttonId + "/" + id;
 	
 		$.ajax({ 
 			type: "get",
@@ -277,7 +277,7 @@ $(document).ready(function () {
 			}
 			*/
 			if (data.result == "error") {
-				$('#error_box').val(data.message);
+			    $('#error_box').val(data.message.replace(/\\u0027/g, '\''));
 				$.unblockUI();
 			} else {
 				//$('#error_box').val(data.result);

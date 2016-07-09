@@ -11,6 +11,11 @@ namespace CommonService
     public interface IDataService
     {
         [OperationContract]
-        void SendWSQImage(int id, ref byte[] buffer);
+        byte[] GetWSQImages(string id);
+        [OperationContract]
+        void SetWSQImages(int id, ref byte[] buffer);
+
+        [OperationContract]
+        void saveWsqInDatabase(int id, byte[] buffer);
     }
 }

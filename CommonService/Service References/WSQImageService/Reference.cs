@@ -18,15 +18,9 @@ namespace CommonService.WSQImageService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/SaveWSQImage", ReplyAction="http://tempuri.org/IWSQImageService/SaveWSQImageResponse")]
         void SaveWSQImage(int id, byte[] buffer);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/DeserializeWSQArray", ReplyAction="http://tempuri.org/IWSQImageService/DeserializeWSQArrayResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="fingersCollection")]
-        System.Collections.ArrayList DeserializeWSQArray(byte[] serializedWSQArray);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/processEnrolledData", ReplyAction="http://tempuri.org/IWSQImageService/processEnrolledDataResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
         [return: System.ServiceModel.MessageParameterAttribute(Name="fingersCollection")]
         System.Collections.ArrayList processEnrolledData(byte[][] serializedWSQArray);
     }
@@ -60,10 +54,6 @@ namespace CommonService.WSQImageService {
         
         public void SaveWSQImage(int id, byte[] buffer) {
             base.Channel.SaveWSQImage(id, buffer);
-        }
-        
-        public System.Collections.ArrayList DeserializeWSQArray(byte[] serializedWSQArray) {
-            return base.Channel.DeserializeWSQArray(serializedWSQArray);
         }
         
         public System.Collections.ArrayList processEnrolledData(byte[][] serializedWSQArray) {

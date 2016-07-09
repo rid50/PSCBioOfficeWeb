@@ -19,8 +19,8 @@ namespace CommonService
         //[FaultContract(typeof(String))]
         void SetDirty();
 
-        [OperationContract]
-        byte[] GetRawFingerCollection(string id);
+        //[OperationContract]
+        //ArrayList GetRawFingerCollection(string id);
 
         [OperationContract]
         ArrayList GetQualityFingerCollection(string id);
@@ -32,8 +32,8 @@ namespace CommonService
         void Put(FingerPrintDataContract fingersCollectionDataContract);
     }
 
-    [DataContract]
-    [KnownType (typeof(WsqImage))]
+    [DataContract(Namespace = "http://psc.com.kw")]
+    [KnownType(typeof(WsqImage))]
     public class FingerPrintDataContract
     {
         [DataMember]

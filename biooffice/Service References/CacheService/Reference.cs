@@ -15,6 +15,69 @@ namespace biooffice.CacheService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FingerPrintDataContract", Namespace="http://schemas.datacontract.org/2004/07/CommonService")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ArrayList))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]
+    public partial class FingerPrintDataContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.ArrayList fingersCollectionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string idField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.ArrayList fingersCollection {
+            get {
+                return this.fingersCollectionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.fingersCollectionField, value) != true)) {
+                    this.fingersCollectionField = value;
+                    this.RaisePropertyChanged("fingersCollection");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string id {
+            get {
+                return this.idField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.idField, value) != true)) {
+                    this.idField = value;
+                    this.RaisePropertyChanged("id");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WsqImage", Namespace="http://schemas.datacontract.org/2004/07/")]
     [System.SerializableAttribute()]
     public partial class WsqImage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -132,69 +195,6 @@ namespace biooffice.CacheService {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FingerPrintDataContract", Namespace="http://schemas.datacontract.org/2004/07/CommonService")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ArrayList))]
-    public partial class FingerPrintDataContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.ArrayList fingersCollectionField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string idField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.ArrayList fingersCollection {
-            get {
-                return this.fingersCollectionField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.fingersCollectionField, value) != true)) {
-                    this.fingersCollectionField = value;
-                    this.RaisePropertyChanged("fingersCollection");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string id {
-            get {
-                return this.idField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.idField, value) != true)) {
-                    this.idField = value;
-                    this.RaisePropertyChanged("id");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CacheService.IMemoryCacheService")]
     public interface IMemoryCacheService {
@@ -205,13 +205,10 @@ namespace biooffice.CacheService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMemoryCacheService/SetDirty", ReplyAction="http://tempuri.org/IMemoryCacheService/SetDirtyResponse")]
         void SetDirty();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMemoryCacheService/GetRawFingerCollection", ReplyAction="http://tempuri.org/IMemoryCacheService/GetRawFingerCollectionResponse")]
-        byte[] GetRawFingerCollection(string id);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollection", ReplyAction="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollectionResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.FingerPrintDataContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.FingerPrintDataContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]
         System.Collections.ArrayList GetQualityFingerCollection(string id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMemoryCacheService/GetPicture", ReplyAction="http://tempuri.org/IMemoryCacheService/GetPictureResponse")]
@@ -254,10 +251,6 @@ namespace biooffice.CacheService {
         
         public void SetDirty() {
             base.Channel.SetDirty();
-        }
-        
-        public byte[] GetRawFingerCollection(string id) {
-            return base.Channel.GetRawFingerCollection(id);
         }
         
         public System.Collections.ArrayList GetQualityFingerCollection(string id) {

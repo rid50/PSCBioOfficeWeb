@@ -109,7 +109,7 @@ namespace MemoryCacheService
         {
             try
             {
-                return (DateTime)initDataCache().Get("cacheExpirationTime");
+                return ((DateTimeOffset)initDataCache().Get("cacheExpirationTime")).DateTime;
             }
             catch (Exception ex)
             {
@@ -313,7 +313,7 @@ namespace MemoryCacheService
             //{
 
                 //int i = 0;
-                //taskArray = new Task[5];
+                //taskArray = new Task[1];
                 for (int i = 0; i < taskArray.Length; i++)
                 {
                     //CallBack.RespondWithError(taskArray.Length.ToString());

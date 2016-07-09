@@ -9,11 +9,12 @@ namespace BiometricService
         [OperationContract]
         void SaveWSQImage(int id, byte[] buffer);
 
-        [OperationContract]
-        void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection);
+        //[OperationContract]
+        //void processRawData(byte[][] serializedWSQArray, out ArrayList fingersCollection);
+        ////void DeserializeWSQArray(byte[][] serializedWSQArray, out ArrayList fingersCollection);
 
         [OperationContract]
-        //ArrayList processEnrolledData(byte[][] serializedWSQArray);
         void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection);
+        //ArrayList processEnrolledData(byte[][] serializedWSQArray);
     }
 }

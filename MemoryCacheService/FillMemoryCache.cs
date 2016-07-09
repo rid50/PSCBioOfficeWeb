@@ -167,7 +167,8 @@ namespace MemoryCacheService
             //SqlDataReader reader = null;
 
             //byte[] buffer = new byte[0];
-            byte[][] buffer = new byte[10][];
+            //byte[][] buffer = new byte[10][];
+            byte[][] buffer;
             int id = 0; bool gender;
             int rowNumber = 0;
 
@@ -326,6 +327,7 @@ namespace MemoryCacheService
                             //if (!reader.IsDBNull(1))
                             //                    {
                             //                        id = (int)reader[dbIdColumn];
+                            buffer = new byte[10][];
                             bool approved = false, confirmed = false;
                             int i = 2; // 0 - Id column, 1 - Gender column, 2 is the first finger column we are interested in
                             foreach (string finger in fingerFieldsArray)
@@ -346,9 +348,19 @@ namespace MemoryCacheService
                                 i++;
                             }
 
+                            //if (id.ToString() == "20005140")
+                            //{
+                            //    int k = 0;
+
+                            //}
                             if (confirmed)
-                                _cache.Add(regionName + (gender ? "m" : "w") + id.ToString(), buffer, new DateTimeOffset(DateTime.Now).AddDays(1));
-                                //_cache.Add(id.ToString() + (gender ? "m" : "w"), buffer, new DateTimeOffset(DateTime.Now, new TimeSpan(24, 0, 0)), regionName);
+                                _cache.Set(regionName + (gender ? "m" : "w") + id.ToString(), buffer, new DateTimeOffset(DateTime.Now).AddDays(1));
+
+                            //_cache.Add(id.ToString() + (gender ? "m" : "w"), buffer, new DateTimeOffset(DateTime.Now, new TimeSpan(24, 0, 0)), regionName);
+
+                            //byte[][] buffer2 = new byte[10][];
+                            //buffer2 = _cache.Get(regionName + (gender ? "m" : "w") + id.ToString()) as byte[][];
+
                             //                    }
                             //else
                             //{

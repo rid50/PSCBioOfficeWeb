@@ -94,18 +94,20 @@ namespace CommonService
                 else
                     throw new Exception("Wrong database provider settings");
 
-                if (imageType == IMAGE_TYPE.wsq)
-                {
-                    buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
+                buffer = ds.GetImage(imageType, Convert.ToInt32(id));
 
-                    //var bioProcessor = new BioProcessor.BioProcessor();
-                    //bioProcessor.processEnrolledData(buffer, out fingersCollection);
+                //if (imageType == IMAGE_TYPE.wsq)
+                //{
+                //    buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
-                }
-                else if (imageType == IMAGE_TYPE.picture)
-                {
-                    buffer = ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id));
-                }
+                //    //var bioProcessor = new BioProcessor.BioProcessor();
+                //    //bioProcessor.processEnrolledData(buffer, out fingersCollection);
+
+                //}
+                //else if (imageType == IMAGE_TYPE.picture)
+                //{
+                //    buffer = ds.GetImage(IMAGE_TYPE.picture, Convert.ToInt32(id));
+                //}
 
             }
 
@@ -128,33 +130,43 @@ namespace CommonService
                 return true;
         }
 
-        public byte[] GetRawFingerCollection(string id)
-        {
-            byte[] buffer = new byte[1];
-            //ArrayList fingersCollection = null;
+        //public ArrayList GetRawFingerCollection(string id)
+        //{
+        //    //byte[] buffer = new byte[1];
+        //    byte[][] buffer = new byte[11][];
+        //    //ArrayList fingersCollection = null;
 
-            //if (getAppSetting("Enroll") == "db")
-            if (_settings["enroll"] == "db")
-            {
-                //var ds = new Database(_settings);
-                DataSource ds = null;
-                if (_settings["dbProvider"] == "dedicatedServer")
-                    ds = new DAO.Database(_settings);
-                else if (_settings["dbProvider"] == "cloudServer")
-                    ds = new DAO.CloudDatabase(_settings);
-                else
-                    throw new Exception("Wrong database provider settings");
+        //    //if (getAppSetting("Enroll") == "db")
+        //    if (_settings["enroll"] == "db")
+        //    {
+        //        //var ds = new Database(_settings);
+        //        DataSource ds = null;
+        //        if (_settings["dbProvider"] == "dedicatedServer")
+        //            ds = new DAO.Database(_settings);
+        //        else if (_settings["dbProvider"] == "cloudServer")
+        //            ds = new DAO.CloudDatabase(_settings);
+        //        else
+        //            throw new Exception("Wrong database provider settings");
 
-                buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id))[0];
-                var biometricService = new WSQImageServiceClient();
-                _fingersCollection = biometricService.DeserializeWSQArray(buffer);
+        //        buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
+        //        var biometricService = new WSQImageServiceClient();
+        //        //byte[] buffer2 = buffer[0];
+        //        try
+        //        {
+        //            //_fingersCollection = biometricService.DeserializeWSQArray(buffer);
+        //            _fingersCollection = biometricService.processRawData(buffer);
+        //        } catch(Exception ex)
+        //        {
+        //            throw new Exception(ex.Message);
+        //        }
 
-                //var bioProcessor = new BioProcessor.BioProcessor();
-                //bioProcessor.DeserializeWSQArray(buffer, out fingersCollection);
-            }
+        //        //var bioProcessor = new BioProcessor.BioProcessor();
+        //        //bioProcessor.DeserializeWSQArray(buffer, out fingersCollection);
+        //    }
+        //    return _fingersCollection;
 
-            return buffer;
-        }
+        //    //return buffer[0];
+        //}
 
         public ArrayList GetQualityFingerCollection(string id)
         {
@@ -238,7 +250,7 @@ namespace CommonService
         {
             MemoryCache.Default["id"] = fingersCollectionDataContract.id;
             MemoryCache.Default["fingersCollection"] = fingersCollectionDataContract.fingersCollection;
-            MemoryCache.Default["dirty"] = "false";
+            MemoryCache.Default["dirty"] = "true";
         }
 
         //public string getAppSetting(string key)

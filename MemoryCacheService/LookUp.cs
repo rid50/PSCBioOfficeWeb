@@ -42,7 +42,8 @@ namespace MemoryCacheService
                 byte[][] buffer = new byte[10][];
                 //int rowNumber = 0;
                 UInt32 retcode = 0;
-                foreach (KeyValuePair<string, object> item in _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName)).Select(x => x))
+                foreach (KeyValuePair<string, object> item in _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName))
+                                                    .Select(x => new KeyValuePair<string, object>(x.Key, x.Value)))
                 {
                     if (_gender == 1 && Regex.IsMatch(item.Key, "m") ||
                         _gender == 2 && Regex.IsMatch(item.Key, "w") ||
@@ -69,9 +70,9 @@ namespace MemoryCacheService
                         //if (Regex.Replace(item.Key, ".$", "") == "20005140")
                           //  matched = true;
 
-                        int k = item.Key.IndexOf("m");
-                        if (item.Key.Substring(k + 1) == "20005140")
-                            matched = true;
+                        //int k = item.Key.IndexOf("m");
+                        //if (item.Key.Substring(k + 1) == "20005140")
+                        //    matched = true;
 
                         matched = matcher.match(_fingerList, item.Value as byte[][]);
                         if (matched)

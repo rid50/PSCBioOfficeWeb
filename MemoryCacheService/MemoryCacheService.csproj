@@ -78,6 +78,7 @@
     <Content Include="MatchingService.svc" />
     <Content Include="parameters.xml" />
     <Content Include="PopulateCacheService.svc" />
+    <None Include="Properties\PublishProfiles\MemoryCacheService.pubxml" />
     <None Include="Service References\ConfigurationService\ConfigurationService.disco" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />

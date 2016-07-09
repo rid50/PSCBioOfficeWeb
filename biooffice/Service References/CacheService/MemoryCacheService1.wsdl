@@ -9,11 +9,11 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/CommonService" />
-      <xsd:import schemaLocation="http://pscservice/CommonService/MemoryCacheService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="http://localhost/CommonService/MemoryCacheService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost/CommonService/MemoryCacheService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost/CommonService/MemoryCacheService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost/CommonService/MemoryCacheService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/CommonService" />
+      <xsd:import schemaLocation="http://localhost/CommonService/MemoryCacheService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMemoryCacheService_Contains_InputMessage">
@@ -27,12 +27,6 @@
   </wsdl:message>
   <wsdl:message name="IMemoryCacheService_SetDirty_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetDirtyResponse" />
-  </wsdl:message>
-  <wsdl:message name="IMemoryCacheService_GetRawFingerCollection_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetRawFingerCollection" />
-  </wsdl:message>
-  <wsdl:message name="IMemoryCacheService_GetRawFingerCollection_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetRawFingerCollectionResponse" />
   </wsdl:message>
   <wsdl:message name="IMemoryCacheService_GetQualityFingerCollection_InputMessage">
     <wsdl:part name="parameters" element="tns:GetQualityFingerCollection" />
@@ -61,10 +55,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/SetDirty" message="tns:IMemoryCacheService_SetDirty_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/SetDirtyResponse" message="tns:IMemoryCacheService_SetDirty_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetRawFingerCollection">
-      <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/GetRawFingerCollection" message="tns:IMemoryCacheService_GetRawFingerCollection_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/GetRawFingerCollectionResponse" message="tns:IMemoryCacheService_GetRawFingerCollection_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetQualityFingerCollection">
       <wsdl:input wsaw:Action="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollection" message="tns:IMemoryCacheService_GetQualityFingerCollection_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMemoryCacheService/GetQualityFingerCollectionResponse" message="tns:IMemoryCacheService_GetQualityFingerCollection_OutputMessage" />
@@ -92,15 +82,6 @@
     </wsdl:operation>
     <wsdl:operation name="SetDirty">
       <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/SetDirty" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetRawFingerCollection">
-      <soap:operation soapAction="http://tempuri.org/IMemoryCacheService/GetRawFingerCollection" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -138,7 +119,7 @@
   </wsdl:binding>
   <wsdl:service name="MemoryCacheService">
     <wsdl:port name="BasicHttpBinding_IMemoryCacheService" binding="tns:BasicHttpBinding_IMemoryCacheService">
-      <soap:address location="http://pscservice/CommonService/MemoryCacheService.svc" />
+      <soap:address location="http://localhost/CommonService/MemoryCacheService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

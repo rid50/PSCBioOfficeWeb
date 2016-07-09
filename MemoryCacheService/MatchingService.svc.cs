@@ -81,10 +81,10 @@ namespace MemoryCacheService
             //string regionName = "0";
             //for(int k = 0; k < 2; k++)
 
-            string regionName = "0";
-            taskArray = new Task<UInt32>[1];
+            //string regionName = "0";
+            //taskArray = new Task<UInt32>[1];
             int i = 0;
-            //foreach (string regionName in regionNameList)
+            foreach (string regionName in regionNameList)
             {
                 //if (regionName == null)
                   //  continue;

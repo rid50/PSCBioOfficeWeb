@@ -308,6 +308,15 @@ namespace BioProcessor
             _biometricClient.Dispose();
         }
 
+        public int getImageQuality(byte[] wsqImage)
+        {
+            NFRecord record = new NFRecord(wsqImage);
+            if (record.Quality == 254)
+                return 0;
+            else
+                return record.Quality;
+        }
+
         public void DeserializeWSQArray(byte[] serializedWSQArray, out ArrayList fingersCollection)
         {
             fingersCollection = null;
@@ -339,14 +348,24 @@ namespace BioProcessor
             }
         }
 
-        public int getImageQuality(byte[] wsqImage)
-        {
-            NFRecord record = new NFRecord(wsqImage);
-            if (record.Quality == 254)
-                return 0;
-            else
-                return record.Quality;
-        }
+        //public void processRawData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
+        //{
+        //    //if (Data.NFExtractor == null)
+        //    //{
+        //    //    Data.NFExtractor = new NFExtractor();
+        //    //    Data.UpdateNfe();
+        //    //    //Data.UpdateNfeSettings();
+        //    //}
+
+        //    //if (Data.NMatcher == null)
+        //    //{
+        //    //    Data.NMatcher = new NMatcher();
+        //    //    Data.UpdateNM();
+        //    //    //Data.UpdateNMSettings();
+        //    //}
+
+        //    DeserializeWSQArray(serializedWSQArray[0], out fingersCollection);
+        //}
 
         public void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
         {

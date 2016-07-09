@@ -9,9 +9,9 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://pscservice/BiometricService/WSQImageService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://pscservice/BiometricService/WSQImageService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://pscservice/BiometricService/WSQImageService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IWSQImageService_SaveWSQImage_InputMessage">
@@ -19,12 +19,6 @@
   </wsdl:message>
   <wsdl:message name="IWSQImageService_SaveWSQImage_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveWSQImageResponse" />
-  </wsdl:message>
-  <wsdl:message name="IWSQImageService_DeserializeWSQArray_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeserializeWSQArray" />
-  </wsdl:message>
-  <wsdl:message name="IWSQImageService_DeserializeWSQArray_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeserializeWSQArrayResponse" />
   </wsdl:message>
   <wsdl:message name="IWSQImageService_processEnrolledData_InputMessage">
     <wsdl:part name="parameters" element="tns:processEnrolledData" />
@@ -37,10 +31,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/SaveWSQImage" message="tns:IWSQImageService_SaveWSQImage_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/SaveWSQImageResponse" message="tns:IWSQImageService_SaveWSQImage_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DeserializeWSQArray">
-      <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/DeserializeWSQArray" message="tns:IWSQImageService_DeserializeWSQArray_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/DeserializeWSQArrayResponse" message="tns:IWSQImageService_DeserializeWSQArray_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="processEnrolledData">
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledData" message="tns:IWSQImageService_processEnrolledData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledDataResponse" message="tns:IWSQImageService_processEnrolledData_OutputMessage" />
@@ -51,15 +41,6 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SaveWSQImage">
       <soap:operation soapAction="http://tempuri.org/IWSQImageService/SaveWSQImage" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DeserializeWSQArray">
-      <soap:operation soapAction="http://tempuri.org/IWSQImageService/DeserializeWSQArray" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -79,7 +60,7 @@
   </wsdl:binding>
   <wsdl:service name="WSQImageService">
     <wsdl:port name="BasicHttpBinding_IWSQImageService" binding="tns:BasicHttpBinding_IWSQImageService">
-      <soap:address location="http://pscservice/BiometricService/WSQImageService.svc" />
+      <soap:address location="http://localhost/BiometricService/WSQImageService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

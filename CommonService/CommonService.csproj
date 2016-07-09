@@ -83,6 +83,7 @@
     <Content Include="DataService.svc" />
     <Content Include="MemoryCacheService.svc" />
     <None Include="Properties\PublishProfiles\CommonService.pubxml" />
+    <Content Include="parameters.xml" />
     <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\WSQImageService\configuration91.svcinfo" />
     <None Include="Service References\WSQImageService\configuration.svcinfo" />
@@ -90,7 +91,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="parameters.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -100,6 +100,10 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Service References\WSQImageService\WSQImageService.wsdl" />
+    <None Include="Service References\WSQImageService\WSQImageService.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\WSQImageService\WSQImageService1.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -135,12 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\WSQImageService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WSQImageService\WSQImageService.wsdl" />
-    <None Include="Service References\WSQImageService\WSQImageService.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

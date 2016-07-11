@@ -12,10 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioProcessor", "BioProcesso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{D4C98875-6D45-44B2-8D9C-7B37CB1E71D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCWindowsService", "PSCWindowsService\PSCWindowsService.csproj", "{79CE48BE-4787-4ECC-8789-03C5CA600DE4}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PSCWindowsServiceSetup", "PSCWindowsServiceSetup\PSCWindowsServiceSetup.vdproj", "{F993B112-FFB1-4E12-B36F-1180B38885C4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "biooffice", "biooffice\biooffice.csproj", "{17E09742-830E-430A-B605-DE5CA3C132EF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {7FD160D9-F401-4C22-88FF-E14C93CF91A4}
@@ -110,27 +106,6 @@ Global
 		{D4C98875-6D45-44B2-8D9C-7B37CB1E71D9}.Release|x64.ActiveCfg = Release|x86
 		{D4C98875-6D45-44B2-8D9C-7B37CB1E71D9}.Release|x86.ActiveCfg = Release|Any CPU
 		{D4C98875-6D45-44B2-8D9C-7B37CB1E71D9}.Release|x86.Build.0 = Release|Any CPU
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Debug|x64.ActiveCfg = Debug|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Debug|x86.ActiveCfg = Debug|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Debug|x86.Build.0 = Debug|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|Any CPU.ActiveCfg = Release|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|Mixed Platforms.Build.0 = Release|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|x64.ActiveCfg = Release|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|x86.ActiveCfg = Release|x86
-		{79CE48BE-4787-4ECC-8789-03C5CA600DE4}.Release|x86.Build.0 = Release|x86
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Debug|Any CPU.ActiveCfg = Debug
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Debug|x64.ActiveCfg = Debug
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Debug|x64.Build.0 = Debug
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Debug|x86.ActiveCfg = Debug
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Release|Any CPU.ActiveCfg = Release
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Release|Mixed Platforms.ActiveCfg = Release
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Release|x64.ActiveCfg = Release
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Release|x64.Build.0 = Release
-		{F993B112-FFB1-4E12-B36F-1180B38885C4}.Release|x86.ActiveCfg = Release
 		{17E09742-830E-430A-B605-DE5CA3C132EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17E09742-830E-430A-B605-DE5CA3C132EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{17E09742-830E-430A-B605-DE5CA3C132EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU

@@ -110,6 +110,7 @@
     <Content Include="bin\TiTGActiveXControl.cab" />
     <Content Include="css\style.css" />
     <Content Include="css\ui.jqgrid.css" />
+    <Content Include="favicon.ico" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\ajax-loaderCircl.gif" />
     <Content Include="images\ajax-loaderCircle2.gif" />

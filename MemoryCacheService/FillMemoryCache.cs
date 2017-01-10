@@ -162,10 +162,6 @@ namespace MemoryCacheService
 
             //return;
 
-            //SqlConnection conn = null;
-            //SqlCommand cmd = null;
-            //SqlDataReader reader = null;
-
             //byte[] buffer = new byte[0];
             //byte[][] buffer = new byte[10][];
             byte[][] buffer;
@@ -221,11 +217,16 @@ namespace MemoryCacheService
 
             //conn = new SqlConnection(connectionString);
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            //try
+            SqlConnection conn = null;
+            SqlCommand cmd = null;
+            SqlDataReader reader = null;
+
+            //using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
                 //var connStr = getConnectionString();
                 //conn = new SqlConnection(connStr);
+                conn = new SqlConnection(connectionString);
                 conn.Open();
                 cmd = new SqlCommand();
                 cmd.CommandTimeout = 0;
@@ -252,9 +253,9 @@ namespace MemoryCacheService
                 //cmd.CommandText = String.Format("SELECT " + fingerFields + " FROM Egy_T_FingerPrint WITH (NOLOCK) ORDER BY AppID ASC OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", from, count);
                 //cmd.CommandText = "SELECT AppID, AppWsq FROM Egy_T_FingerPrint WHERE AppID = 20095423";
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                //using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    //reader = cmd.ExecuteReader();
+                    reader = cmd.ExecuteReader();
 
                     if (reader.HasRows)
                     {
@@ -263,8 +264,9 @@ namespace MemoryCacheService
                             if (_ct.IsCancellationRequested)
                             {
                                 break;
-                                //_ct.ThrowIfCancellationRequested();
                             }
+
+                            //_ct.ThrowIfCancellationRequested();
 
                             //id = (int)reader[dbIdColumn];
                             id = (int)reader["Id"];
@@ -382,29 +384,32 @@ namespace MemoryCacheService
                 //conn.Close();
                 //}
             }
-            //finally
-            //{
-            //    //try
-            //    //{
-            //    if (cmd != null)
-            //        cmd.Cancel();
+            finally
+            {
+                //try
+                //{
+                if (cmd != null)
+                    cmd.Cancel();
 
-            //    if (reader != null)
-            //        reader.Close();
+                if (reader != null)
+                    reader.Close();
 
-            //    if (conn != null && conn.State == ConnectionState.Open)
-            //    {
-            //        conn.Close();
-            //        //conn = null;
-            //        //conn.Dispose();
-            //        //SqlConnection.ClearPool(conn);
-            //    }
-            //    //}
-            //    //catch (Exception ex)
-            //    //{
-            //    //    throw new Exception(ex.Message);
-            //    //}
-            //}
+                if (conn != null && conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                    //conn = null;
+                    //conn.Dispose();
+                    //SqlConnection.ClearPool(conn);
+                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw new Exception(ex.Message);
+                //}
+            }
+
+            //if (_ct.IsCancellationRequested)
+            //    return;
             _ct.ThrowIfCancellationRequested();
         }
 

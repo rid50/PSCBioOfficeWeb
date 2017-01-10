@@ -37,7 +37,7 @@ namespace MemoryCacheService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PopulateCacheService : IPopulateCacheService
     {
-        private static CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
         private static List<FillMemoryCache> _fillCacheClassList;
 
@@ -119,9 +119,13 @@ namespace MemoryCacheService
 
         public void Terminate()
         {
-            try {
-                _tokenSource.Cancel();
-            } catch (Exception) { }
+            //_tokenSource.Cancel();
+            try
+            {
+                if (_tokenSource != null)
+                    _tokenSource.Cancel();
+            }
+            catch (Exception) { }
 
             //int id = Thread.CurrentThread.ManagedThreadId;
             foreach (var fillCacheClass in _fillCacheClassList)
@@ -166,8 +170,8 @@ namespace MemoryCacheService
 
             initDataCache();
 
-            _tokenSource = new CancellationTokenSource();
-            CancellationToken ct = _tokenSource.Token;
+            //_tokenSource = new CancellationTokenSource();
+            //CancellationToken ct = _tokenSource.Token;
 
             Int32 rowcount = 0;
             //for (int i = 0; i < 2; i++)
@@ -182,7 +186,8 @@ namespace MemoryCacheService
                     dumpCache();
                     CallBack.RespondWithError("The request was cancelled");
                     //CallBack.CacheOperationComplete();
-                    _tokenSource.Dispose();
+                    //_tokenSource.Dispose();
+                    //_tokenSource = null;
                     return;
                 }
                 //break;
@@ -192,7 +197,8 @@ namespace MemoryCacheService
                 dumpCache();
                 CallBack.RespondWithError(ex.Message);
                 //CallBack.CacheOperationComplete();
-                _tokenSource.Dispose();
+                //_tokenSource.Dispose();
+                //_tokenSource = null;
                 return;
                 //Console.WriteLine("Time out, try again ");
             }
@@ -201,7 +207,8 @@ namespace MemoryCacheService
                 dumpCache();
                 CallBack.RespondWithError(ex.Message);
                 //CallBack.CacheOperationComplete();
-                _tokenSource.Dispose();
+                //_tokenSource.Dispose();
+                //_tokenSource = null;
                 return;
                 //throw new FaultException(ex.ToString());
                 //Console.WriteLine("Time out, try again ");
@@ -217,14 +224,18 @@ namespace MemoryCacheService
             CallBack.RespondWithRecordNumbers(rowcount);
             //CallBack.RespondWithRecordNumbers(Thread.CurrentThread.ManagedThreadId);
 
-            if (ct.IsCancellationRequested)
-            {
-                dumpCache();
-                CallBack.RespondWithError("The request was cancelled");
-                //CallBack.CacheOperationComplete();
-                _tokenSource.Dispose();
-                return;
-            }
+            //_tokenSource = new CancellationTokenSource();
+            //CancellationToken ct = _tokenSource.Token;
+
+            //if (ct.IsCancellationRequested)
+            //{
+            //    dumpCache();
+            //    CallBack.RespondWithError("The request was cancelled");
+            //    //CallBack.CacheOperationComplete();
+            //    _tokenSource.Dispose();
+            //    _tokenSource = null;
+            //    return;
+            //}
 
             //Console.WriteLine("Row count: " + rowcount);
 
@@ -236,7 +247,8 @@ namespace MemoryCacheService
             {
                 dumpCache();
                 CallBack.RespondWithError("Chunk size is invalid, press any key to close");
-                _tokenSource.Dispose();
+                //_tokenSource.Dispose();
+                //_tokenSource = null;
                 return;
             }
 
@@ -304,8 +316,10 @@ namespace MemoryCacheService
             //_cache.Put("fingerList", new ArrayList(), cacheTimeSpan);
             //_cache.Put("regionNameList", new ArrayList(), cacheTimeSpan);
 
-//            _tokenSource = new CancellationTokenSource();
-//            CancellationToken ct = _tokenSource.Token;
+            //            _tokenSource = new CancellationTokenSource();
+            //            CancellationToken ct = _tokenSource.Token;
+            _tokenSource = new CancellationTokenSource();
+            CancellationToken ct = _tokenSource.Token;
 
             BlockingCollection<int> bc = new BlockingCollection<int>();
 
@@ -319,7 +333,9 @@ namespace MemoryCacheService
                     //CallBack.RespondWithError(taskArray.Length.ToString());
                     taskArray[i] = Task.Factory.StartNew((Object obj) =>
                     {
-                        ct.ThrowIfCancellationRequested();
+                        //ct.ThrowIfCancellationRequested();
+                        if (ct.IsCancellationRequested)
+                            return;
 
                         PopulateStateObject state = obj as PopulateStateObject;
 
@@ -372,26 +388,53 @@ namespace MemoryCacheService
                     foreach (var item in bc.GetConsumingEnumerable())
                     {
                         CallBack.RespondWithRecordNumbers(item);
-                        //Thread.Sleep(100);
+                        Thread.Yield();
                     }
                 };
+            //d();
+            //d.BeginInvoke(null, null);
+
+            try
+            {
+
+                Action myAction = () =>
+                {
+                    Task.WaitAll(taskArray, ct);
+                };
+
+
+                IAsyncResult result = myAction.BeginInvoke(null, null);
+
                 d();
 
-                try
-                {
-                    Task.WaitAll(taskArray);
-                    _cache.Set("fingerList", fingerList, cacheTimeSpan);
-                    _cache.Set("cacheExpirationTime", cacheTimeSpan, cacheTimeSpan);
-                }
-                catch (Exception ex)
-                {
-                    foreach (var t in taskArray)
-                    {
-                        if (t == null)
-                            continue;
+                myAction.EndInvoke(result);
 
-                        if (t.Status == TaskStatus.Faulted)
-                        {
+                //Task.WaitAll(taskArray);
+
+                //int k = taskArray.Length;
+
+                //for (int i = 0; i < taskArray.Length; i++)
+                //{
+                //    if (taskArray[i].IsCompleted) k--;
+                //    if (k == 0)
+                //        break;
+
+                //    d();
+                //}
+
+
+                _cache.Set("fingerList", fingerList, cacheTimeSpan);
+                _cache.Set("cacheExpirationTime", cacheTimeSpan, cacheTimeSpan);
+            }
+            catch (Exception ex)
+            {
+                foreach (var t in taskArray)
+                {
+                    if (t == null)
+                        continue;
+
+                    if (t.Status == TaskStatus.Faulted)
+                    {
                         //if (ex is System.Data.SqlClient.SqlException)
                         //{
                         //    CallBack.RespondWithError("KUKUKU: " + ex.Message);
@@ -399,34 +442,35 @@ namespace MemoryCacheService
                         //    _tokenSource.Dispose();
                         //    return;
                         //}
-                            bool fault = true;
-                            while ((ex is AggregateException) && (ex.InnerException != null))
+                        bool fault = true;
+                        while ((ex is AggregateException) && (ex.InnerException != null))
+                        {
+                            if (ex.Message.EndsWith("Operation cancelled by user."))
                             {
-                                if (ex.Message.EndsWith("Operation cancelled by user."))
+                                fault = false;
+                                break;
+                            }
+                            else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
+                            {
+                                if (ex.InnerException.Message.StartsWith("A task was canceled"))
                                 {
                                     fault = false;
                                     break;
                                 }
-                                else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
-                                {
-                                    if (ex.InnerException.Message.StartsWith("A task was canceled"))
-                                    {
-                                        fault = false;
-                                        break;
-                                    }
-                                }
-
-                                ex = ex.InnerException;
                             }
 
-                            if (fault)
-                            {
-                                _tokenSource.Cancel();
-                                _tokenSource.Dispose();
-                                dumpCache();
-                                CallBack.RespondWithError(ex.Message);
-                                return;
-                            }
+                            ex = ex.InnerException;
+                        }
+
+                        if (fault)
+                        {
+                            _tokenSource.Cancel();
+                            //_tokenSource.Dispose();
+                            //_tokenSource = null;
+                            dumpCache();
+                            CallBack.RespondWithError(ex.Message);
+                            return;
+                        }
 
                         //ex = ex.InnerException;
 
@@ -439,19 +483,26 @@ namespace MemoryCacheService
                         //    _tokenSource.Dispose();
                         //    return;
                         //}
-                        }
                     }
                 }
-                //finally
-                //{
-                if (ct.IsCancellationRequested)
-                {
-                    dumpCache();
-                    CallBack.RespondWithError("The request was cancelled");
-                }
-
+            }
+            finally
+            {
                 _tokenSource.Dispose();
-                //}
+                _tokenSource = null;
+
+            }
+
+            if (ct.IsCancellationRequested)
+            {
+                dumpCache();
+                CallBack.RespondWithError("The request was cancelled");
+            }
+
+                //_tokenSource.Dispose();
+                //_tokenSource = null;
+
+            //}
             //}
             //else
             //{

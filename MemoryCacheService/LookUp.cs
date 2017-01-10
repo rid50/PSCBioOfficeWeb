@@ -53,6 +53,7 @@ namespace MemoryCacheService
                     //    _gender == 2 && item.Key.EndsWith("w") ||
                     //    _gender == 0)
                     {
+                        //throw new Exception("kuku");
 
                         //short numOfMatches = 0;
                         bool matched = false;
@@ -63,12 +64,16 @@ namespace MemoryCacheService
 
                         //if (_ct.IsCancellationRequested)
                         //{
+                        //_ct.ThrowIfCancellationRequested();
+                        //}
+                        //if (_ct.IsCancellationRequested)
+                        //{
+                        //    break;
                         _ct.ThrowIfCancellationRequested();
                         //}
-
                         //int i = 0;
                         //if (Regex.Replace(item.Key, ".$", "") == "20005140")
-                          //  matched = true;
+                        //  matched = true;
 
                         //int k = item.Key.IndexOf("m");
                         //if (item.Key.Substring(k + 1) == "20005140")
@@ -88,12 +93,13 @@ namespace MemoryCacheService
                     }
                 }
 
+                //_ct.ThrowIfCancellationRequested();
                 return retcode;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex.InnerException);
-            }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message, ex.InnerException);
+            //}
             finally
             {
                 matcher.CleanBiometrics();

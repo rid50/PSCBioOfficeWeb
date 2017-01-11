@@ -86,7 +86,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\ConfigurationService\ConfigurationService2.xsd">
       <SubType>Designer</SubType>
     </None>

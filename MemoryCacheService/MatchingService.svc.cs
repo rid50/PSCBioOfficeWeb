@@ -27,7 +27,7 @@ namespace MemoryCacheService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class MatchingService : IMatchingService
     {
-        private CancellationTokenSource _tokenSource;
+        private static CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
         //private static DataCacheFactory _factory;
 
@@ -49,6 +49,7 @@ namespace MemoryCacheService
 
         public ArrayList getFingerList()
         {
+            string id = OperationContext.Current.SessionId;
             //_cache = _factory.GetCache("default");
             return _cache.Get("fingerList") as ArrayList;
         }
@@ -56,6 +57,8 @@ namespace MemoryCacheService
         public int Terminate()
         {
             //return 66;
+            string id = OperationContext.Current.SessionId;
+            var ic = this;
 
             int k = 55;
             try
@@ -64,6 +67,7 @@ namespace MemoryCacheService
                 {
                     k = 33;
                     _tokenSource.Cancel();
+                    //_tokenSource = null;
                 }
             }
             catch (Exception) { k = 77; }
@@ -159,8 +163,57 @@ namespace MemoryCacheService
         //{
         //    return;
         //}
+        //[OperationBehavior(ReleaseInstanceMode = ReleaseInstanceMode.BeforeCall)]
         public UInt32 match(ArrayList fingerList, int gender, byte[] probeTemplate)
         {
+
+            string id = OperationContext.Current.SessionId;
+
+            UInt32 retcode = 0;
+
+            _tokenSource = new CancellationTokenSource();
+            CancellationToken ct = _tokenSource.Token;
+
+            //Task ta = Task.Factory.StartNew(() =>
+            //{
+
+            //    //source.Cancel();
+
+            //    //var delay = Task.Run(async () => {
+            //    //    await Task.Delay(5000);
+            //    //    int k = 0;
+            //    //});
+
+            //    Task.Delay(10000).Wait();
+
+            //    //if (ct.IsCancellationRequested)
+            //    //  throw new Exception("kuku");
+
+            //    ct.ThrowIfCancellationRequested();
+
+            //    //Console.WriteLine("MainTask {0} Thread={1}", i, Thread.CurrentThread.ManagedThreadId);
+            //    //Console.WriteLine("Thread={0}", Thread.CurrentThread.ManagedThreadId);
+            //    //String str = new SyncTasks().HelloAsync(i.ToString());
+
+            //    //Console.WriteLine(str);
+            //    //return 0;
+
+            //}, _tokenSource.Token);
+
+            //try
+            //{
+            //    ta.Wait();
+            //}
+            //catch (Exception) { }
+
+            //if (_tokenSource != null)
+            //{
+            //    _tokenSource.Cancel();
+            //    _tokenSource = null;
+            //}
+
+            //return retcode = 20005140;
+
             ArrayList regionNameList = new ArrayList();
 
             //_tokenSource = tokenSource;
@@ -180,10 +233,7 @@ namespace MemoryCacheService
             List<Task<UInt32>> tasks = new List<Task<UInt32>>();
             //Task<UInt32>[] taskArray = new Task<UInt32>[2];
 
-            UInt32 retcode = 0;
 
-            _tokenSource = new CancellationTokenSource();
-            CancellationToken ct = _tokenSource.Token;
 
             //Task.Run(() =>
             //{
@@ -285,7 +335,8 @@ namespace MemoryCacheService
                         bool fault = true;
                         if (ex.Message.Equals("The operation was canceled."))
                         {
-                            continue;
+                            fault = true;
+                            //continue;
                         }
 
                         //while ((ex is AggregateException) && (ex.InnerException != null))
@@ -305,12 +356,12 @@ namespace MemoryCacheService
                                 }
                             }
 
-                            ex = ex.InnerException;
+                            //ex = ex.InnerException;
 
                             if (ex.Message.Equals("The operation was canceled."))
                             {
-                                fault = false;
-                                break;
+                                fault = true;
+                                //break;
                             }
                         }
 

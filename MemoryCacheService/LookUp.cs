@@ -64,13 +64,13 @@ namespace MemoryCacheService
 
                         //if (_ct.IsCancellationRequested)
                         //{
-                        //_ct.ThrowIfCancellationRequested();
-                        //}
-                        //if (_ct.IsCancellationRequested)
-                        //{
-                        //    break;
                         _ct.ThrowIfCancellationRequested();
                         //}
+                        ////if (_ct.IsCancellationRequested)
+                        ////{
+                        ////    break;
+                        ////    //_ct.ThrowIfCancellationRequested();
+                        ////}
                         //int i = 0;
                         //if (Regex.Replace(item.Key, ".$", "") == "20005140")
                         //  matched = true;

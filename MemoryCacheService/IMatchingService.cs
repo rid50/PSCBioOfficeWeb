@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MemoryCacheService
 {
     //[ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IMatchingCallback))]
-    [ServiceContract(SessionMode = SessionMode.NotAllowed)]
+    [ServiceContract(SessionMode = SessionMode.Required)]
     public interface IMatchingService
     {
         [OperationContract]

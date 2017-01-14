@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.Caching;
 using System.ServiceModel.Activation;
+using System.Collections.Concurrent;
 
 namespace MemoryCacheService
 {
@@ -24,11 +25,12 @@ namespace MemoryCacheService
     }
 
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class MatchingService : IMatchingService
     {
-        private static CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
+        private static ConcurrentDictionary<string, CancellationTokenSource> _cd = null;
         //private static DataCacheFactory _factory;
 
         static MatchingService()
@@ -37,6 +39,16 @@ namespace MemoryCacheService
             //_cache = factory.GetCache("default");
             _cache = MemoryCache.Default;
             //Debug.Assert(_cache == null);
+            int initialCapacity = 101;
+
+            // The higher the concurrencyLevel, the higher the theoretical number of operations
+            // that could be performed concurrently on the ConcurrentDictionary.  However, global
+            // operations like resizing the dictionary take longer as the concurrencyLevel rises. 
+            int numProcs = Environment.ProcessorCount;
+            int concurrencyLevel = numProcs * 2;
+
+            // Construct the dictionary with the desired concurrencyLevel and initialCapacity
+            _cd = new ConcurrentDictionary<string, CancellationTokenSource>(concurrencyLevel, initialCapacity);
         }
 
         //public IMatchingCallback CallBack
@@ -54,7 +66,7 @@ namespace MemoryCacheService
             return _cache.Get("fingerList") as ArrayList;
         }
 
-        public int Terminate()
+        public int Terminate(string guid)
         {
             //return 66;
             string id = OperationContext.Current.SessionId;
@@ -63,6 +75,8 @@ namespace MemoryCacheService
             int k = 55;
             try
             {
+                _tokenSource = _cd[guid];
+
                 if (_tokenSource != null)
                 {
                     k = 33;
@@ -164,7 +178,7 @@ namespace MemoryCacheService
         //    return;
         //}
         //[OperationBehavior(ReleaseInstanceMode = ReleaseInstanceMode.BeforeCall)]
-        public UInt32 match(ArrayList fingerList, int gender, byte[] probeTemplate)
+        public UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate)
         {
 
             string id = OperationContext.Current.SessionId;
@@ -173,6 +187,7 @@ namespace MemoryCacheService
 
             _tokenSource = new CancellationTokenSource();
             CancellationToken ct = _tokenSource.Token;
+            _cd.TryAdd(guid, _tokenSource);
 
             //Task ta = Task.Factory.StartNew(() =>
             //{
@@ -382,6 +397,7 @@ namespace MemoryCacheService
                 if (_tokenSource != null)
                 {
                     _tokenSource.Dispose();
+                    _cd.TryRemove(guid, out _tokenSource);
                     _tokenSource = null;
                 }
                 //if (ct.IsCancellationRequested)

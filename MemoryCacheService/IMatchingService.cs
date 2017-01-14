@@ -21,7 +21,7 @@ namespace MemoryCacheService
         //Task<int> Terminate();
 
         [OperationContract]
-        int Terminate();
+        int Terminate(string guid);
 
         //[OperationContractAttribute(AsyncPattern = true)]
         //IAsyncResult BeginTerminate(int msg, AsyncCallback callback, object asyncState);
@@ -38,7 +38,7 @@ namespace MemoryCacheService
         //[OperationContract(IsOneWay = true)]
         [OperationContract]
         [FaultContractAttribute(typeof(Exception))]
-        UInt32 match(ArrayList fingerList, int gender, byte[] probeTemplate);
+        UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate);
 
         //[OperationContract]
         //void match2(ArrayList fingerList, int gender, byte[] probeTemplate);

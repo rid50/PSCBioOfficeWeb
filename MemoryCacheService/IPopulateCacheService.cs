@@ -3,14 +3,14 @@ using System.Collections;
 
 namespace MemoryCacheService
 {
-    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IPopulateCacheCallback))]
+    [ServiceContract(SessionMode = SessionMode.Allowed, CallbackContract = typeof(IPopulateCacheCallback))]
     public interface IPopulateCacheService
     {
         [OperationContract(IsOneWay = true)]
-        void Run2(ArrayList fingerList);
+        void Run(ArrayList fingerList);
 
         [OperationContract]
-        void Run(ArrayList fingerList);
+        void Run2(ArrayList fingerList);
 
         [OperationContract]
         [FaultContractAttribute(typeof(System.ComponentModel.DataAnnotations.ValidationException))]

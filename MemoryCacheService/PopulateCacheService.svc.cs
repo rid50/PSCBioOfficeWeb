@@ -34,10 +34,10 @@ namespace MemoryCacheService
     }
 
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class PopulateCacheService : IPopulateCacheService
     {
-        private CancellationTokenSource _tokenSource;
+        private static CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
         private static List<FillMemoryCache> _fillCacheClassList;
 
@@ -120,12 +120,19 @@ namespace MemoryCacheService
         public void Terminate()
         {
             //_tokenSource.Cancel();
+
+//            int k = 55;
             try
             {
                 if (_tokenSource != null)
+                {
+//                    k = 33;
                     _tokenSource.Cancel();
+                    //_tokenSource = null;
+                }
             }
-            catch (Exception) { }
+            catch (Exception) { //k = 77; 
+            }
 
             //int id = Thread.CurrentThread.ManagedThreadId;
             foreach (var fillCacheClass in _fillCacheClassList)
@@ -133,6 +140,8 @@ namespace MemoryCacheService
                 if (fillCacheClass.cmd != null)
                     fillCacheClass.cmd.Cancel();
             }
+
+            //return k;
         }
 
         private void dumpCache() {

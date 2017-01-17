@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace MemoryCacheService
 {
-    [ServiceContract(SessionMode = SessionMode.Allowed, CallbackContract = typeof(IPopulateCacheCallback))]
+    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IPopulateCacheCallback))]
     public interface IPopulateCacheService
     {
         [OperationContract(IsOneWay = true)]
@@ -20,7 +20,7 @@ namespace MemoryCacheService
         System.DateTime getExpirationTime();
 
         [OperationContract]
-        void Terminate();
+        int Terminate();
     }
 
     public interface IPopulateCacheCallback

@@ -117,21 +117,21 @@ namespace MemoryCacheService
             }
         }
 
-        public void Terminate()
+        public int Terminate()
         {
             //_tokenSource.Cancel();
 
-//            int k = 55;
+            int k = 55;
             try
             {
                 if (_tokenSource != null)
                 {
-//                    k = 33;
+                    k = 33;
                     _tokenSource.Cancel();
                     //_tokenSource = null;
                 }
             }
-            catch (Exception) { //k = 77; 
+            catch (Exception) { k = 77; 
             }
 
             //int id = Thread.CurrentThread.ManagedThreadId;
@@ -141,7 +141,7 @@ namespace MemoryCacheService
                     fillCacheClass.cmd.Cancel();
             }
 
-            //return k;
+            return k;
         }
 
         private void dumpCache() {

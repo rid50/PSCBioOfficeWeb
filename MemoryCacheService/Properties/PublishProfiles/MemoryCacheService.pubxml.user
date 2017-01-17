@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAbgvWW+excUy2GUUdZ15OTwAAAAACAAAAAAAQZgAAAAEAACAAAABUAfj+UROvs9P/7f0vUj9QyWU9y9wZ4LvdrodC6laZOgAAAAAOgAAAAAIAACAAAABy1waVFvM6HqZn0cMsQnM/FbHINeVxy1H33ysgOw0bQSAAAAAkceVWvP7IZRnayJqtmSNexysWQCTKqjv601/nwjzqI0AAAAALSHSAvhCL3HPrV94wk/IHFlr5ayPzPESfR6sCYVNYkuEoS9EUbXoIuRA3dO7g2M+LDXprs1bE/5LtY6eLPdN6</EncryptedPassword>
+    <_PublishTargetUrl>C:\temp</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/App_global.asax.compiled">
+      <publishTime>01/11/2017 10:25:59</publishTime>
+    </File>
+    <File Include="bin/App_global.asax.dll">
+      <publishTime>01/11/2017 10:25:59</publishTime>
+    </File>
+    <File Include="bin/BioProcessor.dll">
+      <publishTime>01/11/2017 10:23:58</publishTime>
+    </File>
+    <File Include="bin/MemoryCacheService.dll">
+      <publishTime>01/11/2017 10:23:58</publishTime>
+    </File>
+    <File Include="bin/Neurotec.Biometrics.Client.dll">
+      <publishTime>06/02/2016 00:50:52</publishTime>
+    </File>
+    <File Include="bin/Neurotec.Biometrics.dll">
+      <publishTime>06/02/2016 00:50:49</publishTime>
+    </File>
+    <File Include="bin/Neurotec.Devices.dll">
+      <publishTime>06/02/2016 00:50:37</publishTime>
+    </File>
+    <File Include="bin/Neurotec.dll">
+      <publishTime>06/02/2016 00:50:34</publishTime>
+    </File>
+    <File Include="bin/Neurotec.Licensing.dll">
+      <publishTime>06/02/2016 00:50:55</publishTime>
+    </File>
+    <File Include="bin/Neurotec.Media.dll">
+      <publishTime>06/02/2016 00:51:01</publishTime>
+    </File>
+    <File Include="bin/WsqSerializationBinder.dll">
+      <publishTime>01/11/2017 10:23:58</publishTime>
+    </File>
+    <File Include="MatchingService.svc">
+      <publishTime>07/07/2016 12:37:55</publishTime>
+    </File>
+    <File Include="parameters.xml">
+      <publishTime>06/22/2016 19:22:33</publishTime>
+    </File>
+    <File Include="PopulateCacheService.svc">
+      <publishTime>07/07/2016 12:38:45</publishTime>
+    </File>
+    <File Include="PrecompiledApp.config">
+      <publishTime>01/11/2017 10:25:58</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>01/11/2017 10:25:58</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

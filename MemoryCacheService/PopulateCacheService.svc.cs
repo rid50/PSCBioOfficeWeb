@@ -266,7 +266,7 @@ namespace MemoryCacheService
             if (rowcount % limit != 0)
                 topindex++;
             //topindex = 100;
-            Task[] taskArray = new Task[topindex];
+            Task[] tasks = new Task[topindex];
             //Task[] taskArray = new Task[1];
             int offset = 0;
 
@@ -337,88 +337,106 @@ namespace MemoryCacheService
 
                 //int i = 0;
                 //taskArray = new Task[1];
-                for (int i = 0; i < taskArray.Length; i++)
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                //CallBack.RespondWithError(taskArray.Length.ToString());
+                tasks[i] = Task.Factory.StartNew((Object obj) =>
                 {
-                    //CallBack.RespondWithError(taskArray.Length.ToString());
-                    taskArray[i] = Task.Factory.StartNew((Object obj) =>
-                    {
-                        //ct.ThrowIfCancellationRequested();
-                        if (ct.IsCancellationRequested)
-                            return;
+                    //ct.ThrowIfCancellationRequested();
+                    if (ct.IsCancellationRequested)
+                        return;
 
-                        PopulateStateObject state = obj as PopulateStateObject;
+                    PopulateStateObject state = obj as PopulateStateObject;
 
-                        //if (state.Dlgt == null)
-                        //    state.CallBack.RespondWithError("Null");
-                        //else
-                        //    state.CallBack.RespondWithError("Not Null");
+                    //if (state.Dlgt == null)
+                    //    state.CallBack.RespondWithError("Null");
+                    //else
+                    //    state.CallBack.RespondWithError("Not Null");
 
-                        var cl = new FillMemoryCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
-                        _fillCacheClassList.Add(cl);
+                    var cl = new FillMemoryCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
+                    _fillCacheClassList.Add(cl);
 
-                        //var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
-                        //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
-                        //var process = new FillAppFabricCache.FillAppFabricCache();
-                        //try
-                        //{
-                        //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
-                        //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
-
-                        cl.run(state.LoopCounter * limit + offset, limit);
-                        //cl.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
-                        //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
-
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    Console.WriteLine(ex.Message);
-                        //}
-                        //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
-                    },
-                    new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, maxPoolSize = taskArray.Length, ct = ct, cache = _cache },
-                    //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
-                    _tokenSource.Token,
-                    TaskCreationOptions.LongRunning,
-                    TaskScheduler.Default);
-                }
-
-                Task.Factory.ContinueWhenAll(taskArray, tasks =>
-                {
-                    bc.CompleteAdding();
-
-                    //foreach (Task<string> task in tasks)
+                    //var process = new FillAppFabricCache.FillAppFabricCache(state.bc, null, state.fingerList, state.maxPoolSize, state.ct, state.cache);
+                    //var process = new FillAppFabricCache.FillAppFabricCache(state.Dlgt, state.Context);
+                    //var process = new FillAppFabricCache.FillAppFabricCache();
+                    //try
                     //{
-                    //    Console.WriteLine(task.Result);
-                    //}
-                });
+                    //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
+                    //process.run(state.LoopCounter * limit + 90000, state.LoopCounter * limit + limit, limit);
 
-                d d = delegate
+                    cl.run(state.LoopCounter * limit + offset, limit);
+                    //cl.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+                    //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit);
+
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    Console.WriteLine(ex.Message);
+                    //}
+                    //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
+                },
+                new PopulateStateObject() { LoopCounter = i, bc = bc, fingerList = fingerList, maxPoolSize = tasks.Length, ct = ct, cache = _cache },
+                //new StateObject() { LoopCounter = i, Dlgt = dlgt, CallBack = CallBack, Context = Context },
+                ct,
+                //_tokenSource.Token,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
+            }
+
+            Task.Factory.ContinueWhenAll(tasks, task =>
+            {
+                bc.CompleteAdding();
+
+                //foreach (Task<string> task in tasks)
+                //{
+                //    Console.WriteLine(task.Result);
+                //}
+            });
+
+            d d = delegate
+            {
+                foreach (var item in bc.GetConsumingEnumerable())
                 {
-                    foreach (var item in bc.GetConsumingEnumerable())
+                    if (!ct.IsCancellationRequested)
                     {
                         CallBack.RespondWithRecordNumbers(item);
-                        Thread.Yield();
                     }
-                };
-            //d();
+                    else
+                    {
+                        bc.CompleteAdding();
+                        break;
+                    }
+                    ////Thread.Yield();
+                }
+            };
+
+            d();
             //d.BeginInvoke(null, null);
+
+            Task ta = Task.WhenAll(tasks);
+
+            //            d();
 
             try
             {
+                ta.Wait();
+                //Action myAction = () =>
+                //{
+                //    Task.WaitAll(tasks, ct);
+                //};
 
-                Action myAction = () =>
-                {
-                    Task.WaitAll(taskArray, ct);
-                };
+
+                //IAsyncResult result = myAction.BeginInvoke(null, null);
+                //Thread.Yield();
+                //Thread.Sleep(100);
+
+                //d();
 
 
-                IAsyncResult result = myAction.BeginInvoke(null, null);
 
-                d();
+                ////Task.WaitAll(tasks);
 
-                myAction.EndInvoke(result);
-
-                //Task.WaitAll(taskArray);
+                //myAction.EndInvoke(result);
 
                 //int k = taskArray.Length;
 
@@ -437,12 +455,12 @@ namespace MemoryCacheService
             }
             catch (Exception ex)
             {
-                foreach (var t in taskArray)
+                foreach (var t in tasks)
                 {
                     if (t == null)
                         continue;
 
-                    if (t.Status == TaskStatus.Faulted)
+                    if (t.Status == TaskStatus.Faulted || t.Status == TaskStatus.Canceled)
                     {
                         //if (ex is System.Data.SqlClient.SqlException)
                         //{
@@ -451,27 +469,27 @@ namespace MemoryCacheService
                         //    _tokenSource.Dispose();
                         //    return;
                         //}
-                        bool fault = true;
+                        //bool fault = true;
                         while ((ex is AggregateException) && (ex.InnerException != null))
                         {
-                            if (ex.Message.EndsWith("Operation cancelled by user."))
-                            {
-                                fault = false;
-                                break;
-                            }
-                            else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
-                            {
-                                if (ex.InnerException.Message.StartsWith("A task was canceled"))
-                                {
-                                    fault = false;
-                                    break;
-                                }
-                            }
+                            //if (ex.Message.EndsWith("Operation cancelled by user."))
+                            //{
+                            //    //fault = false;
+                            //    break;
+                            //}
+                            //else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
+                            //{
+                            //    if (ex.InnerException.Message.StartsWith("A task was canceled"))
+                            //    {
+                            //        //fault = false;
+                            //        break;
+                            //    }
+                            //}
 
                             ex = ex.InnerException;
                         }
 
-                        if (fault)
+//                        if (fault)
                         {
                             _tokenSource.Cancel();
                             //_tokenSource.Dispose();
@@ -497,19 +515,20 @@ namespace MemoryCacheService
             }
             finally
             {
+                if (ct.IsCancellationRequested)
+                {
+                    dumpCache();
+                    CallBack.RespondWithError("The request was cancelled");
+                }
+
                 _tokenSource.Dispose();
                 _tokenSource = null;
 
             }
 
-            if (ct.IsCancellationRequested)
-            {
-                dumpCache();
-                CallBack.RespondWithError("The request was cancelled");
-            }
 
-                //_tokenSource.Dispose();
-                //_tokenSource = null;
+            //_tokenSource.Dispose();
+            //_tokenSource = null;
 
             //}
             //}

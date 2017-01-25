@@ -304,8 +304,11 @@ namespace BioProcessor
 
         public void CleanBiometrics()
         {
-            _probeSubject.Dispose();
-            _biometricClient.Dispose();
+            if (_probeSubject != null)
+                _probeSubject.Dispose();
+
+            if (_biometricClient != null)
+                _biometricClient.Dispose();
         }
 
         public int getImageQuality(byte[] wsqImage)
@@ -604,11 +607,14 @@ namespace BioProcessor
 
             //private NBiometricClient _biometricClient;
 
-            var biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            _biometricClient.FingersFastExtraction = true;
-            biometricClient.FingersTemplateSize = NTemplateSize.Small;
-            biometricClient.FingersQualityThreshold = 48;
-            biometricClient.Initialize();
+            //var biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
+
+            _biometricClient.UseDeviceManager = true;
+            _biometricClient.BiometricTypes = NBiometricType.Finger;
+            _biometricClient.FingersFastExtraction = false;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
+            _biometricClient.FingersQualityThreshold = 48;
+            _biometricClient.Initialize();
 
             //Stopwatch sw = new Stopwatch();
             //Stopwatch stwd = new Stopwatch();
@@ -774,7 +780,7 @@ namespace BioProcessor
             //sw = System.Diagnostics.Stopwatch.StartNew();
             try
             {
-                biometricClient.CreateTemplate(subject);
+                _biometricClient.CreateTemplate(subject);
             }
             catch (Exception ex) {
                 while (ex.InnerException != null)
@@ -909,8 +915,8 @@ namespace BioProcessor
             if (subject != null)
                 subject.Dispose();
 
-            if (biometricClient != null)
-                biometricClient.Dispose();
+            //if (biometricClient != null)
+            //    biometricClient.Dispose();
 
             if (fingersCollection != null)
             {

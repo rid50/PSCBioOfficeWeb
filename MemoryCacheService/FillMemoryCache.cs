@@ -21,7 +21,7 @@ namespace MemoryCacheService
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
         //private static DataCacheFactory _factory = null;
-        private static CancellationToken _ct;
+        private CancellationToken _ct;
         private static MemoryCache _cache;
         private static SendOrPostCallback _callback;
         //private static SynchronizationContext _context = null;
@@ -261,12 +261,12 @@ namespace MemoryCacheService
                     {
                         while (reader.Read())
                         {
-                            if (_ct.IsCancellationRequested)
-                            {
-                                break;
-                            }
-
-                            //_ct.ThrowIfCancellationRequested();
+                            //if (_ct.IsCancellationRequested)
+                            //{
+                            //    break;
+                            //}
+                            //Thread.Sleep(100);
+                            _ct.ThrowIfCancellationRequested();
 
                             //id = (int)reader[dbIdColumn];
                             id = (int)reader["Id"];
@@ -410,7 +410,7 @@ namespace MemoryCacheService
 
             //if (_ct.IsCancellationRequested)
             //    return;
-            _ct.ThrowIfCancellationRequested();
+            //_ct.ThrowIfCancellationRequested();
         }
 
         //static private String getConnectionString()

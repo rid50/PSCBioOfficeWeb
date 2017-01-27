@@ -15,14 +15,24 @@ namespace BioProcessor
 {
     public class BioProcessor
     {
-        private NBiometricClient    _biometricClient;
-        private NSubject            _probeSubject;
+        private NBiometricClient _biometricClient;
+        private NSubject _probeSubject;
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
-        public BioProcessor()
+        public BioProcessor(byte FingersQualityThreshold = 48,
+            int MatchingThreshold = 60,
+            NTemplateSize FingersTemplateSize = NTemplateSize.Large,
+            NMatchingSpeed MatchingSpeed = NMatchingSpeed.High,
+            bool FingersFastExtraction = false)
         {
             try {
                 _biometricClient = new NBiometricClient();
+                _biometricClient.FingersQualityThreshold = FingersQualityThreshold;
+                _biometricClient.MatchingThreshold = MatchingThreshold;
+                _biometricClient.FingersTemplateSize = FingersTemplateSize;
+                _biometricClient.FingersMatchingSpeed = MatchingSpeed;
+                _biometricClient.FingersFastExtraction = FingersFastExtraction;
+
             } catch (Exception ex)
             {
                 if (ex.InnerException != null)
@@ -185,9 +195,9 @@ namespace BioProcessor
             if (matchMethod1)
             {
                 _biometricClient.MatchingWithDetails = true;
-                _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
-                _biometricClient.FingersQualityThreshold = 48;
-                int threshold = 48;
+                //_biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
+                //_biometricClient.FingersQualityThreshold = 60;
+                //int threshold = 48;
                 var template = new NFTemplate();
 
                 foreach (string finger in fingerList)
@@ -219,7 +229,7 @@ namespace BioProcessor
                             //int fsc = matchingResult.MatchingDetails.FingersScore;
                             foreach (var finger in matchingResult.MatchingDetails.Fingers)
                             {
-                                if (threshold > finger.Score)
+                                if (_biometricClient.FingersQualityThreshold > finger.Score)
                                 {
                                     matched = false;
                                     break;
@@ -611,9 +621,9 @@ namespace BioProcessor
 
             _biometricClient.UseDeviceManager = true;
             _biometricClient.BiometricTypes = NBiometricType.Finger;
-            _biometricClient.FingersFastExtraction = false;
-            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
-            _biometricClient.FingersQualityThreshold = 48;
+            //_biometricClient.FingersFastExtraction = false;
+            //_biometricClient.FingersTemplateSize = NTemplateSize.Large;
+            //_biometricClient.FingersQualityThreshold = 10;
             _biometricClient.Initialize();
 
             //Stopwatch sw = new Stopwatch();
@@ -705,6 +715,9 @@ namespace BioProcessor
                         //ms[i + 1] = new MemoryStream((fingersCollection[i] as WsqImage).Content);
                         //nImage = NImageFormat.Wsq.LoadImage(ms[i + 1]);
                         //nImage = NImage.FromStream(ms[i + 1], NImageFormat.Wsq);
+                        if ((fingersCollection[i] as WsqImage).Content == null)
+                            continue;
+
                         nImage = NImage.FromMemory((fingersCollection[i] as WsqImage).Content, NImageFormat.Wsq);
 
                         finger = new NFinger { Image = nImage };
@@ -864,24 +877,26 @@ namespace BioProcessor
 
                     //sb.Append(dict[i] + "=" + indx);
                     //cmd2.Parameters.Add(indx, SqlDbType.VarBinary);
-
-                    valid = false;
                     int k = 0;
-                    for (k = 0; k < subject.Fingers.Count; k++)
+                    valid = false;
+                    if ((fingersCollection[i] as WsqImage).Content != null)
                     {
-                        if (subject.Fingers[k].Position == pos)
+                        for (k = 0; k < subject.Fingers.Count; k++)
                         {
-                            if (subject.Fingers[k].Objects.First().Status == NBiometricStatus.Ok)
+                            if (subject.Fingers[k].Position == pos)
                             {
-                                if (subject.Fingers[k].Objects.First().Quality != 254)
+                                if (subject.Fingers[k].Objects.First().Status == NBiometricStatus.Ok)
                                 {
-                                    valid = true;
-                                    //Console.WriteLine(" ----- Size: {0}", subject.Fingers[k].Objects.First().Template.GetSize());
+                                    if (subject.Fingers[k].Objects.First().Quality != 254)
+                                    {
+                                        valid = true;
+                                        //Console.WriteLine(" ----- Size: {0}", subject.Fingers[k].Objects.First().Template.GetSize());
 
+                                    }
                                 }
-                            }
 
-                            break;
+                                break;
+                            }
                         }
                     }
 
@@ -898,7 +913,8 @@ namespace BioProcessor
                 }
                 else
                 {
-                    templates.Add(dict[i], new byte[0]);
+                    templates.Add(dict[i], null);
+                    //templates.Add(dict[i], new byte[0]);
                 }
             }
 

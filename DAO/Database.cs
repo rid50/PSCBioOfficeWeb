@@ -372,6 +372,9 @@ namespace DAO
                 {
                     //indx = "@" + key;
 
+                    if (templates[key] == null)
+                        continue;
+
                     if (sb.Length == 0)
                     {
                         sb.Append("update {0} with (serializable) SET ");

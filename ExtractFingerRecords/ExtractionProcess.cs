@@ -209,9 +209,9 @@ namespace ExtractFingerRecords
 
 
             _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            _biometricClient.FingersFastExtraction = false;
-            _biometricClient.FingersTemplateSize = NTemplateSize.Small;
-            _biometricClient.FingersQualityThreshold = 48;
+            _biometricClient.FingersFastExtraction = true;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
+            _biometricClient.FingersQualityThreshold = 60;
             _biometricClient.Initialize();
 
             Stopwatch sw = new Stopwatch();

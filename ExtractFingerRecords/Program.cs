@@ -33,7 +33,7 @@ namespace ExtractFingerRecords
             }
 
             //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-            const string Components = "Biometrics.FingerExtractionFast,Images.WSQ";
+            const string Components = "Biometrics.FingerExtraction,Images.WSQ";
             try
             {
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

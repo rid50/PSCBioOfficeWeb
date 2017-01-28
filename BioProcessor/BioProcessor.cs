@@ -568,7 +568,7 @@ namespace BioProcessor
         //    }
         //}
 
-        public Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer)
+        public Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer, bool[] processAsTemplate)
         {
             //string dbFingerTable = System.Configuration.ConfigurationManager.AppSettings["dbFingerTable"];
             //string dbFingerColumn = System.Configuration.ConfigurationManager.AppSettings["dbFingerColumn"];
@@ -715,7 +715,7 @@ namespace BioProcessor
                         //ms[i + 1] = new MemoryStream((fingersCollection[i] as WsqImage).Content);
                         //nImage = NImageFormat.Wsq.LoadImage(ms[i + 1]);
                         //nImage = NImage.FromStream(ms[i + 1], NImageFormat.Wsq);
-                        if ((fingersCollection[i] as WsqImage).Content == null)
+                        if ((fingersCollection[i] as WsqImage).Content == null || processAsTemplate[i] == false)
                             continue;
 
                         nImage = NImage.FromMemory((fingersCollection[i] as WsqImage).Content, NImageFormat.Wsq);
@@ -826,7 +826,7 @@ namespace BioProcessor
 
                 //valid = false;
 
-                if (fingersCollection[i] != null)
+                if (fingersCollection[i] != null && processAsTemplate[i] == true)
                 {
                     switch (i)
                     {

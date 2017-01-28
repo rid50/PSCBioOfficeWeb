@@ -27,6 +27,7 @@ namespace BioProcessor
         {
             try {
                 _biometricClient = new NBiometricClient();
+                _biometricClient.BiometricTypes = NBiometricType.Finger;
                 _biometricClient.FingersQualityThreshold = FingersQualityThreshold;
                 _biometricClient.MatchingThreshold = MatchingThreshold;
                 _biometricClient.FingersTemplateSize = FingersTemplateSize;

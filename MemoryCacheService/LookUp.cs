@@ -29,9 +29,9 @@ namespace MemoryCacheService
 
 //        enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
-        public UInt32 run(String regionName)
+        public UInt32 run(String regionName, int matchingThreshold)
         {
-            var matcher = new BioProcessor.BioProcessor();
+            var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
 
 
             //var items = _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName)).Select(x => x.Key);

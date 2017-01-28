@@ -60,6 +60,9 @@
       <HintPath>..\DAO\bin\DAO.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Neurotec.Biometrics">
+      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
+    </Reference>
     <Reference Include="Neurotec.Licensing">
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
     </Reference>

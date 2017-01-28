@@ -19,6 +19,7 @@ namespace MemoryCacheService
         public ArrayList    fingerList;
         public int          gender;
         public byte[]       probeTemplate;
+        public int          matchingThreshold;
         public MemoryCache  cache;
         public String       regionName;
         public CancellationToken ct;
@@ -162,9 +163,9 @@ namespace MemoryCacheService
         //    //return result.Data;
         //}
 
-        public bool verify(byte[] probeTemplate, byte[] galleryTemplate)
+        public bool verify(byte[] probeTemplate, byte[] galleryTemplate, int matchingThreshold)
         {
-            var matcher = new BioProcessor.BioProcessor();
+            var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
             return matcher.verify(probeTemplate, galleryTemplate);
         }
 
@@ -178,7 +179,7 @@ namespace MemoryCacheService
         //    return;
         //}
         //[OperationBehavior(ReleaseInstanceMode = ReleaseInstanceMode.BeforeCall)]
-        public UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate)
+        public UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate, int matchingThreshold)
         {
 
             string id = OperationContext.Current.SessionId;
@@ -280,7 +281,7 @@ namespace MemoryCacheService
 
                     //retcode = process.run(state.regionName);
 
-                    retcode = process.run(state.regionName);
+                    retcode = process.run(state.regionName, state.matchingThreshold);
                     if (retcode != 0 && !_tokenSource.IsCancellationRequested)
                     {
                         _tokenSource.Cancel();
@@ -288,7 +289,7 @@ namespace MemoryCacheService
 
                     return retcode;
                 },
-                new MatchStateObject() { fingerList = fingerList, gender = gender, probeTemplate = probeTemplate, cache = _cache, regionName = regionName, ct = ct },
+                new MatchStateObject() { fingerList = fingerList, gender = gender, probeTemplate = probeTemplate, matchingThreshold = matchingThreshold, cache = _cache, regionName = regionName, ct = ct },
                 //_tokenSource.Token,
                 ct,
                 TaskCreationOptions.LongRunning,

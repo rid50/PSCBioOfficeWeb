@@ -48,7 +48,7 @@ namespace BiometricService
         public void SaveWSQImage(int id, byte[] buffer)
         {
             var bioProcessor = new BioProcessor.BioProcessor();
-            Dictionary<string, byte[]> templates = bioProcessor.GetTemplatesFromWSQImage(id, buffer);
+            Dictionary<string, byte[]> templates = bioProcessor.GetTemplatesFromWSQImage(id, buffer,  null);
 
             var client = new ConfigurationServiceClient();
 

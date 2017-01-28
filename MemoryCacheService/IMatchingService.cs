@@ -30,7 +30,7 @@ namespace MemoryCacheService
         //void EndTerminate(IAsyncResult result);
 
         [OperationContract]
-        bool verify(byte[] probeTemplate, byte[] galleryTemplate);
+        bool verify(byte[] probeTemplate, byte[] galleryTemplate, int matchingThreshold);
 
         //[OperationContract(IsOneWay = true)]
         //Task<int> match2(ArrayList fingerList, int gender, byte[] probeTemplate);
@@ -38,10 +38,10 @@ namespace MemoryCacheService
         //[OperationContract(IsOneWay = true)]
         [OperationContract]
         [FaultContractAttribute(typeof(Exception))]
-        UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate);
+        UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate, int matchingThreshold);
 
         //[OperationContract]
-        //void match2(ArrayList fingerList, int gender, byte[] probeTemplate);
+        //void match2(ArrayList fingerList, int gender, byte[] probeTemplate, int matchingThreshold);
     }
 
     //public interface IMatchingCallback

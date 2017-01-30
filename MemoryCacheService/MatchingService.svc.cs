@@ -401,11 +401,12 @@ namespace MemoryCacheService
                     _cd.TryRemove(guid, out _tokenSource);
                     _tokenSource = null;
                 }
+
                 //if (ct.IsCancellationRequested)
                 //{
-                //    throw new Exception("The request was cancelled");
+                //    throw new FaultException("The request was cancelled");
+                //}
             }
-
             //_tokenSource.Dispose();
             //}
 

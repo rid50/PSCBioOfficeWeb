@@ -6,7 +6,7 @@ namespace BiometricService
     public class Global : System.Web.HttpApplication
     {
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Images.WSQ";
+        const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Images.WSQ";
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -19,7 +19,9 @@ namespace BiometricService
                     if (!NLicense.IsComponentActivated(component))
                     {
                         //sw.WriteLine("bio2: " + component);
-                        NLicense.ObtainComponents("/local", "5000", component);
+                        if (!NLicense.ObtainComponents("/local", "5000", component))
+                            if (component.Equals("Biometrics.FingerMatchingFast"))
+                                NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
                     }
                 }
 

@@ -63,6 +63,10 @@
       <HintPath>..\..\..\Program Files\AppFabric 1.1 for Windows Server\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Neurotec.Biometrics, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
+    </Reference>
     <Reference Include="Neurotec.Licensing, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>

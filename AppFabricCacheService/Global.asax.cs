@@ -6,7 +6,7 @@ namespace AppFabricCacheService
     public class Global : System.Web.HttpApplication
     {
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerMatching";
+        const string Components = "Biometrics.FingerMatchingFast, Biometrics.FingerMatching";
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -21,7 +21,8 @@ namespace AppFabricCacheService
                     {
                         //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio2: " + component);
                         //sw.WriteLine("app2: " + component);
-                        NLicense.ObtainComponents("/local", "5000", component);
+                        if (NLicense.ObtainComponents("/local", "5000", component))
+                            break;
                     }
                 }
 

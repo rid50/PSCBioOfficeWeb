@@ -11,7 +11,7 @@ namespace MemoryCacheService
     public class Global : System.Web.HttpApplication
     {
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Devices.FingerScanners,Images.WSQ";
-        const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerMatchingFast,Images.WSQ";
+        const string Components = "Biometrics.FingerMatchingFast";
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -20,16 +20,14 @@ namespace MemoryCacheService
                 //System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
-                    //sw.WriteLine("app: " + component);
+                    ////System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio: " + component);
+                    ////sw.WriteLine("app: " + component);
                     if (!NLicense.IsComponentActivated(component))
                     {
                         if (!NLicense.ObtainComponents("/local", "5000", component))
                         {
                             if (component.Equals("Biometrics.FingerMatchingFast"))
                                 NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
-                            else if (component.Equals("Biometrics.FingerExtractionFast"))
-                                NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerExtraction");
                         }
                     }
                 }

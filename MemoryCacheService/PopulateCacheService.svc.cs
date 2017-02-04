@@ -270,6 +270,17 @@ namespace MemoryCacheService
             //Task[] taskArray = new Task[1];
             int offset = 0;
 
+
+            //int diff = rowcount % Environment.ProcessorCount;
+            //if (diff != 0)
+            //    rowcount += Environment.ProcessorCount - diff;
+
+            //limit = rowcount / Environment.ProcessorCount;
+            //Task[] tasks = new Task[Environment.ProcessorCount];
+
+            //limit = rowcount;
+            //Task[] tasks = new Task[1];
+
             Stopwatch stw = new Stopwatch();
             stw.Start();
 

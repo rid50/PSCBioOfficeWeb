@@ -14,14 +14,16 @@ namespace MemoryCacheService
     {
         private ArrayList   _fingerList;
         private int         _gender;
+        private int         _firstMatch;
         private byte[]      _probeTemplate;
         private MemoryCache   _cache;
         private CancellationToken _ct;
 
-        public LookUp(ArrayList fingerList, int gender, byte[] probeTemplate, MemoryCache cache, CancellationToken ct)
+        public LookUp(ArrayList fingerList, int gender, int firstMatch, byte[] probeTemplate, MemoryCache cache, CancellationToken ct)
         {
             _fingerList     = fingerList;
             _gender         = gender;
+            _firstMatch     = firstMatch;
             _probeTemplate  = probeTemplate;
             _cache          = cache;
             _ct             = ct;
@@ -29,34 +31,31 @@ namespace MemoryCacheService
 
 //        enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
-        public UInt32 run(String regionName, int matchingThreshold)
+        public List<Tuple<string, int>> run(String regionName, int matchingThreshold)
         {
-            var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
+            //var result = new ArrayList();
 
+            var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
 
             //var items = _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName)).Select(x => x.Key);
             try
             {
                 matcher.enrollProbeTemplate(_fingerList, _probeTemplate);
 
-                byte[][] buffer = new byte[10][];
+                //byte[][] buffer = new byte[10][];
                 //int rowNumber = 0;
-                UInt32 retcode = 0;
+                //UInt32 retcode = 0;
                 foreach (KeyValuePair<string, object> item in _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName))
                                                     .Select(x => new KeyValuePair<string, object>(x.Key, x.Value)))
                 {
                     if (_gender == 1 && Regex.IsMatch(item.Key, "m") ||
                         _gender == 2 && Regex.IsMatch(item.Key, "w") ||
                         _gender == 0)
-
-                    //if (_gender == 1 && item.Key.EndsWith("m") ||
-                    //    _gender == 2 && item.Key.EndsWith("w") ||
-                    //    _gender == 0)
                     {
                         //throw new Exception("kuku");
 
                         //short numOfMatches = 0;
-                        bool matched = false;
+                        //bool matched = false;
                         //rowNumber++;
                         //continue;
                         //if (rowNumber % 1000 == 0)
@@ -64,7 +63,7 @@ namespace MemoryCacheService
 
                         //if (_ct.IsCancellationRequested)
                         //{
-                        _ct.ThrowIfCancellationRequested();
+                        //_ct.ThrowIfCancellationRequested();
                         //}
                         ////if (_ct.IsCancellationRequested)
                         ////{
@@ -79,22 +78,34 @@ namespace MemoryCacheService
                         //if (item.Key.Substring(k + 1) == "20005140")
                         //    matched = true;
 
-                        matched = matcher.match(_fingerList, item.Value as byte[][]);
-                        if (matched)
-                        {
-                            int i = item.Key.IndexOf("m");
-                            if (i == -1)
-                                i = item.Key.IndexOf("w");
+                        matcher.enrollGalleryTemplate(_fingerList, item.Value as byte[][], item.Key);
 
-                            retcode = UInt32.Parse(item.Key.Substring(i + 1));
-                            //retcode = UInt32.Parse(Regex.Replace(item.Key, ".$", ""));
-                            break;
-                        }
+                        //matched = matcher.match(_fingerList, item.Value as byte[][]);
+                        //if (matched)
+                        //{
+                        //    int i = item.Key.IndexOf("m");
+                        //    if (i == -1)
+                        //        i = item.Key.IndexOf("w");
+
+                        //    retcode = UInt32.Parse(item.Key.Substring(i + 1));
+                        //    //retcode = UInt32.Parse(Regex.Replace(item.Key, ".$", ""));
+                        //    break;
+                        //}
                     }
                 }
 
-                //_ct.ThrowIfCancellationRequested();
-                return retcode;
+                return matcher.identify(_firstMatch == 1);
+                ////if (ret != String.Empty)
+                ////{
+                ////    int i = ret.IndexOf("m");
+                ////    if (i == -1)
+                ////        i = ret.IndexOf("w");
+
+                ////    retcode = UInt32.Parse(ret.Substring(i + 1));
+                ////}
+
+                //////_ct.ThrowIfCancellationRequested();
+                ////return retcode;
             }
             //catch (Exception ex)
             //{

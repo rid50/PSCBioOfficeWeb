@@ -17,6 +17,8 @@ namespace BioProcessor
     {
         private NBiometricClient _biometricClient;
         private NSubject _probeSubject;
+        private NBiometricTask _enrollTask = null;
+
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
         public BioProcessor(byte FingersQualityThreshold = 48,
@@ -33,7 +35,6 @@ namespace BioProcessor
                 _biometricClient.FingersTemplateSize = FingersTemplateSize;
                 _biometricClient.FingersMatchingSpeed = MatchingSpeed;
                 _biometricClient.FingersFastExtraction = FingersFastExtraction;
-
             } catch (Exception ex)
             {
                 if (ex.InnerException != null)
@@ -186,6 +187,79 @@ namespace BioProcessor
             //    throw new Exception("Probe template is null");
         }
 
+
+        public void enrollGalleryTemplate(ArrayList fingerList, byte[][] galleryTemplate, string id)
+        {
+            if (_enrollTask == null)
+                _enrollTask = _biometricClient.CreateTask(NBiometricOperations.Enroll, null);
+
+            var template = new NFTemplate();
+
+            foreach (string finger in fingerList)
+            {
+                FingerListEnum f = (FingerListEnum)Enum.Parse(typeof(FingerListEnum), finger);
+                if (galleryTemplate[(int)f] != null && (galleryTemplate[(int)f]).Length != 0)
+                {
+                    var record = new NFRecord(galleryTemplate[(int)f]);
+                    if (record.Position == NFPosition.Unknown)
+                        record.Position = getFingerPositionByTag(f.ToString());
+
+                    template.Records.Add((NFRecord)record.Clone());
+                }
+            }
+
+            if (template == null)
+                throw new Exception("Gallery template is null");
+
+            using (var gallerySubject = NSubject.FromMemory(template.Save().ToArray()))
+            {
+                if (gallerySubject == null)
+                    throw new Exception("Gallery template is null");
+
+                gallerySubject.Id = string.Format("GallerySubject_{0}", id);
+                _enrollTask.Subjects.Add(gallerySubject);
+            }
+        }
+
+        public List<Tuple<string, int>> identify(bool firstMatch)
+        {
+            var list = new List<Tuple<string, int>>();
+            string retcode = string.Empty;
+
+            NBiometricStatus status = NBiometricStatus.None;
+
+            _biometricClient.PerformTask(_enrollTask);
+            status = _enrollTask.Status;
+            if (status != NBiometricStatus.Ok)
+            {
+                //Console.WriteLine("Enrollment was unsuccessful. Status: {0}.", status);
+                if (_enrollTask.Error != null) throw _enrollTask.Error;
+            }
+
+            _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
+            _biometricClient.MatchingFirstResultOnly = firstMatch;
+
+            status = _biometricClient.Identify(_probeSubject);
+
+            if (status == NBiometricStatus.Ok)
+            {
+                foreach (var matchingResult in _probeSubject.MatchingResults)
+                {
+                    int i = matchingResult.Id.IndexOf("m");
+                    if (i == -1)
+                        i = matchingResult.Id.IndexOf("w");
+
+                    list.Add(new Tuple<string, int>(matchingResult.Id.Substring(i + 1), matchingResult.Score));
+                }
+            }
+
+            _enrollTask.Dispose();
+            _enrollTask = null;
+
+            return list;
+        }
+
+
         //public bool match(byte[] galleryTemplate)
         public bool match(ArrayList fingerList, byte[][] galleryTemplate)
         {
@@ -193,7 +267,7 @@ namespace BioProcessor
 
             bool matched = true;
             bool matchMethod1 = false;
-            if (matchMethod1)
+            if (matchMethod1)               // call Verify for all fingers at ones
             {
                 _biometricClient.MatchingWithDetails = true;
                 //_biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
@@ -244,7 +318,7 @@ namespace BioProcessor
                         matched = false;
                 }
             }
-            else
+            else                       // call Verify for every finger, one by one
             {
                 var template = new NFTemplate();
                 foreach (string finger in fingerList)
@@ -319,7 +393,15 @@ namespace BioProcessor
                 _probeSubject.Dispose();
 
             if (_biometricClient != null)
+            {
                 _biometricClient.Dispose();
+                _biometricClient = null;
+            }
+
+            if (_enrollTask != null) {
+                _enrollTask.Dispose();
+                _enrollTask = null;
+            }
         }
 
         public int getImageQuality(byte[] wsqImage)

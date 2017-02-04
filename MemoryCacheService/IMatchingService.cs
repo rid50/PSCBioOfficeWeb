@@ -7,11 +7,12 @@ using System.Text;
 using System.Collections;
 //using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace MemoryCacheService
 {
     //[ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IMatchingCallback))]
-    [ServiceContract(SessionMode = SessionMode.Required)]
+    [ServiceContract(SessionMode = SessionMode.Allowed)]
     public interface IMatchingService
     {
         [OperationContract]
@@ -21,7 +22,7 @@ namespace MemoryCacheService
         //Task<int> Terminate();
 
         [OperationContract]
-        int Terminate(string guid);
+        void Terminate(string guid);
 
         //[OperationContractAttribute(AsyncPattern = true)]
         //IAsyncResult BeginTerminate(int msg, AsyncCallback callback, object asyncState);
@@ -38,10 +39,24 @@ namespace MemoryCacheService
         //[OperationContract(IsOneWay = true)]
         [OperationContract]
         [FaultContractAttribute(typeof(Exception))]
-        UInt32 match(string guid, ArrayList fingerList, int gender, byte[] probeTemplate, int matchingThreshold);
+        MatchingResult match(string guid, List<string> fingerList, int gender, int firstMatch, byte[] probeTemplate, int matchingThreshold);
 
         //[OperationContract]
         //void match2(ArrayList fingerList, int gender, byte[] probeTemplate, int matchingThreshold);
+    }
+
+    [DataContract]
+    [Serializable]
+    [KnownType(typeof(List<Tuple<string, int>>))] //required because ArrayList is used polymorphically
+    public class MatchingResult
+    {
+        private List<Tuple<string, int>> _list;
+        [DataMember]
+        public List<Tuple<string, int>> Result
+        {
+            get { return _list; }
+            set { _list = value; }
+        }
     }
 
     //public interface IMatchingCallback

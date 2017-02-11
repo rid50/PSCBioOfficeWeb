@@ -92,14 +92,24 @@
     <None Include="Properties\PublishProfiles\BiometricService.pubxml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService.disco" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />
+    <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
+    <None Include="Service References\ConfigurationService\ConfigurationService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ConfigurationService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Content Include="parameters.xml" />
+    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -110,12 +120,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="WSQImageService.svc" />
-    <None Include="Service References\ConfigurationService\ConfigurationService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -144,12 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ConfigurationService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ConfigurationService\ConfigurationService.wsdl" />
-    <None Include="Service References\ConfigurationService\ConfigurationService.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WsqSerializationBinder\WsqSerializationBinder.csproj">

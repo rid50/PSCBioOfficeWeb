@@ -1,12 +1,5 @@
-﻿//using System;
-using System.Collections.Generic;
-//using System.Linq;
-//using System.Runtime.Serialization.Formatters.Binary;
-//using Neurotec.Biometrics.Client;
-//using Neurotec.Biometrics;
-//using System.IO;
+﻿using System.Collections.Generic;
 using System.Collections;
-//using Neurotec.Images;
 using BiometricService.ConfigurationService;
 using DAO;
 //using WsqSerializationBinder;
@@ -15,21 +8,6 @@ namespace BiometricService
 {
     public class WSQImageService : IWSQImageService
     {
-        //public void DeserializeWSQArray(byte[][] serializedWSQArray, out ArrayList fingersCollection)
-        //public void processRawData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
-        //{
-        //    var bioProcessor = new BioProcessor.BioProcessor();
-        //    try
-        //    {
-        //        //bioProcessor.DeserializeWSQArray(serializedWSQArray[0], out fingersCollection);
-        //        bioProcessor.processRawData(serializedWSQArray, out fingersCollection);
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        throw new System.Exception(ex.Message);
-        //    }
-        //}
-
         //public ArrayList processEnrolledData(byte[][] serializedWSQArray)
         public void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection)
         {

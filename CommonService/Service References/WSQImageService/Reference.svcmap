@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8054180f-f42b-492b-9955-08e6c8c881a9" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="891d88f9-6faa-4e87-a54c-3fc92967c72d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -23,11 +23,11 @@
     <MetadataSource Address="http://localhost/BiometricService/WSQImageService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="WSQImageService.disco" MetadataType="Disco" ID="c5001960-1e04-48be-a0ab-2f059d6723a5" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?disco" />
-    <MetadataFile FileName="WSQImageService.xsd" MetadataType="Schema" ID="747f48b1-a201-49dc-a8c9-d03df198683c" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd2" />
-    <MetadataFile FileName="WSQImageService1.xsd" MetadataType="Schema" ID="add1fde6-9761-4a39-bb82-c183ef40f173" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd1" />
-    <MetadataFile FileName="WSQImageService.wsdl" MetadataType="Wsdl" ID="1eb8335c-f578-4bce-8498-abf10d780d2f" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?wsdl" />
-    <MetadataFile FileName="WSQImageService2.xsd" MetadataType="Schema" ID="9601e488-cb94-477f-8e89-cd34af50f20d" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd0" />
+    <MetadataFile FileName="WSQImageService.disco" MetadataType="Disco" ID="fe090b6a-84e6-4d4f-96c8-d2d6e2c327c8" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?disco" />
+    <MetadataFile FileName="WSQImageService.xsd" MetadataType="Schema" ID="17a5b02b-aaa6-4d54-af2d-acae31b65790" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd2" />
+    <MetadataFile FileName="WSQImageService1.xsd" MetadataType="Schema" ID="53868bbb-d4d9-495c-839b-2042e748d99e" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd1" />
+    <MetadataFile FileName="WSQImageService.wsdl" MetadataType="Wsdl" ID="fc5dfcb7-e425-4241-ba1d-e18d21c3c72b" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?wsdl" />
+    <MetadataFile FileName="WSQImageService2.xsd" MetadataType="Schema" ID="2c292c80-f2f2-4f3f-a56d-901d79d4388f" SourceId="1" SourceUrl="http://localhost/BiometricService/WSQImageService.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

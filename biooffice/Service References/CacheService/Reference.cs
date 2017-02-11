@@ -15,7 +15,7 @@ namespace biooffice.CacheService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FingerPrintDataContract", Namespace="http://schemas.datacontract.org/2004/07/CommonService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FingerPrintDataContract", Namespace="http://psc.com.kw")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ArrayList))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]

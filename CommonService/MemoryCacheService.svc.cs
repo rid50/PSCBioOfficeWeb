@@ -10,6 +10,8 @@ using System.Collections;
 using DAO;
 using System.Configuration;
 using CommonService.WSQImageService;
+
+//using CommonService.WSQImageService;
 //using DataService.ConfigurationService;
 
 
@@ -203,8 +205,12 @@ namespace CommonService
 
                     if (buffer[0] != null)
                     {
-                        var biometricService = new WSQImageServiceClient();
-                        _fingersCollection = biometricService.processEnrolledData(buffer);
+                        //var biometricService = new WSQImageServiceClient();
+                        //_fingersCollection = biometricService.processEnrolledData(buffer);
+
+                        var client = new WSQImageServiceClient();
+                        _fingersCollection = client.processEnrolledData(buffer);
+
 
                         //var bioProcessor = new BioProcessor.BioProcessor();
                         //bioProcessor.processEnrolledData(buffer, out fingersCollection);

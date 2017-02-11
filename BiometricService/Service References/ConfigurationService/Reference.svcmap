@@ -18,14 +18,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://PSCService/CommonService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost/CommonService/ConfigurationService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConfigurationService.wsdl" MetadataType="Wsdl" ID="3817ce19-e1f0-4130-838e-fbaf28fb0866" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?wsdl" />
-    <MetadataFile FileName="ConfigurationService.xsd" MetadataType="Schema" ID="51b9ad0a-f56b-43f0-87fa-f691a9c037a7" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ConfigurationService.disco" MetadataType="Disco" ID="f81272df-2341-406f-80bf-adc5fc14476f" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?disco" />
-    <MetadataFile FileName="ConfigurationService1.xsd" MetadataType="Schema" ID="ef7a1aa8-bda4-41eb-878f-4ad7cdd17d73" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="8b9c677d-67a1-445c-ad64-b4531aa3da72" SourceId="1" SourceUrl="http://pscservice/CommonService/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService3.xsd" MetadataType="Schema" ID="d0a9eced-1034-4bd5-846d-268f44c63876" SourceId="1" SourceUrl="http://localhost/CommonService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService31.xsd" MetadataType="Schema" ID="0882dc9b-5c61-4822-b644-e81692847a90" SourceId="1" SourceUrl="http://localhost/CommonService/ConfigurationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ConfigurationService1.wsdl" MetadataType="Wsdl" ID="a970f61e-cfea-4534-b63a-cc513a9bef70" SourceId="1" SourceUrl="http://localhost/CommonService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService1.disco" MetadataType="Disco" ID="b2bb38cf-2414-4fb5-be1e-8cc8c535d3ca" SourceId="1" SourceUrl="http://localhost/CommonService/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService32.xsd" MetadataType="Schema" ID="02da8929-077e-44b0-bf40-f8fa1b231dcc" SourceId="1" SourceUrl="http://localhost/CommonService/ConfigurationService.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

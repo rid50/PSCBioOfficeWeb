@@ -15,6 +15,10 @@ namespace BiometricService.ConfigurationService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ConfigurationService.IConfigurationService")]
     public interface IConfigurationService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/GetConfigurationManager", ReplyAction="http://tempuri.org/IConfigurationService/GetConfigurationManagerResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, string>))]
+        object GetConfigurationManager();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/AppSettings", ReplyAction="http://tempuri.org/IConfigurationService/AppSettingsResponse")]
         System.Collections.Generic.Dictionary<string, string> AppSettings();
         
@@ -53,6 +57,10 @@ namespace BiometricService.ConfigurationService {
         
         public ConfigurationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public object GetConfigurationManager() {
+            return base.Channel.GetConfigurationManager();
         }
         
         public System.Collections.Generic.Dictionary<string, string> AppSettings() {

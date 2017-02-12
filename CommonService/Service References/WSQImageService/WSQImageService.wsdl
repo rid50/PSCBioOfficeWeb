@@ -26,6 +26,12 @@
   <wsdl:message name="IWSQImageService_processEnrolledData_OutputMessage">
     <wsdl:part name="parameters" element="tns:processEnrolledDataResponse" />
   </wsdl:message>
+  <wsdl:message name="IWSQImageService_GetTemplatesFromWSQImage_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTemplatesFromWSQImage" />
+  </wsdl:message>
+  <wsdl:message name="IWSQImageService_GetTemplatesFromWSQImage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTemplatesFromWSQImageResponse" />
+  </wsdl:message>
   <wsdl:portType name="IWSQImageService">
     <wsdl:operation name="SaveWSQImage">
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/SaveWSQImage" message="tns:IWSQImageService_SaveWSQImage_InputMessage" />
@@ -34,6 +40,10 @@
     <wsdl:operation name="processEnrolledData">
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledData" message="tns:IWSQImageService_processEnrolledData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledDataResponse" message="tns:IWSQImageService_processEnrolledData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplatesFromWSQImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImage" message="tns:IWSQImageService_GetTemplatesFromWSQImage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImageResponse" message="tns:IWSQImageService_GetTemplatesFromWSQImage_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IWSQImageService" type="tns:IWSQImageService">
@@ -50,6 +60,15 @@
     </wsdl:operation>
     <wsdl:operation name="processEnrolledData">
       <soap:operation soapAction="http://tempuri.org/IWSQImageService/processEnrolledData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplatesFromWSQImage">
+      <soap:operation soapAction="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImage" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

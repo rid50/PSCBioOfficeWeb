@@ -21,8 +21,13 @@ namespace CommonService.WSQImageService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/processEnrolledData", ReplyAction="http://tempuri.org/IWSQImageService/processEnrolledDataResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(bool[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, byte[]>))]
         [return: System.ServiceModel.MessageParameterAttribute(Name="fingersCollection")]
         System.Collections.ArrayList processEnrolledData(byte[][] serializedWSQArray);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImage", ReplyAction="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImageResponse")]
+        System.Collections.Generic.Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer, bool[] processAsTemplate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -58,6 +63,10 @@ namespace CommonService.WSQImageService {
         
         public System.Collections.ArrayList processEnrolledData(byte[][] serializedWSQArray) {
             return base.Channel.processEnrolledData(serializedWSQArray);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer, bool[] processAsTemplate) {
+            return base.Channel.GetTemplatesFromWSQImage(id, buffer, processAsTemplate);
         }
     }
 }

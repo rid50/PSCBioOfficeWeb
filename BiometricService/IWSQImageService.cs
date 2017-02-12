@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BiometricService
 {
@@ -15,6 +16,9 @@ namespace BiometricService
 
         [OperationContract]
         void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection);
+
+        [OperationContract]
+        Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer, bool[] processAsTemplate);
         //ArrayList processEnrolledData(byte[][] serializedWSQArray);
     }
 }

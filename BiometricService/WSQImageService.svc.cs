@@ -23,6 +23,13 @@ namespace BiometricService
             //return fingersCollection;
         }
 
+        public Dictionary<string, byte[]> GetTemplatesFromWSQImage(int id, byte[] buffer, bool[] processAsTemplate)
+        {
+            var bioProcessor = new BioProcessor.BioProcessor();
+            Dictionary<string, byte[]> templates = bioProcessor.GetTemplatesFromWSQImage(id, buffer, processAsTemplate);
+            return templates;
+        }
+
         public void SaveWSQImage(int id, byte[] buffer)
         {
             var bioProcessor = new BioProcessor.BioProcessor();

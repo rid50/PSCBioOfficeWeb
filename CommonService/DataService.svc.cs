@@ -68,10 +68,25 @@ namespace CommonService
             }
         }
 
-        public void saveWsqInDatabase(int id, byte[] buffer)
+        public void SaveWSQInDatabase(int id, byte[] buffer, bool[] processAsTemplate)
         {
-            var biometricService = new WSQImageServiceClient();
-            biometricService.SaveWSQImage(id, buffer);
+            if (_settings["enroll"] == "db")
+            {
+                DataSource ds = null;
+
+                if (_settings["dbProvider"] == "dedicatedServer")
+                    ds = new DAO.Database(_settings);
+                else if (_settings["dbProvider"] == "cloudServer")
+                    ds = new DAO.CloudDatabase(_settings);
+                else
+                    throw new Exception("Wrong database provider settings");
+
+                var biometricService = new WSQImageServiceClient();
+                Dictionary<string, byte[]> templates = biometricService.GetTemplatesFromWSQImage(id, buffer, processAsTemplate);
+
+                var db = new DAO.Database(_settings);
+                db.SaveWSQTemplate(id, templates);
+            }
         }
     }
 }

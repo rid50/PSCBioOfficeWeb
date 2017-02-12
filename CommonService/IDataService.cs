@@ -12,10 +12,11 @@ namespace CommonService
     {
         [OperationContract]
         byte[] GetWSQImages(string id);
+
         [OperationContract]
         void SetWSQImages(int id, ref byte[] buffer);
 
         [OperationContract]
-        void saveWsqInDatabase(int id, byte[] buffer);
+        void SaveWSQInDatabase(int id, byte[] buffer, bool[] processAsTemplate);
     }
 }

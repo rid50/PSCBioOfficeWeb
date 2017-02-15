@@ -50,6 +50,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <IncludeAppPool>true</IncludeAppPool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DAO">
@@ -82,7 +84,9 @@
     <Content Include="ConfigurationService.svc" />
     <Content Include="DataService.svc" />
     <Content Include="MemoryCacheService.svc" />
-    <None Include="Properties\PublishProfiles\CommonService.pubxml" />
+    <None Include="Properties\PublishProfiles\CommonService.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="parameters.xml" />
     <None Include="Service References\WSQImageService\WSQImageService.disco" />
     <None Include="Service References\WSQImageService\configuration91.svcinfo" />

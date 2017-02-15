@@ -10,6 +10,8 @@ using System.Collections;
 using DAO;
 using System.Configuration;
 using CommonService.WSQImageService;
+using System.IO;
+using System.Drawing;
 
 //using CommonService.WSQImageService;
 //using DataService.ConfigurationService;
@@ -202,23 +204,33 @@ namespace CommonService
                     //buffer = ds.GetImage(IMAGE_TYPE.fingerTemplates, Convert.ToInt32(id));
                     //else
                     buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
-
-                    if (buffer[0] != null)
+                    try
                     {
-                        //var biometricService = new WSQImageServiceClient();
-                        //_fingersCollection = biometricService.processEnrolledData(buffer);
-
-                        var client = new WSQImageServiceClient();
-                        _fingersCollection = client.processEnrolledData(buffer);
-
-
-                        //var bioProcessor = new BioProcessor.BioProcessor();
-                        //bioProcessor.processEnrolledData(buffer, out fingersCollection);
-                        MemoryCache.Default["id"] = id;
-                        if (_fingersCollection != null)
+                        if (buffer[0] != null)
                         {
-                            MemoryCache.Default["fingersCollection"] = _fingersCollection;
-                            MemoryCache.Default["dirty"] = "false";
+                            //var biometricService = new WSQImageServiceClient();
+                            //_fingersCollection = biometricService.processEnrolledData(buffer);
+
+                            var client = new WSQImageServiceClient();
+                            _fingersCollection = client.processEnrolledData(buffer);
+
+
+                            //var bioProcessor = new BioProcessor.BioProcessor();
+                            //bioProcessor.processEnrolledData(buffer, out fingersCollection);
+                            MemoryCache.Default["id"] = id;
+                            if (_fingersCollection != null)
+                            {
+                                MemoryCache.Default["fingersCollection"] = _fingersCollection;
+                                MemoryCache.Default["dirty"] = "false";
+                            }
+                        }
+                    } catch(Exception ex)
+                    {
+                        while (ex.InnerException != null)
+                            ex = ex.InnerException;
+
+                        for (int i = 0; i < 10; i++) {
+                            _fingersCollection.Add(getEmptyBitmap());
                         }
                     }
                 }
@@ -288,5 +300,41 @@ namespace CommonService
         //    //string setting = "aa";
         //    return setting;
         //}
+
+        private byte[] getEmptyBitmap()
+        {
+            using (var ms = new MemoryStream())
+            {
+                //Properties.Resources.redcross
+                //Image newImage = Image.
+                //Bitmap bmp = new Bitmap(65, 95);
+                Bitmap bmp = new Bitmap(100, 120);
+
+                //Bitmap bmp = new Bitmap(65, 95, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
+                //bmp.Palette = System.Drawing.Imaging.ColorPalette.
+
+                int x, y;
+
+                // Loop through the images pixels to reset color. 
+                for (x = 0; x < bmp.Width; x++)
+                {
+                    for (y = 0; y < bmp.Height; y++)
+                    {
+                        //Color pixelColor = bmp.GetPixel(x, y);
+                        //int luma = (int)(pixelColor.R * 0.3 + pixelColor.G * 0.59 + pixelColor.B * 0.11);
+                        //bmp.SetPixel(x, y, Color.FromArgb(luma, luma, luma));
+
+                        //Color newColor = Color.FromArgb(pixelColor.R, 0, 0);
+                        //#eee
+                        Color newColor = System.Drawing.ColorTranslator.FromHtml("#eee");
+                        bmp.SetPixel(x, y, newColor);
+                    }
+                }
+
+
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                return ms.ToArray();
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Web.SessionState;
 //using BioProcessor;
 using biooffice.CacheService;
 using System.Web.Script.Serialization;
+using System.Web.Services;
 //using ImageHandler;
 //using Microsoft.ApplicationServer.Caching;
 
@@ -30,41 +31,42 @@ namespace WebHandlers
         //private static IList<string> licensesBss = null;
 
         //System.IO.StreamWriter file = null;
-/*
-        public ImageHandler() : base()
-        {
-            
-            //System.IO.File.WriteAllText(HttpContext.Current.Server.MapPath("\\BioProcessorLog.txt"), "ctor");
+        /*
+                public ImageHandler() : base()
+                {
 
-            if (licensesMain == null)
-            {
-            //    file = new System.IO.StreamWriter(HttpContext.Current.Server.MapPath("\\BioProcessorLog.txt"), true);
-            //    file.WriteLine("wsq: ctor");
-            //    file.Flush();
+                    //System.IO.File.WriteAllText(HttpContext.Current.Server.MapPath("\\BioProcessorLog.txt"), "ctor");
 
-                initFingersLicences(HttpContext.Current);
-            }
-        }
+                    if (licensesMain == null)
+                    {
+                    //    file = new System.IO.StreamWriter(HttpContext.Current.Server.MapPath("\\BioProcessorLog.txt"), true);
+                    //    file.WriteLine("wsq: ctor");
+                    //    file.Flush();
 
-        ~ImageHandler()
-        {
-            //throw new Exception("destructor");
+                        initFingersLicences(HttpContext.Current);
+                    }
+                }
 
-            if (licensesMain != null)
-            {
-                releaseFingersLicences();
-                licensesMain = null;
-            }
-            //file.WriteLine("wsq: dtor");
-            //file.Flush();
-            //file.Close();
-        }
- */       
+                ~ImageHandler()
+                {
+                    //throw new Exception("destructor");
+
+                    if (licensesMain != null)
+                    {
+                        releaseFingersLicences();
+                        licensesMain = null;
+                    }
+                    //file.WriteLine("wsq: dtor");
+                    //file.Flush();
+                    //file.Close();
+                }
+         */
+        [WebMethod]
         public void ProcessRequest(HttpContext context)
         {
-//#if DEBUG
-//            System.Diagnostics.Debugger.Launch();
-//#endif
+            //#if DEBUG
+            //            System.Diagnostics.Debugger.Launch();
+            //#endif
 
             //context.Response.ContentType = "application/xop+xml";
             context.Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -118,8 +120,8 @@ namespace WebHandlers
 
             //_context = context;
             //_fingersCollectionList = new Dictionary<int, byte[]>();
-//            IList<string> licensesMain = null;
-//            IList<string> licensesBss = null;
+            //            IList<string> licensesMain = null;
+            //            IList<string> licensesBss = null;
             string id = context.Request.QueryString["id"];
             try {
                 Int32.Parse(id);
@@ -188,7 +190,7 @@ namespace WebHandlers
                     {
                         fingersCollection = cache.GetQualityFingerCollection(id);
 
-//                        if (context.Application["fingersCollection"] == null || id != context.Application["id"] as String)
+                        //                        if (context.Application["fingersCollection"] == null || id != context.Application["id"] as String)
                         //if (HttpRuntime.Cache["fingersCollection"] == null || id != HttpRuntime.Cache["id"] as String)
 
 
@@ -198,84 +200,86 @@ namespace WebHandlers
 
                         //if (MemoryCache.Default["fingersCollection"] == null || id != MemoryCache.Default["id"] as String)
                         //if (cfc == null || id != cId)
-/*
-                        var cache = new MemoryCacheServiceClient();
-                        //if (!cache.Contains(id))
-                        if (!cache.IsDirty(id))
-                        {
-                            cache.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
+                        /*
+                                                var cache = new MemoryCacheServiceClient();
+                                                //if (!cache.Contains(id))
+                                                if (!cache.IsDirty(id))
+                                                {
+                                                    cache.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
-//                            if (context.Application["fingersCollection"] != null)
-//                            if (HttpRuntime.Cache["fingersCollection"] != null)
-//                            if (MemoryCache.Default["fingersCollection"] != null)
-                            //if (cfc != null)
-                            //{
-                                //context.Session.Remove("FingersLicences");
-//                                context.Application.Remove("fingersCollection");
-//                                context.Application.Remove("id");
-//                                HttpRuntime.Cache.Remove("fingersCollection");
-//                                HttpRuntime.Cache.Remove("id");
-                                //MemoryCache.Default.Remove("fingersCollection");
-                                //MemoryCache.Default.Remove("id");
-                              //  cache.Remove("fingersCollection");
-                              //  cache.Remove("id");
-                                //MemoryCache.Default.Remove("fingersCollection");
-                                //MemoryCache.Default.Remove("id");
-                                //releaseFingersLicences();
-                                //initFingersLicences(context);
-                            //}
+                        //                            if (context.Application["fingersCollection"] != null)
+                        //                            if (HttpRuntime.Cache["fingersCollection"] != null)
+                        //                            if (MemoryCache.Default["fingersCollection"] != null)
+                                                    //if (cfc != null)
+                                                    //{
+                                                        //context.Session.Remove("FingersLicences");
+                        //                                context.Application.Remove("fingersCollection");
+                        //                                context.Application.Remove("id");
+                        //                                HttpRuntime.Cache.Remove("fingersCollection");
+                        //                                HttpRuntime.Cache.Remove("id");
+                                                        //MemoryCache.Default.Remove("fingersCollection");
+                                                        //MemoryCache.Default.Remove("id");
+                                                      //  cache.Remove("fingersCollection");
+                                                      //  cache.Remove("id");
+                                                        //MemoryCache.Default.Remove("fingersCollection");
+                                                        //MemoryCache.Default.Remove("id");
+                                                        //releaseFingersLicences();
+                                                        //initFingersLicences(context);
+                                                    //}
 
-                            //initFingersLicences(context, out licensesMain, out licensesBss);
+                                                    //initFingersLicences(context, out licensesMain, out licensesBss);
 
-                            buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
+                                                    buffer = ds.GetImage(IMAGE_TYPE.wsq, Convert.ToInt32(id));
 
-                            var bioProcessor = new BioProcessor.BioProcessor();
-                            bioProcessor.processEnrolledData(buffer, out fingersCollection);
+                                                    var bioProcessor = new BioProcessor.BioProcessor();
+                                                    bioProcessor.processEnrolledData(buffer, out fingersCollection);
 
-                            //ms = new MemoryStream(buffer);
+                                                    //ms = new MemoryStream(buffer);
 
-                            // Construct a BinaryFormatter and use it to deserialize the data to the stream.
-                            //BinaryFormatter formatter = new BinaryFormatter();
-                            //formatter.Binder = new GenericBinder<WsqImage>();
-                            //fingersCollection = formatter.Deserialize(ms) as ArrayList;
-//                            context.Application["id"] = id;
-//                            context.Application["fingersCollection"] = fingersCollection;
-//                            HttpRuntime.Cache["id"] = id;
-//                            HttpRuntime.Cache["fingersCollection"] = fingersCollection;
-//                            cache.Add("fingersCollection", fingersCollection);
-//                            cache.Add("id", id);
-                            //cache.Put("id", id);
-                            //cache.Put("fingersCollection", fingersCollection);
-                            var dataContract = new FingerPrintDataContract();
-                            dataContract.id = id;
-                            dataContract.fingersCollection = fingersCollection;
-                            cache.Put(dataContract);
-                            //MemoryCache.Default["id"] = id;
-                            //MemoryCache.Default["fingersCollection"] = fingersCollection;
-                            //throw new Exception(fingersCollection.Count.ToString());
-                            //releaseFingersLicences(licensesMain, licensesBss);
+                                                    // Construct a BinaryFormatter and use it to deserialize the data to the stream.
+                                                    //BinaryFormatter formatter = new BinaryFormatter();
+                                                    //formatter.Binder = new GenericBinder<WsqImage>();
+                                                    //fingersCollection = formatter.Deserialize(ms) as ArrayList;
+                        //                            context.Application["id"] = id;
+                        //                            context.Application["fingersCollection"] = fingersCollection;
+                        //                            HttpRuntime.Cache["id"] = id;
+                        //                            HttpRuntime.Cache["fingersCollection"] = fingersCollection;
+                        //                            cache.Add("fingersCollection", fingersCollection);
+                        //                            cache.Add("id", id);
+                                                    //cache.Put("id", id);
+                                                    //cache.Put("fingersCollection", fingersCollection);
+                                                    var dataContract = new FingerPrintDataContract();
+                                                    dataContract.id = id;
+                                                    dataContract.fingersCollection = fingersCollection;
+                                                    cache.Put(dataContract);
+                                                    //MemoryCache.Default["id"] = id;
+                                                    //MemoryCache.Default["fingersCollection"] = fingersCollection;
+                                                    //throw new Exception(fingersCollection.Count.ToString());
+                                                    //releaseFingersLicences(licensesMain, licensesBss);
 
-                        }
-                        else
-                            fingersCollection = cache.GetFingerCollection();
-//                        fingersCollection = MemoryCache.Default["fingersCollection"] as ArrayList;
-//                        fingersCollection = HttpRuntime.Cache["fingersCollection"] as ArrayList;
-//                        fingersCollection = context.Application["fingersCollection"] as ArrayList;
+                                                }
+                                                else
+                                                    fingersCollection = cache.GetFingerCollection();
+                        //                        fingersCollection = MemoryCache.Default["fingersCollection"] as ArrayList;
+                        //                        fingersCollection = HttpRuntime.Cache["fingersCollection"] as ArrayList;
+                        //                        fingersCollection = context.Application["fingersCollection"] as ArrayList;
 
 
-                        //throw new Exception((fingersCollection == null).ToString());
-                        //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].GetType().ToString());
+                                                //throw new Exception((fingersCollection == null).ToString());
+                                                //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].GetType().ToString());
 
-                        //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].ToString());
-                        //byte[] buffer2 = new byte[0];
-                        //image.ToByteArray(ImageFormat.Bmp);
-                        //buffer = fingersCollection[dict[wsqQuery]] as byte[];
-                        //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].ToString());
-                        //throw new Exception("type: " + buffer2.GetType().ToString());
+                                                //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].ToString());
+                                                //byte[] buffer2 = new byte[0];
+                                                //image.ToByteArray(ImageFormat.Bmp);
+                                                //buffer = fingersCollection[dict[wsqQuery]] as byte[];
+                                                //throw new Exception("type: " + fingersCollection[dict[wsqQuery]].ToString());
+                                                //throw new Exception("type: " + buffer2.GetType().ToString());
 
-                        //WsqImage wsqImage = fingersCollection[dict[wsqQuery]] as WsqImage;
-                        //buffer = ConvertWSQToBmp(wsqImage);
-*/
+                                                //WsqImage wsqImage = fingersCollection[dict[wsqQuery]] as WsqImage;
+                                                //buffer = ConvertWSQToBmp(wsqImage);
+                        */
+                        //throw new Exception("kuku");
+
                         if (fingersCollection != null)
                             context.Response.BinaryWrite(fingersCollection[dict[wsqQuery]] as byte[]);
                         else
@@ -284,6 +288,7 @@ namespace WebHandlers
                     }
                     catch (Exception ex)
                     {
+                        //throw new Exception("kuku2");
                         //context.Response.Write("<script language=javascript>alert('ERROR');</script>");
                         //context.Response.Write(String.Format("<script>$('#error_box').val({0});</script>", ex.ToString()));
                         //context.Response.Flush();
@@ -294,6 +299,9 @@ namespace WebHandlers
                         //context.Response.StatusCode = 404;
                         //context.Response.SuppressContent = true;
                         //HttpContext.Current.ApplicationInstance.CompleteRequest();
+                        while (ex.InnerException != null)
+                            ex = ex.InnerException;
+
                         context.Application["myerror"] = ex.Message;
                         throw new Exception(ex.Message);
                     }

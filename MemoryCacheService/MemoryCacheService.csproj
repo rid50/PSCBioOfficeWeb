@@ -43,6 +43,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <IncludeAppPool>true</IncludeAppPool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BioProcessor">
@@ -82,7 +84,9 @@
     <Content Include="MatchingService.svc" />
     <Content Include="parameters.xml" />
     <Content Include="PopulateCacheService.svc" />
-    <None Include="Properties\PublishProfiles\MemoryCacheService.pubxml" />
+    <None Include="Properties\PublishProfiles\MemoryCacheService.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ConfigurationService\ConfigurationService.disco" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />

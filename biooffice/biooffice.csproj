@@ -50,6 +50,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -220,6 +222,7 @@
   <ItemGroup>
     <Compile Include="ImageHandler\ImageHandler.ashx.cs">
       <DependentUpon>ImageHandler.ashx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\CacheService\Reference.cs">
@@ -240,7 +243,9 @@
     <Content Include="bundle\Messages.properties" />
     <Content Include="bundle\Messages_ar.properties" />
     <Content Include="bundle\Messages_en.properties" />
-    <Content Include="ImageHandler\ImageHandler.ashx" />
+    <Content Include="ImageHandler\ImageHandler.ashx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\biooffice.pubxml" />
   </ItemGroup>
   <ItemGroup>

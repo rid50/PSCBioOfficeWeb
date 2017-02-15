@@ -20,7 +20,7 @@ namespace BiometricService
             }
             catch (System.Exception ex)
             {
-                throw new FaultException<ValidationException>(new ValidationException(), new FaultReason(ex.Message));
+                throw new FaultException(ex.Message);
                 //throw new System.Exception(ex.Message);
             }
             //return fingersCollection;

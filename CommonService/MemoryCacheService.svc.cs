@@ -227,7 +227,7 @@ namespace CommonService
                             }
                         }
                     }
-                    catch (FaultException<System.ComponentModel.DataAnnotations.ValidationException> fault)
+                    catch (FaultException fault)
                     {
                         _fingersCollection = new ArrayList();
                         for (int i = 0; i < 10; i++)
@@ -235,7 +235,7 @@ namespace CommonService
                             _fingersCollection.Add(getEmptyBitmap());
                         }
 
-                        errorMessage = fault.Detail.ToString();
+                        errorMessage = fault.Reason.ToString();
 
                         ////labelCacheUnavailable.Text = fault.Detail;
                         //fingerList = null;

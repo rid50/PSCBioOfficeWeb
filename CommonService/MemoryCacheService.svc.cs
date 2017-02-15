@@ -172,8 +172,10 @@ namespace CommonService
         //    //return buffer[0];
         //}
 
-        public ArrayList GetQualityFingerCollection(string id)
+        public ArrayList GetQualityFingerCollection(string id, out string errorMessage)
         {
+            errorMessage = String.Empty;
+
             if (IsDirty(id))
             {
                 _fingersCollection = null;
@@ -224,15 +226,42 @@ namespace CommonService
                                 MemoryCache.Default["dirty"] = "false";
                             }
                         }
-                    } catch(Exception ex)
+                    }
+                    catch (FaultException<System.ComponentModel.DataAnnotations.ValidationException> fault)
                     {
-                        while (ex.InnerException != null)
-                            ex = ex.InnerException;
-
-                        for (int i = 0; i < 10; i++) {
+                        _fingersCollection = new ArrayList();
+                        for (int i = 0; i < 10; i++)
+                        {
                             _fingersCollection.Add(getEmptyBitmap());
                         }
+
+                        errorMessage = fault.Detail.ToString();
+
+                        ////labelCacheUnavailable.Text = fault.Detail;
+                        //fingerList = null;
+                        ////labelCacheUnavailable.Text = string.Format("Cache is unavailable ({0}), Identification mode is disabled", fault.Detail);
+                        //labelCacheUnavailable.Text = "AppFabric caching service is not available. Launch PowerShell command \"get-cachehost\" to see if it is down";
+                        ////MessageBox.Show(string.Format("{0}", fault.Detail));
+                        ////EnableControls(false);
+                        //manageCacheButton.Tag = "off";
+                        //manageCacheButton.Enabled = false;
+                        //radioButtonIdentify.Tag = "off";
+                        //radioButtonIdentify.Enabled = false;
+                        //buttonScan.Enabled = false;
                     }
+                    //catch (Exception ex)
+                    //{
+                    //    //while (ex.InnerException != null)
+                    //    //    ex = ex.InnerException;
+
+                    //    _fingersCollection = new ArrayList();
+                    //    for (int i = 0; i < 10; i++)
+                    //    {
+                    //        _fingersCollection.Add(getEmptyBitmap());
+                    //    }
+
+                    //    errorMessage = "Error happened";
+                    //}
                 }
 
                 return _fingersCollection;

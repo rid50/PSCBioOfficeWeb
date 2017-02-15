@@ -23,7 +23,7 @@ namespace CommonService
         //ArrayList GetRawFingerCollection(string id);
 
         [OperationContract]
-        ArrayList GetQualityFingerCollection(string id);
+        ArrayList GetQualityFingerCollection(string id, out string errorMessage);
 
         [OperationContract]
         byte[] GetPicture(string id);

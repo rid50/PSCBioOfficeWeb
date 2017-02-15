@@ -75,9 +75,17 @@ $(document).ready(function () {
 	
 	$('.wsq, .wsq_to_scan').on('load', function (e) {
 		//if ($('#div_wsq').css('display') == 'none')
-		//$('#pre_scanned_fingers').slideDown(500);
-		if (--numberOfFingerImages == 0)
-			$.unblockUI();
+	    //$('#pre_scanned_fingers').slideDown(500);
+	    $.get("ImageHandler/ImageHandler.ashx?getSessionState=")
+		    .done(function (data) {
+		        //alert(data);
+		        $('#error_box').val(data);
+		    });
+
+	    if (--numberOfFingerImages == 0) {
+	        $.get("ImageHandler/ImageHandler.ashx?getSessionState=&clearError=");
+	        $.unblockUI();
+	    }
 	})
 	.on('error', function (e) {
 		//if ($('#div_wsq').css('display') == 'none')

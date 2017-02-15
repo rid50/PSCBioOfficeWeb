@@ -15,6 +15,7 @@ namespace BiometricService
         ////void DeserializeWSQArray(byte[][] serializedWSQArray, out ArrayList fingersCollection);
 
         [OperationContract]
+        [FaultContractAttribute(typeof(System.ComponentModel.DataAnnotations.ValidationException))]
         void processEnrolledData(byte[][] serializedWSQArray, out ArrayList fingersCollection);
 
         [OperationContract]

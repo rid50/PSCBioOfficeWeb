@@ -361,7 +361,7 @@ namespace MemoryCacheService
 
                 //return retcode;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //foreach (var t in tasks)
                 //{

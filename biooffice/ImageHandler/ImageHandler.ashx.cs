@@ -186,9 +186,10 @@ namespace WebHandlers
 
                     ArrayList fingersCollection = null;
                     //MemoryStream ms = null;
+                    string errorMessage = null;
                     try
                     {
-                        fingersCollection = cache.GetQualityFingerCollection(id);
+                        fingersCollection = cache.GetQualityFingerCollection(out errorMessage, id);
 
                         //                        if (context.Application["fingersCollection"] == null || id != context.Application["id"] as String)
                         //if (HttpRuntime.Cache["fingersCollection"] == null || id != HttpRuntime.Cache["id"] as String)
@@ -281,7 +282,12 @@ namespace WebHandlers
                         //throw new Exception("kuku");
 
                         if (fingersCollection != null)
+                        {
+                            if (errorMessage != "")
+                                context.Application["myerror"] = errorMessage;
+
                             context.Response.BinaryWrite(fingersCollection[dict[wsqQuery]] as byte[]);
+                        }
                         else
                             throw new Exception("Fingerprint image does not exist");
                         //context.Response.Flush();
@@ -299,8 +305,8 @@ namespace WebHandlers
                         //context.Response.StatusCode = 404;
                         //context.Response.SuppressContent = true;
                         //HttpContext.Current.ApplicationInstance.CompleteRequest();
-                        while (ex.InnerException != null)
-                            ex = ex.InnerException;
+                        //while (ex.InnerException != null)
+                        //    ex = ex.InnerException;
 
                         context.Application["myerror"] = ex.Message;
                         throw new Exception(ex.Message);

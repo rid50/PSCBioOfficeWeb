@@ -209,7 +209,7 @@ namespace biooffice.CacheService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.FingerPrintDataContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(biooffice.CacheService.WsqImage))]
-        System.Collections.ArrayList GetQualityFingerCollection(string id);
+        System.Collections.ArrayList GetQualityFingerCollection(out string errorMessage, string id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMemoryCacheService/GetPicture", ReplyAction="http://tempuri.org/IMemoryCacheService/GetPictureResponse")]
         byte[] GetPicture(string id);
@@ -253,8 +253,8 @@ namespace biooffice.CacheService {
             base.Channel.SetDirty();
         }
         
-        public System.Collections.ArrayList GetQualityFingerCollection(string id) {
-            return base.Channel.GetQualityFingerCollection(id);
+        public System.Collections.ArrayList GetQualityFingerCollection(out string errorMessage, string id) {
+            return base.Channel.GetQualityFingerCollection(out errorMessage, id);
         }
         
         public byte[] GetPicture(string id) {

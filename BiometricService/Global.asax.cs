@@ -33,14 +33,15 @@ namespace BiometricService
                 while (ex.InnerException != null)
                     ex = ex.InnerException;
 
+                //throw new Exception("Error FingersExtractor, FingersMatcher: " + ex.Message);
                 throw new System.ServiceModel.FaultException("Error FingersExtractor, FingersMatcher: " + ex.Message, System.ServiceModel.FaultCode.CreateSenderFaultCode("a1", "b1"));
             }
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            Exception exc = Server.GetLastError();
-            throw new System.ServiceModel.FaultException(exc.Message);
+            //Exception exc = Server.GetLastError();
+            //throw new System.ServiceModel.FaultException(exc.Message);
 
             //Response.Write(exc.Message);
             //Server.ClearError();

@@ -2,6 +2,8 @@
 using System.Collections;
 using BiometricService.ConfigurationService;
 using DAO;
+using System.ServiceModel;
+using System.ComponentModel.DataAnnotations;
 //using WsqSerializationBinder;
 
 namespace BiometricService
@@ -18,7 +20,8 @@ namespace BiometricService
             }
             catch (System.Exception ex)
             {
-                throw new System.Exception(ex.Message);
+                throw new FaultException<ValidationException>(new ValidationException(), new FaultReason(ex.Message));
+                //throw new System.Exception(ex.Message);
             }
             //return fingersCollection;
         }

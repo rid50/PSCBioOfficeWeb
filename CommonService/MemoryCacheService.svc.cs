@@ -227,7 +227,7 @@ namespace CommonService
                             }
                         }
                     }
-                    catch (FaultException fault)
+                    catch (Exception fault)
                     {
                         _fingersCollection = new ArrayList();
                         for (int i = 0; i < 10; i++)
@@ -235,7 +235,7 @@ namespace CommonService
                             _fingersCollection.Add(getEmptyBitmap());
                         }
 
-                        errorMessage = fault.Reason.ToString();
+                        errorMessage = fault.Message;
 
                         ////labelCacheUnavailable.Text = fault.Detail;
                         //fingerList = null;

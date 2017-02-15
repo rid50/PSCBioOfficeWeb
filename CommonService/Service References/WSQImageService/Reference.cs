@@ -19,6 +19,7 @@ namespace CommonService.WSQImageService {
         void SaveWSQImage(int id, byte[] buffer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWSQImageService/processEnrolledData", ReplyAction="http://tempuri.org/IWSQImageService/processEnrolledDataResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IWSQImageService/processEnrolledDataStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(bool[]))]

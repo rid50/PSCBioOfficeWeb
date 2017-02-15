@@ -26,6 +26,9 @@
   <wsdl:message name="IWSQImageService_processEnrolledData_OutputMessage">
     <wsdl:part name="parameters" element="tns:processEnrolledDataResponse" />
   </wsdl:message>
+  <wsdl:message name="IWSQImageService_processEnrolledData_StringFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/" name="detail" element="q1:string" />
+  </wsdl:message>
   <wsdl:message name="IWSQImageService_GetTemplatesFromWSQImage_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTemplatesFromWSQImage" />
   </wsdl:message>
@@ -40,6 +43,7 @@
     <wsdl:operation name="processEnrolledData">
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledData" message="tns:IWSQImageService_processEnrolledData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledDataResponse" message="tns:IWSQImageService_processEnrolledData_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IWSQImageService/processEnrolledDataStringFault" name="StringFault" message="tns:IWSQImageService_processEnrolledData_StringFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetTemplatesFromWSQImage">
       <wsdl:input wsaw:Action="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImage" message="tns:IWSQImageService_GetTemplatesFromWSQImage_InputMessage" />
@@ -66,6 +70,9 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="StringFault">
+        <soap:fault use="literal" name="StringFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetTemplatesFromWSQImage">
       <soap:operation soapAction="http://tempuri.org/IWSQImageService/GetTemplatesFromWSQImage" style="document" />

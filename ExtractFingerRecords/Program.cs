@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Neurotec.Licensing;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ExtractFingerRecords
 {
@@ -9,10 +11,20 @@ namespace ExtractFingerRecords
     {
         public int LoopCounter;
         public int MaxPoolSize;
+        public CancellationToken ct;
     }
 
     class Program
     {
+        private delegate bool ConsoleCtrlHandlerDelegate(int sig);
+
+        [DllImport("Kernel32")]
+        private static extern bool SetConsoleCtrlHandler(ConsoleCtrlHandlerDelegate handler, bool add);
+
+        static ConsoleCtrlHandlerDelegate _consoleCtrlHandler;
+
+        private static CancellationTokenSource _tokenSource;
+
         private static int Usage()
         {
             Console.WriteLine("usage:");
@@ -24,6 +36,7 @@ namespace ExtractFingerRecords
             Console.ReadKey();
             return 1;
         }
+
         //[STAThread]
         static int Main(string[] args)
         {
@@ -32,25 +45,30 @@ namespace ExtractFingerRecords
                 return Usage();
             }
 
+            _consoleCtrlHandler += s =>
+            {
+                if (_tokenSource != null)
+                {
+                    _tokenSource.Cancel();
+                }
+                return true;
+            };
+
+            SetConsoleCtrlHandler(_consoleCtrlHandler, true);
+
             //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
-            const string Components = "Biometrics.FingerExtraction,Images.WSQ";
+            const string Components = "Biometrics.FingerExtractionFast,Images.WSQ";
             try
             {
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    NLicense.ObtainComponents("/local", "5000", component);
+                    if (!NLicense.ObtainComponents("/local", "5000", component))
+                        if (component.Equals("Biometrics.FingerMatchingFast"))
+                            NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
+                        else if (component.Equals("Biometrics.FingerExtractionFast"))
+                            NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerExtraction");
                 }
 
-                //Helpers.ObtainLicenses(licensesMain);
-
-                //try
-                //{
-                //    Helpers.ObtainLicenses(licensesBss);
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine(ex.ToString());
-                //}
                 Run(args);
 
             }
@@ -61,54 +79,13 @@ namespace ExtractFingerRecords
                 Console.WriteLine(" ------------------ Press any key to close -----------------------");
                 Console.ReadKey();
                 return 1;
-                //MessageBox.Show("Error. Details: " + ex.Message, "Fingers Sample", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 NLicense.ReleaseComponents(Components);
-                //Helpers.ReleaseLicenses(licensesMain);
-                //Helpers.ReleaseLicenses(licensesBss);
             }
 
             return 0;
-            //IList<string> licensesMain = new List<string>(new string[] { "FingersExtractor", "FingersMatcher" });
-            //IList<string> licensesBss = new List<string>(new string[] { "FingersBSS" });
-
-            //try
-            //{
-            //    Helpers.ObtainLicenses(licensesMain);
-
-            //    try
-            //    {
-            //        Helpers.ObtainLicenses(licensesBss);
-
-            //        //if (Data.NFExtractor == null)
-            //        //{
-            //        //    Data.NFExtractor = new NFExtractor();
-            //        //    Data.UpdateNfe();
-            //        //    //Data.UpdateNfeSettings();
-            //        //}
-
-            //        Run();
-            //        //Run(Data.NFExtractor);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine(ex.ToString());
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Error. Details: " + ex.Message);
-            //}
-            //finally
-            //{
-            //    Helpers.ReleaseLicenses(licensesMain);
-            //    Helpers.ReleaseLicenses(licensesBss);
-            //}
-
-            //var worker = new BackgroundWorkerProcess();
-            //worker.startProcess();
         }
         //static void Run(NFExtractor NFExtractor)
         static void Run(string[] args)
@@ -139,12 +116,12 @@ namespace ExtractFingerRecords
 
             int limit = 10000;
 //            int.TryParse(System.Configuration.ConfigurationManager.AppSettings["chunkSize"], out limit);
-            if (limit == 0)
-            {
-                Console.WriteLine("------- Chunk size is invalid, press any key to close -------");
-                Console.ReadKey();
-                return;
-            }
+            //if (limit == 0)
+            //{
+            //    Console.WriteLine("------- Chunk size is invalid, press any key to close -------");
+            //    Console.ReadKey();
+            //    return;
+            //}
 
             int topindex = (int)(rowcount / limit);
             if (rowcount % limit != 0)
@@ -191,16 +168,22 @@ namespace ExtractFingerRecords
                 }
             }
 
+            _tokenSource = new CancellationTokenSource();
+            CancellationToken ct = _tokenSource.Token;
+
             //return;
-            //limit = 20;
-            //taskArray = new Task[10];
+            //limit = 10;
+            //taskArray = new Task[1];
             for (int i = 0; i < taskArray.Length; i++)
             {
                 taskArray[i] = Task.Factory.StartNew((Object obj) =>
                 {
+                    if (ct.IsCancellationRequested)
+                        return;
+
                     StateObject state = obj as StateObject;
 
-                    var process = new ExtractionProcess(state.MaxPoolSize);
+                    var process = new ExtractionProcess(state.MaxPoolSize, state.ct);
                     //try
                     //{
                     //process.run(state.LoopCounter * limit + offset, state.LoopCounter * limit + limit, limit - offset, Thread.CurrentThread.ManagedThreadId);
@@ -215,7 +198,11 @@ namespace ExtractFingerRecords
                     //}
                     //Console.WriteLine(process.run(1, 2, Thread.CurrentThread.ManagedThreadId));
                 },
-                new StateObject() { LoopCounter = i, MaxPoolSize = taskArray.Length * 2});
+                new StateObject() { LoopCounter = i, MaxPoolSize = taskArray.Length * 2, ct = ct},
+                ct,
+                //_tokenSource.Token,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
             }
 
             try

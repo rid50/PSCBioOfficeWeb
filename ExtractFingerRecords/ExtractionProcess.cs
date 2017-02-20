@@ -50,7 +50,7 @@ namespace ExtractFingerRecords
     //            conn2.Open();
     //        }
     //        catch (Exception ex)
-    //        {
+    //         
     //            throw new Exception(ex.Message);
     //        }
     //    }
@@ -80,6 +80,7 @@ namespace ExtractFingerRecords
     {
         private NBiometricClient _biometricClient;
         private int _maxPoolSize;
+        private CancellationToken _ct;
         //private static readonly System.Object lockThis = new System.Object();
 
         //NFExtractor extractor;
@@ -92,9 +93,10 @@ namespace ExtractFingerRecords
         //    conn2.Open();
         //}
 
-        public ExtractionProcess(int MaxPoolSize)
+        public ExtractionProcess(int MaxPoolSize, CancellationToken ct)
         {
             _maxPoolSize = MaxPoolSize;
+            _ct = ct;
             //extractor = new NFExtractor();
         }
 
@@ -256,6 +258,11 @@ namespace ExtractFingerRecords
                     {
                         while (reader.Read())
                         {
+                            if (_ct.IsCancellationRequested)
+                            {
+                                break;
+                            }
+
                             rowNumber++;
                             if (rowNumber % 10 == 0)
                             {
@@ -618,30 +625,32 @@ namespace ExtractFingerRecords
             {
                 throw new Exception(ex.Message);
             }
-            //finally
-            //{
-            //    try
-            //    {
-            //        if (reader != null)
-            //            reader.Close();
+            finally
+            {
+                if (_biometricClient != null)
+                    _biometricClient.Cancel();
+                //    try
+                //    {
+                //        if (reader != null)
+                //            reader.Close();
 
-            //        if (conn != null && conn.State == ConnectionState.Open)
-            //        {
-            //            conn.Close();
-            //            conn = null;
-            //        }
+                //        if (conn != null && conn.State == ConnectionState.Open)
+                //        {
+                //            conn.Close();
+                //            conn = null;
+                //        }
 
-            //        if (conn2 != null && conn2.State == ConnectionState.Open)
-            //        {
-            //            conn2.Close();
-            //            conn2 = null;
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new Exception(ex.Message);
-            //    }
-            //}
+                //        if (conn2 != null && conn2.State == ConnectionState.Open)
+                //        {
+                //            conn2.Close();
+                //            conn2 = null;
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        throw new Exception(ex.Message);
+                //    }
+            }
         }
 
         static private String getConnectionString()

@@ -133,8 +133,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neurotec, Version=3.1.1.2, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Neurotec">
       <HintPath>..\dotNET\Neurotec.dll</HintPath>
     </Reference>
     <Reference Include="Neurotec.Biometrics">
@@ -142,6 +141,10 @@
     </Reference>
     <Reference Include="Neurotec.Biometrics.Client">
       <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Devices, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dotNET\Neurotec.Devices.dll</HintPath>
     </Reference>
     <Reference Include="Neurotec.Licensing, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -169,7 +172,6 @@
     <Compile Include="GenericBinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BackgroundWorkerProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

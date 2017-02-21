@@ -8,3 +8,4 @@ bin
 *.config
 *.cfg
 NLicenses.cfg
+/dotNET

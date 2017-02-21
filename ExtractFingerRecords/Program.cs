@@ -57,20 +57,21 @@ namespace ExtractFingerRecords
             SetConsoleCtrlHandler(_consoleCtrlHandler, true);
 
             //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatching,Devices.FingerScanners,Images.WSQ";
+            //const string Components = "Biometrics.FingerExtractionFast,Biometrics.FingerSegmentationFast,Images.WSQ";
             const string Components = "Biometrics.FingerExtractionFast,Images.WSQ";
             try
             {
                 foreach (string component in Components.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (!NLicense.ObtainComponents("/local", "5000", component))
-                        if (component.Equals("Biometrics.FingerMatchingFast"))
-                            NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
-                        else if (component.Equals("Biometrics.FingerExtractionFast"))
-                            NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerExtraction");
+                    if (!NLicense.IsComponentActivated(component))
+                    {
+                        if (!NLicense.ObtainComponents("/local", "5000", component))
+                            if (component.Equals("Biometrics.FingerExtractionFast"))
+                                NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerExtraction");
+                    }
                 }
 
                 Run(args);
-
             }
             catch (Exception ex)
             {
@@ -172,7 +173,7 @@ namespace ExtractFingerRecords
             CancellationToken ct = _tokenSource.Token;
 
             //return;
-            //limit = 10;
+            //limit = 15;
             //taskArray = new Task[1];
             for (int i = 0; i < taskArray.Length; i++)
             {

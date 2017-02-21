@@ -210,10 +210,10 @@ namespace ExtractFingerRecords
             //formatter.Binder = new WsqSerializationBinder.GenericBinder<WsqImage>();
 
 
-            _biometricClient = new NBiometricClient { UseDeviceManager = true, BiometricTypes = NBiometricType.Finger };
-            _biometricClient.FingersFastExtraction = true;
-            _biometricClient.FingersTemplateSize = NTemplateSize.Large;
-            _biometricClient.FingersQualityThreshold = 60;
+            _biometricClient = new NBiometricClient {BiometricTypes = NBiometricType.Finger };
+            _biometricClient.FingersFastExtraction = false;
+            _biometricClient.FingersTemplateSize = NTemplateSize.Small;
+            _biometricClient.FingersQualityThreshold = 48;
             _biometricClient.Initialize();
 
             Stopwatch sw = new Stopwatch();
@@ -430,7 +430,17 @@ namespace ExtractFingerRecords
                                 //continue;
 
                                 //sw = System.Diagnostics.Stopwatch.StartNew();
-                                _biometricClient.CreateTemplate(subject);
+                                //_biometricClient.CreateTemplate(subject);
+                                try
+                                {
+                                    _biometricClient.CreateTemplate(subject);
+                                }
+                                catch (Exception ex)
+                                {
+                                    while (ex.InnerException != null)
+                                        ex = ex.InnerException;
+                                    throw new Exception(ex.Message);
+                                }
                                 //sw.Stop();
                                 //TimeSpan ts = sw.Elapsed;
                                 //string elapsedTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);

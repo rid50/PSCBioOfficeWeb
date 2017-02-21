@@ -62,11 +62,13 @@
       <HintPath>..\DAO\bin\DAO.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Neurotec.Biometrics">
-      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
+    <Reference Include="Neurotec.Biometrics, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Biometrics.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Licensing">
-      <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
+    <Reference Include="Neurotec.Licensing, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />

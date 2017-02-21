@@ -23,7 +23,7 @@ namespace BioProcessor
 
         public BioProcessor(byte FingersQualityThreshold = 48,
             int MatchingThreshold = 60,
-            NTemplateSize FingersTemplateSize = NTemplateSize.Large,
+            NTemplateSize FingersTemplateSize = NTemplateSize.Small,
             NMatchingSpeed MatchingSpeed = NMatchingSpeed.High,
             bool FingersFastExtraction = false)
         {

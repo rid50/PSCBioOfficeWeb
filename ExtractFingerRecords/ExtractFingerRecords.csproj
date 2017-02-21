@@ -134,24 +134,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Neurotec">
-      <HintPath>..\dotNET\Neurotec.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.dll</HintPath>
     </Reference>
     <Reference Include="Neurotec.Biometrics">
-      <HintPath>..\dotNET\Neurotec.Biometrics.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Biometrics.dll</HintPath>
     </Reference>
     <Reference Include="Neurotec.Biometrics.Client">
-      <HintPath>..\dotNET\Neurotec.Biometrics.Client.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Biometrics.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Neurotec.Devices, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
+    <Reference Include="Neurotec.Licensing, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dotNET\Neurotec.Devices.dll</HintPath>
-    </Reference>
-    <Reference Include="Neurotec.Licensing, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dotNET\Neurotec.Licensing.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="Neurotec.Media">
-      <HintPath>..\dotNET\Neurotec.Media.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Neurotechnology\Neurotec Biometric 9.0 SDK\Bin\Win64_x64\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

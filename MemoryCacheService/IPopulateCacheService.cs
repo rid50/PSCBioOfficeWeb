@@ -13,10 +13,11 @@ namespace MemoryCacheService
         void Run2(ArrayList fingerList);
 
         [OperationContract]
-        [FaultContractAttribute(typeof(System.ComponentModel.DataAnnotations.ValidationException))]
+        [FaultContractAttribute(typeof(string))]
         ArrayList getFingerList();
 
         [OperationContract]
+        [FaultContractAttribute(typeof(string))]
         System.DateTime getExpirationTime();
 
         [OperationContract]

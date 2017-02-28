@@ -99,7 +99,7 @@ namespace AppFabricCacheService
             }
             catch (Exception ex)
             {
-                throw new FaultException<ValidationException>(new ValidationException(), new FaultReason(ex.Message));
+                throw new FaultException<string>("AppFabric caching service is not available. Launch PowerShell command \"get-cachehost\" to see if it is down");
             }
         }
 
@@ -111,7 +111,7 @@ namespace AppFabricCacheService
             }
             catch (Exception ex)
             {
-                throw new FaultException<string>(ex.Message);
+                throw new FaultException<string>("AppFabric caching service is not available. Launch PowerShell command \"get-cachehost\" to see if it is down");
             }
         }
 

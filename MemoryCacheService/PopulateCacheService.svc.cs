@@ -101,7 +101,7 @@ namespace MemoryCacheService
             }
             catch (Exception ex)
             {
-                throw new FaultException<ValidationException>(new ValidationException(), new FaultReason(ex.Message));
+                throw new FaultException(new FaultReason(ex.Message));
             }
         }
 
@@ -109,11 +109,15 @@ namespace MemoryCacheService
         {
             try
             {
-                return ((DateTimeOffset)initDataCache().Get("cacheExpirationTime")).DateTime;
+                Object obj = initDataCache().Get("cacheExpirationTime");
+                if (obj != null)
+                    return ((DateTimeOffset)obj).DateTime;
+                else
+                    return new DateTime(0);
             }
             catch (Exception ex)
             {
-                throw new FaultException<string>(ex.Message);
+                throw new FaultException(new FaultReason(ex.Message));
             }
         }
 

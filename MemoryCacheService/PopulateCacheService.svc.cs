@@ -96,6 +96,13 @@ namespace MemoryCacheService
 
         public ArrayList getFingerList()
         {
+            //var list = new ArrayList();
+            //list.Add("li");
+            //list.Add("lm");
+
+            //return list;
+            //throw new FaultException(new FaultReason("kuku"));
+
             try {
                 return initDataCache().Get("fingerList") as ArrayList;
             }

@@ -330,7 +330,7 @@ namespace MemoryCacheService
                             //                    {
                             //                        id = (int)reader[dbIdColumn];
                             buffer = new byte[10][];
-                            bool approved = false, confirmed = false;
+                            bool approved = false, confirmed = false;   // this two variables asure that no less than 2 finger templates will be saved in memry cache
                             int i = 2; // 0 - Id column, 1 - Gender column, 2 is the first finger column we are interested in
                             foreach (string finger in fingerFieldsArray)
                             {

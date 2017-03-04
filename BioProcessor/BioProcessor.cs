@@ -20,6 +20,13 @@ namespace BioProcessor
         private NBiometricTask _enrollTask = null;
 
         enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
+        public Object EnrolTask
+        {
+            get
+            {
+                return _enrollTask;
+            }
+        } 
 
         public BioProcessor(byte FingersQualityThreshold = 48,
             int MatchingThreshold = 60,
@@ -187,6 +194,7 @@ namespace BioProcessor
             //    throw new Exception("Probe template is null");
         }
 
+        private static System.Object theLock = new System.Object();
 
         public void enrollGalleryTemplate(ArrayList fingerList, byte[][] galleryTemplate, string id)
         {
@@ -217,11 +225,14 @@ namespace BioProcessor
                     throw new Exception("Gallery template is null");
 
                 gallerySubject.Id = string.Format("GallerySubject_{0}", id);
-                _enrollTask.Subjects.Add(gallerySubject);
+                lock (theLock)
+                {
+                    _enrollTask.Subjects.Add(gallerySubject);
+                }
             }
         }
 
-        public List<Tuple<string, int>> identify(bool firstMatch)
+        public List<Tuple<string, int>> identify(bool firstMatch, int matchingThreshold)
         {
             var list = new List<Tuple<string, int>>();
             string retcode = string.Empty;
@@ -238,6 +249,7 @@ namespace BioProcessor
 
             _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
             _biometricClient.MatchingFirstResultOnly = firstMatch;
+            _biometricClient.MatchingThreshold = matchingThreshold;
 
             status = _biometricClient.Identify(_probeSubject);
 
@@ -253,8 +265,8 @@ namespace BioProcessor
                 }
             }
 
-            _enrollTask.Dispose();
-            _enrollTask = null;
+            //_enrollTask.Dispose();
+            //_enrollTask = null;
 
             return list;
         }
@@ -387,20 +399,32 @@ namespace BioProcessor
             return matched;
         }
 
-        public void CleanBiometrics()
+        public void DisposeEnrolmentTast()
         {
             if (_probeSubject != null)
                 _probeSubject.Dispose();
+
+            if (_enrollTask != null)
+            {
+                _enrollTask.Dispose();
+                _enrollTask = null;
+            }
+        }
+
+        public void DisposeBiometrics()
+        {
+            if (_probeSubject != null)
+                _probeSubject.Dispose();
+
+            if (_enrollTask != null) {
+                _enrollTask.Dispose();
+                _enrollTask = null;
+            }
 
             if (_biometricClient != null)
             {
                 _biometricClient.Dispose();
                 _biometricClient = null;
-            }
-
-            if (_enrollTask != null) {
-                _enrollTask.Dispose();
-                _enrollTask = null;
             }
         }
 

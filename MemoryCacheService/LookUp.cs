@@ -14,33 +14,35 @@ namespace MemoryCacheService
     {
         private ArrayList   _fingerList;
         private int         _gender;
-        private int         _firstMatch;
-        private byte[]      _probeTemplate;
+        //private int         _firstMatch;
+        //private byte[]      _probeTemplate;
         private MemoryCache   _cache;
         private CancellationToken _ct;
+        private BioProcessor.BioProcessor _matcher;
 
-        public LookUp(ArrayList fingerList, int gender, int firstMatch, byte[] probeTemplate, MemoryCache cache, CancellationToken ct)
+        public LookUp(BioProcessor.BioProcessor matcher, ArrayList fingerList, int gender, MemoryCache cache, CancellationToken ct)
         {
+            _matcher        = matcher;
             _fingerList     = fingerList;
             _gender         = gender;
-            _firstMatch     = firstMatch;
-            _probeTemplate  = probeTemplate;
+            //_firstMatch     = firstMatch;
+            //_probeTemplate  = probeTemplate;
             _cache          = cache;
             _ct             = ct;
         }
 
 //        enum FingerListEnum { li, lm, lr, ll, ri, rm, rr, rl, lt, rt }
 
-        public List<Tuple<string, int>> run(String regionName, int matchingThreshold)
+        public List<Tuple<string, int>> run(String regionName)
         {
             //var result = new ArrayList();
 
-            var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
+            //var matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
 
             //var items = _cache.Where(x => Regex.IsMatch(x.Key, "^" + regionName)).Select(x => x.Key);
             try
             {
-                matcher.enrollProbeTemplate(_fingerList, _probeTemplate);
+                //_matcher.enrollProbeTemplate(_fingerList, _probeTemplate);
 
                 //byte[][] buffer = new byte[10][];
                 //int rowNumber = 0;
@@ -78,7 +80,7 @@ namespace MemoryCacheService
                         //if (item.Key.Substring(k + 1) == "20005140")
                         //    matched = true;
 
-                        matcher.enrollGalleryTemplate(_fingerList, item.Value as byte[][], item.Key);
+                        _matcher.enrollGalleryTemplate(_fingerList, item.Value as byte[][], item.Key);
 
                         //matched = matcher.match(_fingerList, item.Value as byte[][]);
                         //if (matched)
@@ -94,7 +96,11 @@ namespace MemoryCacheService
                     }
                 }
 
-                return matcher.identify(_firstMatch == 1);
+                //return matcher.identify(_firstMatch == 1);
+                var list = new List<Tuple<string, int>>();
+                list.Add(new Tuple<string, int>("", 0));
+                return list;
+
                 ////if (ret != String.Empty)
                 ////{
                 ////    int i = ret.IndexOf("m");
@@ -113,7 +119,7 @@ namespace MemoryCacheService
             //}
             finally
             {
-                matcher.CleanBiometrics();
+                //matcher.CleanBiometrics();
             }
         }
     }

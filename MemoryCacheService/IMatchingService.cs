@@ -39,6 +39,7 @@ namespace MemoryCacheService
         //[OperationContract(IsOneWay = true)]
         [OperationContract]
         [FaultContractAttribute(typeof(Exception))]
+        //void enrollGalleryTemplate(List<string> fingerList);
         MatchingResult match(string guid, List<string> fingerList, int gender, int firstMatch, byte[] probeTemplate, int matchingThreshold);
 
         //[OperationContract]

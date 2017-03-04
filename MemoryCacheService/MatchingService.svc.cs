@@ -18,25 +18,32 @@ namespace MemoryCacheService
     {
         public List<string> fingerList;
         public int          gender;
-        public int          firstMatch;
-        public byte[]       probeTemplate;
-        public int          matchingThreshold;
+        //public int          firstMatch;
+        //public byte[]       probeTemplate;
+        //public int          matchingThreshold;
         public MemoryCache  cache;
         public String       regionName;
         public CancellationToken ct;
+        public BioProcessor.BioProcessor matcher;
     }
 
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class MatchingService : IMatchingService
     {
+        private static BioProcessor.BioProcessor _matcher = null;
         private CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
         private static ConcurrentDictionary<string, CancellationTokenSource> _cd = null;
+
+        private static int sGender= -1;
+        private static List<string> sFingerList = new List<string>();
         //private static DataCacheFactory _factory;
 
         static MatchingService()
         {
+            _matcher = new BioProcessor.BioProcessor();
+
             //DataCacheFactory factory = new DataCacheFactory();
             //_cache = factory.GetCache("default");
             _cache = MemoryCache.Default;
@@ -181,6 +188,7 @@ namespace MemoryCacheService
         //    return;
         //}
         //[OperationBehavior(ReleaseInstanceMode = ReleaseInstanceMode.BeforeCall)]
+        //public void enrollGalleryTemplate(List<string> fingerList)
         public MatchingResult match(string guid, List<string> fingerList, int gender, int firstMatch, byte[] probeTemplate, int matchingThreshold)
         {
             //string id = OperationContext.Current.SessionId;
@@ -188,9 +196,20 @@ namespace MemoryCacheService
 
             List<Tuple<string, int>> list = new List<Tuple<string, int>>();
 
+            if (_matcher.EnrolTask != null && sGender == gender && sFingerList.Except(fingerList).ToList().Count == 0)
+            {
+                _matcher.enrollProbeTemplate(new ArrayList(fingerList), probeTemplate);
+                list = _matcher.identify(firstMatch == 1, matchingThreshold);
+                matchingResult.Result = list.OrderByDescending(x => x.Item2).ToList();
+                return matchingResult;
+            }
+
+            sGender = gender;
+            sFingerList = fingerList;
+
             _tokenSource = new CancellationTokenSource();
             CancellationToken ct = _tokenSource.Token;
-            _cd.TryAdd(guid, _tokenSource);
+            //_cd.TryAdd(guid, _tokenSource);
 
             //Task ta = Task.Factory.StartNew(() =>
             //{
@@ -267,66 +286,77 @@ namespace MemoryCacheService
             //regionNameList.Add("0");
             //regionNameList.Add("0");
 
-            //List<Task<List<Tuple<string, int>>>> tasks = new List<Task<List<Tuple<string, int>>>>();
-            try
-            {
-                Task<List<Tuple<string, int>>> task = null;
-                foreach (string regionName in regionNameList)
-                {
-                    //if (regionName == null)
-                    //  continue;
+            _matcher.DisposeEnrolmentTast();
 
-                    if (ct.IsCancellationRequested)
-                    {
-                        break;
-                        //ct.ThrowIfCancellationRequested();
-                    }
+            List<Task<List<Tuple<string, int>>>> tasks = new List<Task<List<Tuple<string, int>>>>();
 
-                    //taskArray[i++] = Task.Factory.StartNew((Object obj) =>
-                    //tasks.Add(Task.Factory.StartNew((Object obj) =>
-                    task = Task.Factory.StartNew((Object obj) =>
-                    {
-                        //if (ct.IsCancellationRequested)
-                        //{
-                        //ct.ThrowIfCancellationRequested();
-                        //}
+            //_matcher = new BioProcessor.BioProcessor(MatchingThreshold: matchingThreshold);
 
-                        //if (ct.IsCancellationRequested)
-                        //    return list;
-
-                        MatchStateObject state = obj as MatchStateObject;
-
-                        var process = new LookUp(new ArrayList(state.fingerList), state.gender, state.firstMatch, state.probeTemplate, state.cache, state.ct);
-
-                        //retcode = process.run(state.regionName);
-
-                        List<Tuple<string, int>> arrayList = process.run(state.regionName, state.matchingThreshold);
-                        if (arrayList.Count != 0 && state.firstMatch == 1 && !_tokenSource.IsCancellationRequested)
-                        {
-                            _tokenSource.Cancel();
-                        }
-
-                        return arrayList;
-                    },
-                    new MatchStateObject() { fingerList = fingerList, gender = gender, firstMatch = firstMatch, probeTemplate = probeTemplate, matchingThreshold = matchingThreshold, cache = _cache, regionName = regionName, ct = ct },
-                    //_tokenSource.Token,
-                    ct,
-                    TaskCreationOptions.LongRunning,
-                    TaskScheduler.Default);
-//                }
-
-                //Task task = Task.WhenAll(tasks.ToArray());
-            //Task task = Task.WhenAll(tasks.ToArray().Where(t => t != null));
             //try
             //{
-                    task.Wait();
+                //Task<List<Tuple<string, int>>> task = null;
+            foreach (string regionName in regionNameList)
+            {
+                //if (regionName == null)
+                //  continue;
 
-                    if (task.Status == TaskStatus.RanToCompletion && ((List<Tuple<string, int>>)(task.Result)).Count != 0)
-                    {
-                        list.AddRange((List<Tuple<string, int>>)(task.Result));
-                        //break;
-                    }
+                if (ct.IsCancellationRequested)
+                {
+                    break;
+                    //ct.ThrowIfCancellationRequested();
                 }
+
+                //taskArray[i++] = Task.Factory.StartNew((Object obj) =>
+                tasks.Add(Task.Factory.StartNew((Object obj) =>
+                //task = Task.Factory.StartNew((Object obj) =>
+                {
+                    //if (ct.IsCancellationRequested)
+                    //{
+                    //ct.ThrowIfCancellationRequested();
+                    //}
+
+                    //if (ct.IsCancellationRequested)
+                    //    return list;
+
+                    MatchStateObject state = obj as MatchStateObject;
+
+                    var process = new LookUp(state.matcher, new ArrayList(state.fingerList), state.gender, state.cache, state.ct);
+
+                    //retcode = process.run(state.regionName);
+
+                    List<Tuple<string, int>> list2 = process.run(state.regionName);
+                    //if (arrayList.Count != 0 && state.firstMatch == 1 && !_tokenSource.IsCancellationRequested)
+                    //{
+                    //    _tokenSource.Cancel();
+                    //}
+
+                    return list2;
+                },
+                //new MatchStateObject() { matcher = _matcher, fingerList = fingerList, gender = gender, firstMatch = firstMatch, probeTemplate = probeTemplate, matchingThreshold = matchingThreshold, cache = _cache, regionName = regionName, ct = ct },
+                new MatchStateObject() { matcher = _matcher, fingerList = fingerList, gender = gender, cache = _cache, regionName = regionName, ct = ct },
+                //_tokenSource.Token,
+                ct,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default));
+            }
+
+            //Task task = Task.WhenAll(tasks.ToArray());
+            //Task task = Task.WhenAll(tasks.ToArray().Where(t => t != null));
+            try
+            {
+                Task.WaitAll(tasks.ToArray());
+                //task.Wait();
+
+                //if (task.Status == TaskStatus.RanToCompletion && ((List<Tuple<string, int>>)(task.Result)).Count != 0)
+                //{
+                //    list.AddRange((List<Tuple<string, int>>)(task.Result));
+                //    //break;
+                //}
+                //}
+
+                _matcher.enrollProbeTemplate(new ArrayList(fingerList), probeTemplate);
+                list.Add(new Tuple<string, int>("", 0));
+                list = _matcher.identify(firstMatch == 1, matchingThreshold);
 
                 //Task.WaitAll(taskArray);
                 //await task;
@@ -361,71 +391,71 @@ namespace MemoryCacheService
 
                 //return retcode;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //foreach (var t in tasks)
-                //{
-                //    if (t == null)
-                //        continue;
+                foreach (var t in tasks)
+                {
+                    if (t == null)
+                        continue;
 
-                //    if (t.Status == TaskStatus.RanToCompletion && ((List<Tuple<string, int>>)(t.Result)).Count != 0)
-                //    {
-                //        list = (List<Tuple<string, int>>)(t.Result);
-                //        break;
-                //    }
-                //    else if (t.Status == TaskStatus.Faulted || t.Status == TaskStatus.Running)
-                //    {
-                //        bool fault = true;
-                //        if (ex.Message.Equals("The operation was canceled."))
-                //        {
-                //            fault = true;
-                //            //continue;
-                //        }
+                    if (t.Status == TaskStatus.RanToCompletion && ((List<Tuple<string, int>>)(t.Result)).Count != 0)
+                    {
+                        list = (List<Tuple<string, int>>)(t.Result);
+                        break;
+                    }
+                    else if (t.Status == TaskStatus.Faulted || t.Status == TaskStatus.Running)
+                    {
+                        bool fault = true;
+                        if (ex.Message.Equals("The operation was canceled."))
+                        {
+                            fault = true;
+                            //continue;
+                        }
 
-                //        //while ((ex is AggregateException) && (ex.InnerException != null))
-                //        while (ex.InnerException != null)
-                //        {
-                //            if (ex.Message.EndsWith("Operation cancelled by user."))
-                //            {
-                //                fault = false;
-                //                break;
-                //            }
-                //            else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
-                //            {
-                //                if (ex.InnerException.Message.StartsWith("A task was canceled"))
-                //                {
-                //                    fault = false;
-                //                    break;
-                //                }
-                //            }
+                        //while ((ex is AggregateException) && (ex.InnerException != null))
+                        while (ex.InnerException != null)
+                        {
+                            if (ex.Message.EndsWith("Operation cancelled by user."))
+                            {
+                                fault = false;
+                                break;
+                            }
+                            else if (ex.InnerException.GetType().Name.Equals("TaskCanceledException"))
+                            {
+                                if (ex.InnerException.Message.StartsWith("A task was canceled"))
+                                {
+                                    fault = false;
+                                    break;
+                                }
+                            }
 
-                //            //ex = ex.InnerException;
+                            //ex = ex.InnerException;
 
-                //            if (ex.Message.Equals("The operation was canceled."))
-                //            {
-                //                fault = true;
-                //                //break;
-                //            }
-                //        }
+                            if (ex.Message.Equals("The operation was canceled."))
+                            {
+                                fault = true;
+                                //break;
+                            }
+                        }
 
-                //        if (fault)
-                //        {
-                //            if (_tokenSource != null)
-                //                _tokenSource.Cancel();
-                //            //_tokenSource.Dispose();
-                //            //CallBack.RespondWithError(ex.Message);
-                //            //return;
-                //            throw new FaultException(ex.Message);
-                //        }
-                //    }
-                //}
+                        if (fault)
+                        {
+                            if (_tokenSource != null)
+                                _tokenSource.Cancel();
+                            //_tokenSource.Dispose();
+                            //CallBack.RespondWithError(ex.Message);
+                            //return;
+                            throw new FaultException(ex.Message);
+                        }
+                    }
+                }
             }
             finally
             {
                 if (_tokenSource != null)
                 {
                     _tokenSource.Dispose();
-                    _cd.TryRemove(guid, out _tokenSource);
+                    //_cd.TryRemove(guid, out _tokenSource);
                     _tokenSource = null;
                 }
 

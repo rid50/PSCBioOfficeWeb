@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageHandler", "ImageHandler\ImageHandler.csproj", "{A0B06382-840F-48E6-AEA1-897096C777F2}"
 EndProject
@@ -49,6 +49,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCacheService", "MemoryCacheService\MemoryCacheService.csproj", "{7B10B902-C1CF-4222-A7A2-5A1222B6AA1A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B14A562B-92B2-4368-BE53-860A0EAFBB69} = {B14A562B-92B2-4368-BE53-860A0EAFBB69}
+		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {7FD160D9-F401-4C22-88FF-E14C93CF91A4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingService", "MatchingService\MatchingService.csproj", "{AB5F5C87-065F-45EB-A039-0268AEB36B1F}"
+	ProjectSection(ProjectDependencies) = postProject
 		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {7FD160D9-F401-4C22-88FF-E14C93CF91A4}
 	EndProjectSection
 EndProject
@@ -227,6 +232,22 @@ Global
 		{7B10B902-C1CF-4222-A7A2-5A1222B6AA1A}.Release|x64.Build.0 = Release|Any CPU
 		{7B10B902-C1CF-4222-A7A2-5A1222B6AA1A}.Release|x86.ActiveCfg = Release|Any CPU
 		{7B10B902-C1CF-4222-A7A2-5A1222B6AA1A}.Release|x86.Build.0 = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|x64.Build.0 = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|x64.ActiveCfg = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|x64.Build.0 = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,5 +257,6 @@ Global
 		{7FD160D9-F401-4C22-88FF-E14C93CF91A4} = {00DF90E1-8FDD-48F1-86CF-672FCD1B1E70}
 		{908BBF33-EA26-4069-989E-AD6D2B11577F} = {00DF90E1-8FDD-48F1-86CF-672FCD1B1E70}
 		{7B10B902-C1CF-4222-A7A2-5A1222B6AA1A} = {00DF90E1-8FDD-48F1-86CF-672FCD1B1E70}
+		{AB5F5C87-065F-45EB-A039-0268AEB36B1F} = {00DF90E1-8FDD-48F1-86CF-672FCD1B1E70}
 	EndGlobalSection
 EndGlobal

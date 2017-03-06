@@ -354,9 +354,9 @@ namespace MemoryCacheService
                 //}
                 //}
 
-                _matcher.enrollProbeTemplate(new ArrayList(fingerList), probeTemplate);
+                //_matcher.enrollProbeTemplate(new ArrayList(fingerList), probeTemplate);
                 list.Add(new Tuple<string, int>("", 0));
-                list = _matcher.identify(firstMatch == 1, matchingThreshold);
+                list = _matcher.identify(new ArrayList(fingerList), probeTemplate, firstMatch == 1, matchingThreshold);
 
                 //Task.WaitAll(taskArray);
                 //await task;

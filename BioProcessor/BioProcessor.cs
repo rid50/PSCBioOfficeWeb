@@ -232,11 +232,8 @@ namespace BioProcessor
             }
         }
 
-        public List<Tuple<string, int>> identify(bool firstMatch, int matchingThreshold)
+        public void performEnroll()
         {
-            var list = new List<Tuple<string, int>>();
-            string retcode = string.Empty;
-
             NBiometricStatus status = NBiometricStatus.None;
 
             _biometricClient.PerformTask(_enrollTask);
@@ -246,10 +243,20 @@ namespace BioProcessor
                 //Console.WriteLine("Enrollment was unsuccessful. Status: {0}.", status);
                 if (_enrollTask.Error != null) throw _enrollTask.Error;
             }
+        }
+
+        public List<Tuple<string, int>> identify(ArrayList fingerList, byte[] probeTemplate, bool firstMatch, int matchingThreshold)
+        {
+            var list = new List<Tuple<string, int>>();
+            string retcode = string.Empty;
+
+            NBiometricStatus status = NBiometricStatus.None;
 
             _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
             _biometricClient.MatchingFirstResultOnly = firstMatch;
             _biometricClient.MatchingThreshold = matchingThreshold;
+
+            enrollProbeTemplate(fingerList, probeTemplate);
 
             status = _biometricClient.Identify(_probeSubject);
 
@@ -257,16 +264,10 @@ namespace BioProcessor
             {
                 foreach (var matchingResult in _probeSubject.MatchingResults)
                 {
-                    int i = matchingResult.Id.IndexOf("m");
-                    if (i == -1)
-                        i = matchingResult.Id.IndexOf("w");
-
+                    int i = matchingResult.Id.IndexOf('_');
                     list.Add(new Tuple<string, int>(matchingResult.Id.Substring(i + 1), matchingResult.Score));
                 }
             }
-
-            //_enrollTask.Dispose();
-            //_enrollTask = null;
 
             return list;
         }

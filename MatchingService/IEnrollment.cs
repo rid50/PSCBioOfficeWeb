@@ -13,10 +13,10 @@ namespace MatchingService
     public interface IEnrollment
     {
         [OperationContract(IsOneWay = true)]
-        void Run(ArrayList fingerList);
+        void Run2(ArrayList fingerList);
 
         [OperationContract]
-        void Run2(ArrayList fingerList);
+        void Run(ArrayList fingerList);
 
         [OperationContract]
         [FaultContractAttribute(typeof(string))]

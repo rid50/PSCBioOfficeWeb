@@ -33,19 +33,32 @@ namespace MatchingService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class Enrollment : IEnrollment, IDisposable
     {
+        private static string _sessionId = null;
+
         private static BioProcessor.BioProcessor _matcher = null;
 
         private static CancellationTokenSource _tokenSource;
         private static MemoryCache _cache;
         private static List<Enroll> _EnrollClassList;
 
-        private static DateTimeOffset cacheTimeSpan = new DateTimeOffset(DateTime.Now).AddDays(1);
-
         //const string Components = "Biometrics.FingerExtraction,Biometrics.FingerMatchingFast,Devices.FingerScanners,Images.WSQ";
         const string _Components = "Biometrics.FingerMatchingFast";
 
+        //Enrollment()
+        //{
+        //    System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio Constructor:=======================================================");
+        //}
+
         static Enrollment()
         {
+            _sessionId = OperationContext.Current.SessionId;
+
+            if (!EventLog.SourceExists("BiometricService"))
+            {
+                EventLog.CreateEventSource("BiometricService", "BiometricServiceLog");
+            }
+
+            //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio Static Constructor:=================== " + _sessionId);
             try
             {
                 //System.IO.StreamWriter sw = new System.IO.StreamWriter(System.Web.HttpContext.Current.Server.MapPath("App_Data/log.txt"), true);
@@ -55,15 +68,25 @@ namespace MatchingService
                     ////sw.WriteLine("app: " + component);
                     if (!NLicense.IsComponentActivated(component))
                     {
+                        System.Diagnostics.EventLog.WriteEntry("BiometricService", "c1 " + component);
+
                         if (!NLicense.ObtainComponents("/local", "5000", component))
                         {
+                            System.Diagnostics.EventLog.WriteEntry("BiometricService", "c2 " + component);
+
                             if (component.Equals("Biometrics.FingerMatchingFast"))
-                                NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
+                            {
+                                System.Diagnostics.EventLog.WriteEntry("BiometricService", "c3 " + component);
+
+                                if (!NLicense.IsComponentActivated("Biometrics.FingerMatching"))
+                                {
+                                    System.Diagnostics.EventLog.WriteEntry("BiometricService", "c4 " + component);
+                                    NLicense.ObtainComponents("/local", "5000", "Biometrics.FingerMatching");
+                                }
+                            }
                         }
                     }
                 }
-
-                //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio:=======================================================");
 
                 //sw.WriteLine("app:=======================================================");
                 //sw.Close();
@@ -283,6 +306,7 @@ namespace MatchingService
         //public void Run(string[] args)
         public void Run(ArrayList fingerList)
         {
+            DateTimeOffset cacheTimeSpan = new DateTimeOffset(DateTime.Now).AddDays(1);
             //            Stopwatch st = new Stopwatch();
             //            st.Start();
             //_terminate = false;
@@ -291,6 +315,10 @@ namespace MatchingService
                 _EnrollClassList = new List<Enroll>();
             else
                 _EnrollClassList.Clear();
+
+            _matcher.DisposeEnrolmentTask();
+
+            _cache.Set("fingerList", new ArrayList(), cacheTimeSpan);
 
             initDataCache();
 
@@ -448,7 +476,9 @@ namespace MatchingService
                             }
                         }
             */
-            _cache.Set("fingerList", new ArrayList(), cacheTimeSpan);
+
+
+
             //_cache.Set("regionNameList", new ArrayList(), cacheTimeSpan);
             //_cache.Put("fingerList", new ArrayList(), cacheTimeSpan);
             //_cache.Put("regionNameList", new ArrayList(), cacheTimeSpan);
@@ -736,7 +766,12 @@ namespace MatchingService
 
         public void Dispose()
         {
-            NLicense.ReleaseComponents(_Components);
+            if (_sessionId == OperationContext.Current.SessionId)
+            {
+                //System.Diagnostics.EventLog.WriteEntry("BiometricService", "bio Destructor:======= " + OperationContext.Current.SessionId);
+
+                NLicense.ReleaseComponents(_Components);
+            }
         }
     }
 }

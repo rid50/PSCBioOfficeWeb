@@ -250,6 +250,8 @@ namespace BioProcessor
             var list = new List<Tuple<string, int>>();
             string retcode = string.Empty;
 
+            //NSubject sub =_enrollTask.Subjects[0];
+
             NBiometricStatus status = NBiometricStatus.None;
 
             _biometricClient.FingersMatchingSpeed = NMatchingSpeed.High;
@@ -400,8 +402,10 @@ namespace BioProcessor
             return matched;
         }
 
-        public void DisposeEnrolmentTast()
+        public void DisposeEnrolmentTask()
         {
+            _biometricClient.Clear();
+
             if (_probeSubject != null)
                 _probeSubject.Dispose();
 
@@ -421,6 +425,8 @@ namespace BioProcessor
                 _enrollTask.Dispose();
                 _enrollTask = null;
             }
+
+            _biometricClient.Clear();
 
             if (_biometricClient != null)
             {

@@ -286,7 +286,7 @@ namespace MemoryCacheService
             //regionNameList.Add("0");
             //regionNameList.Add("0");
 
-            _matcher.DisposeEnrolmentTast();
+            _matcher.DisposeEnrolmentTask();
 
             List<Task<List<Tuple<string, int>>>> tasks = new List<Task<List<Tuple<string, int>>>>();
 
